@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
+/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/24 23:28:49 by odruke-s         ###   ########.fr       */
+/*   Created: 2024/10/01 22:20:07 by odruke-s          #+#    #+#             */
+/*   Updated: 2024/10/01 22:27:06 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "libft.h"
-# include <stdio.h>
-# include <curses.h>
-# include <term.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <termios.h>
-# include <limits.h>
+#include "libft.h"
 
-#endif
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (((unsigned char *)s)[i] == (unsigned char)c)
+			return ((void *)s + i);
+		i++;
+	}
+	return (NULL);
+}

@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
+/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/24 23:31:23 by odruke-s         ###   ########.fr       */
+/*   Created: 2024/10/01 21:47:53 by odruke-s          #+#    #+#             */
+/*   Updated: 2024/10/01 22:19:02 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "libft.h"
 
-int	main()
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	char	*input;
-	while (1)
+	size_t	i;
+
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
 	{
-		input = readline("Minishell $ ");
-		if (!input)
-			exit(0);
+		if (s1[i] != s2[i])
+			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
+		i++;
 	}
+	return (0);
 }

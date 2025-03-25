@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
+/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/24 23:28:49 by odruke-s         ###   ########.fr       */
+/*   Created: 2024/10/01 18:34:43 by odruke-s          #+#    #+#             */
+/*   Updated: 2024/10/01 20:50:08 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "libft.h"
-# include <stdio.h>
-# include <curses.h>
-# include <term.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <termios.h>
-# include <limits.h>
+#include "libft.h"
 
-#endif
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[i])
+	{
+		if ((char)c == s[i])
+			return ((char *)s + i);
+		i++;
+	}
+	if ((char)c == '\0')
+		return ((char *)s + i);
+	return (NULL);
+}

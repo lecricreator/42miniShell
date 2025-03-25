@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
+/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/24 23:28:49 by odruke-s         ###   ########.fr       */
+/*   Created: 2024/10/06 18:11:20 by odruke-s          #+#    #+#             */
+/*   Updated: 2024/10/06 18:13:28 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "libft.h"
-# include <stdio.h>
-# include <curses.h>
-# include <term.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <termios.h>
-# include <limits.h>
+#include "libft.h"
 
-#endif
+void	ft_putendl_fd(char *s, int fd)
+{
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
+}
