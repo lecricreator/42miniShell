@@ -23,15 +23,8 @@
 # include <limits.h>
 # include <sys/types.h>
 # include <errno.h>
-/*
-typedef struct s_parsing
-{
-	int		size;
-	int		str_index;
-	int		arg_index;
-	int		arg_char_indx;
-}	t_parsing;
 
+/*
 typedef struct s_fds
 {
 	int	pipefd[2];
@@ -40,10 +33,17 @@ typedef struct s_fds
 	int	outfile;
 }	t_fds;
 */
+typedef struct s_token
+{
+	char	*str;
+	int		type;
+	int		index;
+}	t_token;
 
 typedef struct s_data
 {
-    t_list  *env;
+    t_list  *env_list;
+	t_list	*token_list;
     char    *input;
 }	t_data;
 
@@ -52,5 +52,8 @@ void    parsing(t_data *data);
 void    print_env(t_list *env);
 int	    error_handle(t_data *data, char *cmd, char *msg, int terminate);
 void    get_env(t_list **env_list, char **env);
+void	lexing_tokens(t_data *data, char *input);
+void    print_token_list(t_list *token_list);
+void	reset_input(t_data *data);
 
 #endif
