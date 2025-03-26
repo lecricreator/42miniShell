@@ -21,16 +21,18 @@ SRC_DIR= ./src/
 OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
 LIBFT_DIR = ./libft/
+FT_PRINTF_DIR = ./ft_printf/
 
 # custom libraries
 LIBFT = $(LIBFT_DIR)libft.a
+FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
-FILES = main.c
+FILES = main.c parsing.c utils.c error_handle.c
 INC_FILES = minishell.h
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
-INC = $(addprefix $(INC_DIR), $(INC_FILES))
+INC = $(addprefix $(INC_DIR)%.h, $(INC_FILES))
 
 
 
@@ -38,12 +40,12 @@ INC = $(addprefix $(INC_DIR), $(INC_FILES))
 	
 all: aux_libraries $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT)
-	$(CC) $< $(LFLAGS) $(LIBFT) -o $@
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) $(LFLAGS) $(FT_PRINTF) $(LIBFT) -o $@
 	@$(MAKE) compilation_success
 
 # create .o file 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(OBJ_DIR)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
 
 $(OBJ_DIR):
@@ -51,16 +53,19 @@ $(OBJ_DIR):
 
 aux_libraries:
 	make -C $(LIBFT_DIR) all
+	make -C $(FT_PRINTF_DIR) all
 
 # delete just file OBJ_DIR and o file inside
 clean:
 	rm -rf $(OBJ_DIR)
 	make -C $(LIBFT_DIR) clean 
+	make -C $(FT_PRINTF_DIR) clean
 
 # executes clean and deletes the executable 
 fclean: clean
 	rm -f $(NAME)
 	make -C $(LIBFT_DIR) fclean 
+	make -C $(FT_PRINTF_DIR) fclean
 
 re: fclean all
 
@@ -87,4 +92,4 @@ compilation_success:
 	@echo "▐-░░░░░░░░░--░░░░░---░░░░░-░░░░░░░░░░-░░░░░-░░░░░-▌"
 	@echo "▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌"
 
-.PHONY: clean fclean re all compilation_success
+.PHONY: clean fclean re all aux_libraries compilation_success
