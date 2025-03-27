@@ -33,7 +33,7 @@ typedef struct s_fds
 	int	outfile;
 }	t_fds;
 */
-typedef enum 
+typedef enum e_type
 {
 	BI_ECHO,
 	BI_CD,
@@ -47,13 +47,17 @@ typedef enum
 	OP_REDIR_OUT,
 	OP_APPEND,
 	OP_HEREDOC,
+	COMMAND,
+	FILENAME,
+	ARGUMENT,
+	BAD_TOKEN,
 	UNKNOW
 } t_type;
 
 typedef struct s_token
 {
 	char	*str;
-	int		type;
+	t_type	type;
 	int		index;
 }	t_token;
 
