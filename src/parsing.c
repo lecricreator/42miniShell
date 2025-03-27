@@ -31,5 +31,7 @@ void	get_env(t_list **env_list, char **env)
 
 void	parsing(t_data *data)
 {
+
 	lexing_tokens(data, data->input);
+
 }

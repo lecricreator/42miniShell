@@ -6,14 +6,9 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:31:14 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/27 18:33:20 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/03/27 20:57:32 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
-				/*MODIFY THIS ENTIRE FILE*/
-
 
 #include "minishell.h"
 
@@ -34,7 +29,7 @@ static int	is_double_arrow(const char *input, int *i)
 {
 	if (input[*i] == '>' && input[*i + 1] == '>')
 		return (1);
-	else if (input[*i] == '<' && input[*(i + 1)] == '<')
+	else if (input[*i] == '<' && input[*i + 1] == '<')
 		return (1);
 	return (0);
 }
@@ -111,6 +106,49 @@ static void fill_token_list(t_data *data, char *token, int token_index)
 	ft_lstadd_back(&data->token_list, new_node);
 }
 
+static int get_type(char *token)
+{
+	if(!ft_strncmp(token, "echo", ft_strlen(token)))
+		return (BI_ECHO);
+	if(!ft_strncmp(token, "cd", ft_strlen(token)))
+		return (BI_CD);
+	if(!ft_strncmp(token, "pwd", ft_strlen(token)))
+		return (BI_PWD);
+	if(!ft_strncmp(token, "export", ft_strlen(token)))
+		return (BI_EXPORT);
+	if(!ft_strncmp(token, "unset", ft_strlen(token)))
+		return (BI_UNSET);
+	if(!ft_strncmp(token, "env", ft_strlen(token)))
+		return (BI_ENV);
+	if(!ft_strncmp(token, "exit", ft_strlen(token)))
+		return (BI_EXIT);
+	if(!ft_strncmp(token, "|", ft_strlen(token)))
+		return (OP_PIPE);
+	if(!ft_strncmp(token, ">", ft_strlen(token)))
+		return (OP_REDIR_OUT);
+	if(!ft_strncmp(token, "<", ft_strlen(token)))
+		return (OP_REDIR_IN);
+	if(!ft_strncmp(token, ">>", ft_strlen(token)))
+		return (OP_APPEND);
+	if(!ft_strncmp(token, "<<", ft_strlen(token)))
+		return (OP_HEREDOC);
+	return (UNKNOW);
+}
+
+static void	fill_types(t_data *data)
+{
+	t_token *tmp_token;
+	t_list	*tmp_head;
+
+	tmp_head = data->token_list;
+	while (tmp_head)
+	{
+		tmp_token = (t_token *)tmp_head->content;
+		tmp_token->type = get_type(tmp_token->str);
+		tmp_head = tmp_head->next;
+	}
+}
+
 void	lexing_tokens(t_data *data, char *input)
 {
 	int		i;
@@ -141,4 +179,5 @@ void	lexing_tokens(t_data *data, char *input)
 			while (ft_isblank(input[i]))
 				i++;
 	}
+	fill_types(data);
 }

@@ -33,6 +33,23 @@ typedef struct s_fds
 	int	outfile;
 }	t_fds;
 */
+typedef enum 
+{
+	BI_ECHO,
+	BI_CD,
+	BI_PWD,
+	BI_EXPORT,
+	BI_UNSET,
+	BI_ENV,
+	BI_EXIT,
+	OP_PIPE,
+	OP_REDIR_IN,
+	OP_REDIR_OUT,
+	OP_APPEND,
+	OP_HEREDOC,
+	UNKNOW
+} t_type;
+
 typedef struct s_token
 {
 	char	*str;
