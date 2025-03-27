@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:31:14 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/27 12:03:27 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:33:20 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ static int	is_special_symbol(char c)
 			return (1);
 		symbol_set++;
 	}
+	return (0);
+}
+static int	is_double_arrow(const char *input, int *i)
+{
+	if (input[*i] == '>' && input[*i + 1] == '>')
+		return (1);
+	else if (input[*i] == '<' && input[*(i + 1)] == '<')
+		return (1);
 	return (0);
 }
 
@@ -56,8 +64,16 @@ static int	token_len(const char *input, int *i)
 	}
 	else if (is_special_symbol(input[*i]))
 	{
-		(*i)++;
-		len++;
+		if (is_double_arrow(input, i))
+		{
+			(*i) += 2;
+			len = 2;
+		}
+		else
+		{
+			(*i)++;
+			len++;
+		}
 	}
 	else
 	{
@@ -119,6 +135,8 @@ void	lexing_tokens(t_data *data, char *input)
 		}
 		if (input[i] == '\0')
 			break ;
+		if (input[i] == 39 || input[i] == 34)
+			i++;
 		else
 			while (ft_isblank(input[i]))
 				i++;
