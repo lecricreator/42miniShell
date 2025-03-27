@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handle.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/26 19:33:39 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:11:00 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	free_table(char **table)
 */
 static void	free_token(void *token_void)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = (t_token *)token_void;
 	if (token->str)
@@ -34,7 +34,7 @@ static void	free_token(void *token_void)
 
 static void	free_list(t_list **list, void (*del)(void *))
 {
-	t_list *tmp;
+	t_list	*tmp;
 
 	if (!list || !*list)
 		return ;
@@ -53,13 +53,14 @@ static void	free_data(t_data *data)
 {
 	if (data->input)
 		free(data->input);
-    if (data->env_list)
+	if (data->env_list)
 		free_list(&data->env_list, free);
 	if (data->token_list)
 		free_list(&data->token_list, free_token);
 	if (data)
 		free(data);
 }
+
 void	reset_input(t_data *data)
 {
 	if (data->input)

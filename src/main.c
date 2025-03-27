@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/26 20:44:57 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:02:34 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-	t_data *data;
+	t_data	*data;
 
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:31:14 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/26 20:56:42 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:03:27 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ static int	token_len(const char *input, int *i)
 
 t_token *create_token(char *str, int index)
 {
-    t_token *token = malloc(sizeof(t_token));
-    if (!token)
-        return (NULL);
-    token->str = str;
-    token->type = 0;
+	t_token *token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->str = str;
+	token->type = 0;
 	token->index = index;
-    return (token);
+	return (token);
 }
 
 static void fill_token_list(t_data *data, char *token, int token_index)

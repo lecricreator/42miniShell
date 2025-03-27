@@ -1,0 +1,9 @@
+# not ignore
+!.vscode
+!.gitignore
+
+# at ignore
+mini_shell
+./src/target/
+*.o
+*.a
