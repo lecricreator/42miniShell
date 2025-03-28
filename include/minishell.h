@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 20:01:30 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:34:52 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ void	lexing_tokens(t_data *data, char *input);
 void    print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
-int		exec_build_pwd();
-int		exec_build_cd(char *str);
+int		exec_pwd();
+int		exec_cd(char *str);
 #endif
