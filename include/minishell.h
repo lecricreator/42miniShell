@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 15:44:39 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/28 18:27:58 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,31 @@ typedef struct s_fds
 	int	outfile;
 }	t_fds;
 */
+typedef enum e_type
+{
+	BI_ECHO,
+	BI_CD,
+	BI_PWD,
+	BI_EXPORT,
+	BI_UNSET,
+	BI_ENV,
+	BI_EXIT,
+	OP_PIPE,
+	OP_REDIR_IN,
+	OP_REDIR_OUT,
+	OP_APPEND,
+	OP_HEREDOC,
+	COMMAND,
+	FILENAME,
+	ARGUMENT,
+	BAD_TOKEN,
+	UNKNOW
+} t_type;
 
 typedef struct s_token
 {
 	char	*str;
-	int		type;
+	t_type	type;
 	int		index;
 }	t_token;
 
