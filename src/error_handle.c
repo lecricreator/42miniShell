@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/27 12:11:00 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/27 22:26:22 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	free_data(t_data *data)
 		free_list(&data->env_list, free);
 	if (data->token_list)
 		free_list(&data->token_list, free_token);
+	rl_clear_history();
 	if (data)
 		free(data);
 }
