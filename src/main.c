@@ -35,6 +35,7 @@ int	main(int ac, char **av, char **env)
 		data->input = readline("Minishell $ ");
 		parsing(data);
 		print_token_list(data->token_list);
+		execution(data);
 		if (!ft_strncmp(data->input, "exit", ft_strlen(data->input)))
 			error_handle(data, data->input, strerror(errno), 1);
 	}

@@ -45,7 +45,7 @@ static t_type	token_zero(t_token *token)
 
 static t_type	next_token(t_token *token, t_type state)
 {
-	if (token->type >= 8 && token->type <= 10)// redir tokens (< > >>) HEREDOC??
+	if (token->type >= 8 && token->type <= 11)// redir tokens (< > >>) and << HEREDOC??
 		return (FILENAME);
 	if (token->type == OP_PIPE)
 	{
