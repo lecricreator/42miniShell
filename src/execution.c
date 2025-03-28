@@ -58,7 +58,6 @@ void	execution(t_data *data)
 {
 	t_token *tmp_token;
 	t_list  *tmp_head;
-//	t_type   state;
 
 	tmp_head = data->token_list;
 	while (tmp_head)
