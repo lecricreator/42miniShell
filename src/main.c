@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 11:23:42 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/28 15:47:05 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@ void	init_data(t_data *data, char **env)
 void	test(int sigtype)
 {
 	if (sigtype == SIGINT)
-		ft_printf_fd(1, "Ctrl + C %d\n", sigtype);
+		{
+			ft_putstr(1, "\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
+			//exit_status = 130;
+		}
 	else if (sigtype == SIGQUIT)
 	{
-		ft_printf_fd(1, "Annule commande CTR + \\ %d\n", sigtype);
-		readline("Minishell $ ");
+		rl_redisplay();
+		ft_printf_fd(1, "Ctrl + \\\n");
 	}
 }
 

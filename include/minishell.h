@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/27 22:16:27 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/28 15:44:39 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <spawn.h>
+
+
+extern int	exit_status;
 
 /*
 typedef struct s_fds
