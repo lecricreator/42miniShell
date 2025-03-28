@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 19:56:44 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:01:30 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void    get_env(t_list **env_list, char **env);
 void	lexing_tokens(t_data *data, char *input);
 void    print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
-void	exectution(t_data *data);
+void	execution(t_data *data);
 int		exec_build_pwd();
 int		exec_build_cd(char *str);
 #endif

@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-t_list  *exec_builtin(t_list *token_list, t_list *env_list);
+t_list  *exec_builtin(t_list *token_list, t_list *env_list)
 {
     t_token *tmp_token;
 
