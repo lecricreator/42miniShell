@@ -24,7 +24,6 @@
 # include <sys/types.h>
 # include <errno.h>
 
-/*
 typedef struct s_fds
 {
 	int	pipefd[2];
@@ -32,7 +31,7 @@ typedef struct s_fds
 	int	infile;
 	int	outfile;
 }	t_fds;
-*/
+
 typedef enum e_type
 {
 	BI_ECHO,
@@ -77,6 +76,9 @@ void	lexing_tokens(t_data *data, char *input);
 void    print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
+t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
+t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
+t_list  *exec_cmd(t_data *data, t_list *token_list, t_fds *fds);
 int		exec_pwd();
 int		exec_cd(char *str);
 #endif
