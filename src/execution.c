@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-t_list  *exec_builtin(t_list *token_list, t_list *env_list);
+t_list  *exec_builtin(t_list *token_list, t_list *env_list)
 {
     t_token *tmp_token;
 
@@ -17,6 +17,7 @@ t_list  *exec_builtin(t_list *token_list, t_list *env_list);
 		exec_pwd();
 		return (token_list->next);
 	}
+    /*
     if (tmp_token->type == BI_EXIT)
 	{
 		exec_exit();
@@ -27,11 +28,13 @@ t_list  *exec_builtin(t_list *token_list, t_list *env_list);
 		exec_exit();
 		return (token_list->next);
 	}
+    */
     if (tmp_token->type == BI_ENV)
 	{
-		print_env();
+		print_env(env_list);
 		return (token_list->next);
 	}
+    /*
     if (tmp_token->type == BI_EXPORT)
 	{
 		exec_export();
@@ -42,26 +45,26 @@ t_list  *exec_builtin(t_list *token_list, t_list *env_list);
 		exec_unset();
 		return (token_list->next);
 	}
-	/*
     if (tmp_token->type == BI_ECHO)
 	{
 		exec_echo(argument?);
 		return (token_list->next);
 	}
 	*/
+    return (token_list->next);
 }
 
 void    execution(t_data *data)
 {
     t_token *tmp_token;
     t_list  *tmp_head;
-    t_type   state;
+//    t_type   state;
 
     tmp_head = data->token_list;
     while (tmp_head)
     {
         tmp_token = (t_token *)data->token_list->content;
-        if (tmp_token->str <= 6)
+        if (tmp_token->type <= 6)
             tmp_head = exec_builtin(tmp_head, data->env_list);
 		/*
         else if (tmp_token->type == COMMAND)

@@ -12,17 +12,19 @@
 
 # include "minishell.h"
 
-int	exec_build_pwd()
+int	exec_pwd(void)
 {
 	char	buffer[1024];
 
-	if (getcwd(buffer, sizeof(buffer)) != NULL)
+	if (!getcwd(buffer, sizeof(buffer)))
 		return (0);
 	else
 		printf("%s\n", buffer);
 	return (1);
 }
+/*
 int	exec_build_cd(char *str)
 {
 	(void)str;
 }
+*/
