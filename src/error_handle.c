@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-static void	free_table(char **table)
+
+void	free_table(char **table)
 {
 	int	i;
 
@@ -21,7 +21,7 @@ static void	free_table(char **table)
 		free(table[i++]);
 	free(table);
 }
-*/
+
 static void	free_token(void *token_void)
 {
 	t_token	*token;
@@ -57,6 +57,8 @@ static void	free_data(t_data *data)
 		free_list(&data->env_list, free);
 	if (data->token_list)
 		free_list(&data->token_list, free_token);
+	if (data->path)
+		free_table(data->path);
 	if (data)
 		free(data);
 }

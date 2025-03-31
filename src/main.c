@@ -17,6 +17,7 @@ void	init_data(t_data *data, char **env)
 	data->input = NULL;
 	data->env_list = NULL;
 	get_env(&data->env_list, env);
+	data->path = NULL;
 	data->token_list = NULL;
 }
 
@@ -36,7 +37,8 @@ int	main(int ac, char **av, char **env)
 		parsing(data);
 //		print_token_list(data->token_list);
 		execution(data);
-		if (!ft_strncmp(data->input, "exit", ft_strlen(data->input)))
+		wait(NULL);
+		if (!ft_strncmp("exit", data->input, ft_strlen("exit")))
 			error_handle(data, data->input, strerror(errno), 1);
 	}
 }

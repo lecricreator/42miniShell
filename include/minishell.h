@@ -23,6 +23,7 @@
 # include <limits.h>
 # include <sys/types.h>
 # include <errno.h>
+# include <sys/wait.h>
 
 typedef struct s_fds
 {
@@ -65,20 +66,27 @@ typedef struct s_data
     t_list  *env_list;
 	t_list	*token_list;
     char    *input;
+	char	**path;
+	char	*command_path;
+	char	**cmd_tab;
+	pid_t	pid;
 }	t_data;
 
 void	init_data(t_data *data, char **env);
 void    parsing(t_data *data);
 void    print_env(t_list *env);
 int	    error_handle(t_data *data, char *cmd, char *msg, int terminate);
+void	free_table(char **table);
 void    get_env(t_list **env_list, char **env);
+char	**get_path(char **path, t_list *env);
 void	lexing_tokens(t_data *data, char *input);
 void    print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
+int		wait_and_status(t_data *data);
 t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
-t_list  *exec_cmd(t_data *data, t_list *token_list, t_fds *fds);
+void	exec_cmd(t_data *data, t_list **token_list);
 int		exec_pwd();
 int		exec_cd(char *str);
 #endif
