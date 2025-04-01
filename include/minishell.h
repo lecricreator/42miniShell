@@ -31,6 +31,8 @@ typedef struct s_fds
 	int	prev_pipe;
 	int	infile;
 	int	outfile;
+	int std_in;
+	int std_out;
 }	t_fds;
 
 typedef enum e_type
@@ -77,6 +79,7 @@ void    parsing(t_data *data);
 void    print_env(t_list *env);
 int	    error_handle(t_data *data, char *cmd, char *msg, int terminate);
 void	free_table(char **table);
+void	free_data(t_data *data);
 void    get_env(t_list **env_list, char **env);
 char	**get_path(char **path, t_list *env);
 void	lexing_tokens(t_data *data, char *input);
@@ -86,7 +89,7 @@ void	execution(t_data *data);
 int		wait_and_status(t_data *data);
 t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
-void	exec_cmd(t_data *data, t_list **token_list);
-int		exec_pwd();
+void	exec_cmd(t_data *data, t_list **token_list, t_fds *fds);
+int		exec_pwd(void);
 int		exec_cd(char *str);
 #endif

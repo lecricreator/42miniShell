@@ -49,7 +49,7 @@ static void	free_list(t_list **list, void (*del)(void *))
 	*list = NULL;
 }
 
-static void	free_data(t_data *data)
+void	free_data(t_data *data)
 {
 	if (data->input)
 		free(data->input);
@@ -66,9 +66,15 @@ static void	free_data(t_data *data)
 void	reset_input(t_data *data)
 {
 	if (data->input)
+	{
 		free(data->input);
+		data->input = NULL;
+	}
 	if (data->token_list)
+	{
 		free_list(&data->token_list, free_token);
+		data->token_list = NULL;
+	}
 }
 
 int	error_handle(t_data *data, char *cmd, char *msg, int terminate)

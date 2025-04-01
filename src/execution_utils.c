@@ -2,7 +2,7 @@
 
 t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds)
 {
-	close(fds->pipefd[0]);
+	fds->prev_pipe= fds->pipefd[0];
     if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
 		error_handle(data, (char *)((t_token *)token_list->content)->str, "File: execution_utils || Function: exec_redir || dup2 failed", 1);
 
@@ -39,26 +39,6 @@ static int	cmd_tab_len(t_list *token_list)
 and sets the head of the token_list to the next operator, or the end of the command line*/
 static char  **get_cmd_tab(t_data *data, t_list **token_list)
 {
-	/*
-	char	**cmd_tab;
-	int		i;
-
-	t_list	*tmp_head;
-	t_token	*tmp_token;
- 
-	i = 0;
-	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len(token_list) + 1);
-	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "File: execution_utils || Function: get_cmd_tab || ft_calloc failed", 1);
-	tmp_head = token_list;
-	tmp_token = (t_token *)tmp_head->content;
-	while (tmp_head && (tmp_token->type <= 6 && tmp_token->type >= 12))
-	{
-		cmd_tab[i] = tmp_token->str;
-		tmp_head = tmp_head->next;
-	}
-	return (cmd_tab);
-	*/
 	char	**cmd_tab;
 	int		i;
 
@@ -153,8 +133,36 @@ char	**get_env_tab(t_list *env_list)
 	}
 	return (env_tab);
 }
-/*need to pass fds later*/
-void	exec_cmd(t_data *data, t_list **token_list)
+
+int	handle_procesess(t_data *data, t_fds *fds, char **env_tab)
+{
+	errno = 0;
+	if (!data->cmd_tab[0])
+		error_handle(data, "", "permission denied", 1);
+	else if (!data->command_path)
+	{
+		free_data(data);
+		exit(127);
+	}
+	else if (fds->prev_pipe < 1)
+	{
+		free_data(data);
+		exit(0);
+	}
+	close(fds->pipefd[0]);
+	if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
+		error_handle(data, "", "Error:\ndup2 failed", 1);
+	if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
+		error_handle(data, "", "Error:\ndup2 failed", 1);
+	close(fds->prev_pipe);
+	close(fds->pipefd[1]);
+	execve(data->command_path, data->cmd_tab, env_tab);
+	free_table(env_tab);
+	error_handle(data, data->cmd_tab[0], strerror(errno), 1);
+	return (0);
+}
+
+void	exec_cmd(t_data *data, t_list **token_list, t_fds *fds)
 {
 
 	char	**env_tab;
@@ -165,11 +173,5 @@ void	exec_cmd(t_data *data, t_list **token_list)
 	if (data->pid == -1)
 		error_handle(data, "", "Error:\nFork failed", 1);
 	if (!data->pid)
-	{
-		if (execve(data->command_path, data->cmd_tab, env_tab) == -1)
-		{
-			free_table(env_tab);
-			error_handle(data, data->cmd_tab[0], strerror(errno), 1);
-		}
-	}
+		handle_procesess(data, fds, env_tab);
 }
