@@ -1,16 +1,16 @@
 #include "minishell.h"
 
-t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds)
+t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds)
 {
-	fds->prev_pipe= fds->pipefd[0];
-    if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-		error_handle(data, (char *)((t_token *)token_list->content)->str, "File: execution_utils || Function: exec_redir || dup2 failed", 1);
-
-	/*next type = filename*/
+	if (dup2(fds->pipefd[0], fds->prev_pipe) == -1)  // Redirect pipe[0] as standard input
+		error_handle(data, "pipefd[0]", "Error:\ndup2 failed", 1);
+	close(fds->pipefd[0]);
+		error_handle(data, "std in", "Error:\ndup2 failed", 1);
+	close(fds->std_in);
 	return (token_list->next);
 }
 
-t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds)
+t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds)
 {
 	close(fds->pipefd[0]);
     if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
@@ -134,7 +134,7 @@ char	**get_env_tab(t_list *env_list)
 	return (env_tab);
 }
 
-int	handle_procesess(t_data *data, t_fds *fds, char **env_tab)
+int	handle_procesess(t_data *data, char **env_tab)
 {
 	errno = 0;
 	if (!data->cmd_tab[0])
@@ -144,25 +144,25 @@ int	handle_procesess(t_data *data, t_fds *fds, char **env_tab)
 		free_data(data);
 		exit(127);
 	}
-	else if (fds->prev_pipe < 1)
-	{
-		free_data(data);
-		exit(0);
-	}
-	close(fds->pipefd[0]);
-	if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-		error_handle(data, "", "Error:\ndup2 failed", 1);
-	if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-		error_handle(data, "", "Error:\ndup2 failed", 1);
-	close(fds->prev_pipe);
-	close(fds->pipefd[1]);
+//	else if (fds->prev_pipe < 1)
+//	{
+//		free_data(data);
+//		exit(0);
+//	}
+//	close(fds->pipefd[0]);
+//	if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
+//		error_handle(data, "prev_pipe", "in child: \ndup2 failed", 1);
+//	if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
+//		error_handle(data, "pipefd[1]", "in child:\ndup2 failed", 1);
+//	close(fds->prev_pipe);
+//	close(fds->pipefd[1]);
 	execve(data->command_path, data->cmd_tab, env_tab);
 	free_table(env_tab);
 	error_handle(data, data->cmd_tab[0], strerror(errno), 1);
 	return (0);
 }
 
-void	exec_cmd(t_data *data, t_list **token_list, t_fds *fds)
+void	exec_cmd(t_data *data, t_list **token_list)
 {
 
 	char	**env_tab;
@@ -173,5 +173,5 @@ void	exec_cmd(t_data *data, t_list **token_list, t_fds *fds)
 	if (data->pid == -1)
 		error_handle(data, "", "Error:\nFork failed", 1);
 	if (!data->pid)
-		handle_procesess(data, fds, env_tab);
+		handle_procesess(data, env_tab);
 }

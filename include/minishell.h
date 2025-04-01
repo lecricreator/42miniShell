@@ -89,7 +89,7 @@ void	execution(t_data *data);
 int		wait_and_status(t_data *data);
 t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
-void	exec_cmd(t_data *data, t_list **token_list, t_fds *fds);
+void	exec_cmd(t_data *data, t_list **token_list);
 int		exec_pwd(void);
 int		exec_cd(char *str);
 #endif
