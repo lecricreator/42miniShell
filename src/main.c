@@ -19,6 +19,7 @@ void	init_data(t_data *data, char **env)
 	get_env(&data->env_list, env);
 	data->path = NULL;
 	data->token_list = NULL;
+	data->cmd_list = NULL;
 }
 
 int	main(int ac, char **av, char **env)
@@ -36,6 +37,7 @@ int	main(int ac, char **av, char **env)
 		data->input = readline("Minishell $ ");
 		parsing(data);
 //		print_token_list(data->token_list);
+		create_cmd_block(data, data->token_list);
 		execution(data);
 		wait(NULL);
 		if (!ft_strncmp("exit", data->input, ft_strlen("exit")))

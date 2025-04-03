@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-static t_type	token_zero(t_token *token)
+static t_type	token_zero(t_token *token)//re test this and correct if needed
 {
-	if (token->type < 8)
+	if (token->type < 8)//we are including pipes but pipes requieres a command after, not an argument
 		return (ARGUMENT);
-	else if (token->type == OP_REDIR_IN)
+	else if (token->type == OP_REDIR_IN)//appen and heredoc also requires filename
 		return (FILENAME);
 	else if (token->type == UNKNOW)
 	{

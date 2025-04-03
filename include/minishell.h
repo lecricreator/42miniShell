@@ -53,8 +53,9 @@ typedef enum e_type
 	FILENAME,
 	ARGUMENT,
 	BAD_TOKEN,
-	UNKNOW
-} t_type;
+	UNKNOW,
+	NONE
+} 	t_type;
 
 typedef struct s_token
 {
@@ -63,14 +64,28 @@ typedef struct s_token
 	int		index;
 }	t_token;
 
+typedef struct s_redir
+{
+	t_type	type;
+	char	*filename;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	t_type	type;
+	char	**cmd_args;
+	char	*command_path;
+	t_list	*redir;
+	int		is_pipe;
+}	t_cmd;
+
 typedef struct s_data
 {
     t_list  *env_list;
 	t_list	*token_list;
+	t_list	*cmd_list;
     char    *input;
-	char	**path;
-	char	*command_path;
-	char	**cmd_tab;
+	char	**path;	
 	pid_t	pid;
 }	t_data;
 
@@ -86,10 +101,11 @@ void	lexing_tokens(t_data *data, char *input);
 void    print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
+void    create_cmd_block(t_data *data, t_list *token_list);
 int		wait_and_status(t_data *data);
 t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
-void	exec_cmd(t_data *data, t_list **token_list);
+void	exec_cmd(t_data *data, t_cmd *cmd);
 int		exec_pwd(void);
 int		exec_cd(char *str);
 #endif

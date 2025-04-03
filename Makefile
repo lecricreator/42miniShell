@@ -28,7 +28,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
-FILES = main.c parsing.c utils.c error_handle.c lexing.c execution.c exec_built.c execution_utils.c
+FILES = main.c parsing.c utils.c error_handle.c lexing.c execution.c exec_built.c execution_utils.c command_block.c
 INC_FILES = minishell.h
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
