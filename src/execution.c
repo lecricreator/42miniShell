@@ -9,12 +9,19 @@ t_list  *exec_builtin(t_list *token_list, t_list *env_list)
 	{
 		token_list = token_list->next;
 		tmp_token = token_list->content;
-		exec_cd(tmp_token->str);
+		exec_cd(tmp_token->str, env_list);
 		return (token_list->next);
 	}
 	if (tmp_token->type == BI_PWD)
 	{
 		exec_pwd();
+		return (token_list->next);
+	}
+	if (tmp_token->type == BI_ECHO)
+	{
+		token_list = token_list->next;
+		tmp_token = token_list->content;
+		exec_echo(tmp_token->str, env_list);
 		return (token_list->next);
 	}
 	/*
@@ -58,7 +65,6 @@ void	execution(t_data *data)
 {
 	t_token *tmp_token;
 	t_list  *tmp_head;
-//	t_type   state;
 
 	tmp_head = data->token_list;
 	while (tmp_head)

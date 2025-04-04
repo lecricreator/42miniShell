@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 20:23:47 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 10:04:50 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ int	main(int ac, char **av, char **env)
 	{
 		reset_input(data);
 		data->input = readline("Minishell $ ");
+		add_history(data->input);
 		parsing(data);
-		print_token_list(data->token_list);
+//		print_token_list(data->token_list);
 		execution(data);
 		if (!ft_strncmp(data->input, "exit", ft_strlen(data->input)))
 			error_handle(data, data->input, strerror(errno), 1);
