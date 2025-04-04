@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 01:36:45 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/04 10:05:49 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	error_handle(t_data *data, char *cmd, char *msg, int terminate)
 	if (terminate)
 	{
 		free_data(data);
+		rl_clear_history();
 		exit(exit_code);
 	}
 	else

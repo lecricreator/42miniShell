@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 20:34:52 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:00:27 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_cmd
 
 typedef struct s_data
 {
-    t_list  *env_list;
+	t_list	*env_list;
 	t_list	*token_list;
 	t_list	*cmd_list;
     char    *input;
@@ -102,7 +102,7 @@ void    get_env(t_list **env_list, char **env);
 char	**get_path(char **path, t_list *env);
 char	**get_env_tab(t_list *env_list);
 void	lexing_tokens(t_data *data, char *input);
-void    print_token_list(t_list *token_list);
+void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
 void    create_cmd_block(t_data *data, t_list *token_list);
@@ -111,5 +111,6 @@ t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd);
 int		exec_pwd(void);
-int		exec_cd(char *str);
+int		exec_cd(char *str, t_list **env_list);
+int		exec_echo(char *str, t_list *env_list);
 #endif

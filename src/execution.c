@@ -16,13 +16,22 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 {
 	if (cmd->type == BI_CD)
 	{
-		if ( !cmd->cmd_args || !cmd->cmd_args[0])// manage cd with no arguments. still not finished
-			exec_cd("~");
-		else
-			exec_cd(cmd->cmd_args[1]);
+		exec_cd(cmd->cmd_args[1], env_list);
 		return (errno);
 	}
 	if (cmd->type == BI_PWD)
+	{
+		exec_pwd();
+		return (errno);
+	}
+	if (tmp_token->type == BI_ECHO)
+	{
+		token_list = token_list->next;
+		tmp_token = token_list->content;
+		exec_cd(tmp_token->str);
+		return (token_list->next);
+	}
+	if (tmp_token->type == BI_PWD)
 	{
 		exec_pwd();
 		return (errno);
@@ -90,7 +99,7 @@ void	restore_in_out(t_data *data, t_fds *fds)
 		error_handle(data, "pipefd[0]", "Error:\ndup2 failed", 1);
 	if (dup2(fds->std_out, STDOUT_FILENO) == -1) // Restore standard output to terminal
 		error_handle(data, "std out", "Error:\ndup2 failed", 1);
-	close(fds->pipefd[1]);  
+	close(fds->pipefd[1]);
 	close(fds->std_out);
 	if (dup2(fds->std_in, STDIN_FILENO) == -1) // Restore standard input to terminal
 		error_handle(data, "std in", "Error:\ndup2 failed", 1);
