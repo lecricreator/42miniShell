@@ -14,10 +14,12 @@
 
 static t_type	token_zero(t_token *token)//re test this and correct if needed
 {
-	if (token->type < 8)//we are including pipes but pipes requieres a command after, not an argument
+	if (token->type <= 6)//we are including pipes but pipes requieres a command after, not an argument
 		return (ARGUMENT);
 	else if (token->type == OP_REDIR_IN)//appen and heredoc also requires filename
 		return (FILENAME);
+	else if (token->type == OP_PIPE)
+		return (BAD_TOKEN);
 	else if (token->type == UNKNOW)
 	{
 		token->type = COMMAND;
@@ -31,11 +33,7 @@ static t_type	next_token(t_token *token, t_type state)
 	if (token->type >= 8 && token->type <= 11)// redir tokens (< > >>) and << HEREDOC??
 		return (FILENAME);
 	if (token->type == OP_PIPE)
-	{
-		if (token->index == 1)
-			return (BAD_TOKEN);
 		return (COMMAND);
-	}
 	if (state == ARGUMENT)
 	{
 		token->type = ARGUMENT;
@@ -63,6 +61,7 @@ void	parsing(t_data *data)
 	t_type	state;
 
 	lexing_tokens(data, data->input);
+	print_token_list(data->token_list);
 	tmp_head = data->token_list;
 	state = COMMAND;
 	while (tmp_head)
@@ -74,7 +73,7 @@ void	parsing(t_data *data)
 			state = next_token(tmp_token, state);
 		if (state == BAD_TOKEN)
 		{
-			ft_printf_fd(2, "invalid token\n");// manage this case
+			error_handle(data, tmp_token->str, "syntax error near elemnt", 0);
 			return ;
 		}
 		tmp_head = tmp_head->next;
