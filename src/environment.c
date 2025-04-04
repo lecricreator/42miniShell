@@ -6,7 +6,7 @@
 /*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:50:06 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 01:50:11 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:58:04 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	get_env(t_list **env_list, char **env)
 static int	env_size(t_list *env_list)
 {
 	t_list	*tmp_head;
-	inti	i;
+	int		i;
 
 	i = 0;
 	tmp_head = env_list;
