@@ -11,14 +11,17 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
+
 int	wait_and_status(t_data *data)
 {
+	t_list	*tmp_head;
 	int	exit_code;
 	int	child_exit;
 
 	exit_code = 0;
-	while (data->n_cmd--)
+	tmp_head = data->cmd_list;
+	data->status = 0;
+	while (tmp_head)
 	{
 		if (waitpid(data->pid, &data->status, 0) > 0)
 		{
@@ -31,11 +34,11 @@ int	wait_and_status(t_data *data)
 			else if (WIFSIGNALED(data->status))
 				exit_code = 127;
 		}
+		tmp_head = tmp_head->next;
 	}
-	free_data(data);
 	return (exit_code);
 }
-*/
+
 void	print_token_list(t_list *token_list)
 {
 	t_token	*tmp_token;

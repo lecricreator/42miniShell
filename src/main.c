@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **env)
 //		print_token_list(data->token_list);
 		create_cmd_block(data, data->token_list);
 		execution(data);
-		wait(NULL);
+		wait_and_status(data);
 		if (!ft_strncmp("exit", data->input, ft_strlen("exit")))
 			error_handle(data, data->input, strerror(errno), 1);
 	}

@@ -138,8 +138,8 @@ void	fill_cmd_block(t_data *data, t_list **token_list, t_list **cmd_list)
 	{
 		cmd_node = create_cmd(data, token_list);
 		new_node = ft_lstnew(cmd_node);
-		//  if(*token_list)
-		//    *token_list = (*token_list)->next;
+		if(*token_list)
+			*token_list = (*token_list)->next;
 		ft_lstadd_back(cmd_list, new_node);
 	}
 }

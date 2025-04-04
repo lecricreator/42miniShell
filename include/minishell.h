@@ -86,6 +86,7 @@ typedef struct s_data
 	t_list	*cmd_list;
     char    *input;
 	char	**path;// should be this here??
+	int		status;
 	pid_t	pid;
 }	t_data;
 
@@ -109,7 +110,7 @@ void    create_cmd_block(t_data *data, t_list *token_list);
 int		wait_and_status(t_data *data);
 t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
-void	exec_cmd(t_data *data, t_cmd *cmd);
+void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds);
 int		exec_pwd(void);
 int		exec_cd(char *str, t_list *env_list);
 int		exec_echo(char **cmd_args, t_list *env_list);

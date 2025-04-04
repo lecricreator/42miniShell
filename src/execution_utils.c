@@ -70,7 +70,7 @@ void	find_program(t_data *data, t_cmd *cmd)
 		cmd->cmd_args[0], "command not found", 0);
 }
 
-int	handle_procesess(t_data *data, t_cmd *cmd, char **env_tab)
+int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 {
 	errno = 0;
 	if (!cmd->cmd_args[0])
@@ -80,18 +80,19 @@ int	handle_procesess(t_data *data, t_cmd *cmd, char **env_tab)
 		free_data(data);
 		exit(127);
 	}
-//	else if (fds->prev_pipe < 1)
-//	{
-//		free_data(data);
-//		exit(0);
-//	}
-//	close(fds->pipefd[0]);
-//	if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-//		error_handle(data, "prev_pipe", "in child: \ndup2 failed", 1);
-//	if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-//		error_handle(data, "pipefd[1]", "in child:\ndup2 failed", 1);
-//	close(fds->prev_pipe);
-//	close(fds->pipefd[1]);
+	if (cmd->is_pipe)
+	{
+		close(fds->pipefd[0]);
+		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
+			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
+		close(fds->pipefd[1]);
+	}
+	if (fds->prev_pipe > 0)
+	{
+		if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
+			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
+		close(fds->prev_pipe);
+	}
 	if (execve(cmd->command_path, cmd->cmd_args, env_tab) == -1)
 	{
 		free_table(env_tab);
@@ -100,7 +101,7 @@ int	handle_procesess(t_data *data, t_cmd *cmd, char **env_tab)
 	return (0);
 }
 
-void	exec_cmd(t_data *data, t_cmd *cmd)
+void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds)
 {
 	char	**env_tab;
 
@@ -110,7 +111,7 @@ void	exec_cmd(t_data *data, t_cmd *cmd)
 	if (data->pid == -1)
 		error_handle(data, "", "Error:\nFork failed", 1);
 	if (!data->pid)
-		handle_procesess(data, cmd, env_tab);
+		handle_procesess(data, cmd, fds, env_tab);
 	if (env_tab)
 		free_table(env_tab);
 }
