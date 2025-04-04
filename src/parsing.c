@@ -61,7 +61,6 @@ void	parsing(t_data *data)
 	t_type	state;
 
 	lexing_tokens(data, data->input);
-	print_token_list(data->token_list);
 	tmp_head = data->token_list;
 	state = COMMAND;
 	while (tmp_head)
@@ -73,8 +72,8 @@ void	parsing(t_data *data)
 			state = next_token(tmp_token, state);
 		if (state == BAD_TOKEN)
 		{
-			error_handle(data, tmp_token->str, "syntax error near elemnt", 0);
-			return ;
+			error_handle(data, tmp_token->str, "syntax error near elemnt", 0);//modify error handle to output the correct error format
+			return ;// handle this to return the program to the prompt
 		}
 		tmp_head = tmp_head->next;
 	}

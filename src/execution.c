@@ -95,30 +95,28 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 		if (data->pid == -1)
 			error_handle(data, cmd->cmd_args[0], "execution:96:\nFork failed", 1);
 	}
+	else
+		exec_builtin(cmd, data->env_list);
 	if (!data->pid)
 	{
 		if (cmd->is_pipe)
 		{
 			close(fds->pipefd[0]);
-			if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-				error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
 			if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
 				error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-			close(fds->prev_pipe);
 			close(fds->pipefd[1]);
 		}
-		else
-			{
-				if (fds->prev_pipe > 0)
-				{
-					if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-						error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-				}
-			}
+		if (fds->prev_pipe > 0)
+		{
+			if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
+				error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
+			close(fds->prev_pipe);
+		}
 		exec_builtin(cmd, data->env_list);
+		free_data(data);
+		exit(errno);
 	}
-	else
-		exec_builtin(cmd, data->env_list);
+
 }
 
 void	restore_in_out(t_data *data, t_fds *fds)
