@@ -6,34 +6,17 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/27 22:30:10 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/04 01:42:04 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_env(t_list **env_list, char **env)
+static t_type	token_zero(t_token *token)//re test this and correct if needed
 {
-	char	*tmp_content;
-	int		i;
-
-	i = 0;
-	tmp_content = NULL;
-	while (env[i])
-	{
-		tmp_content = ft_strdup(env[i]);
-		if (!tmp_content)
-			return ;
-		ft_lstadd_back(env_list, ft_lstnew(tmp_content));
-		i++;
-	}
-}
-
-static t_type	token_zero(t_token *token)
-{
-	if (token->type < 8)
+	if (token->type < 8)//we are including pipes but pipes requieres a command after, not an argument
 		return (ARGUMENT);
-	else if (token->type == OP_REDIR_IN)
+	else if (token->type == OP_REDIR_IN)//appen and heredoc also requires filename
 		return (FILENAME);
 	else if (token->type == UNKNOW)
 	{
@@ -45,7 +28,7 @@ static t_type	token_zero(t_token *token)
 
 static t_type	next_token(t_token *token, t_type state)
 {
-	if (token->type >= 8 && token->type <= 10)// redir tokens (< > >>) HEREDOC??
+	if (token->type >= 8 && token->type <= 11)// redir tokens (< > >>) and << HEREDOC??
 		return (FILENAME);
 	if (token->type == OP_PIPE)
 	{
@@ -75,7 +58,7 @@ static t_type	next_token(t_token *token, t_type state)
 
 void	parsing(t_data *data)
 {
-	t_token *tmp_token;
+	t_token	*tmp_token;
 	t_list	*tmp_head;
 	t_type	state;
 

@@ -6,11 +6,16 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/27 22:26:22 by lomorale         ###   ########.fr       */
+=======
+/*   Updated: 2025/04/04 10:05:49 by lomorale         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+<<<<<<< HEAD
 /*
 static void	free_table(char **table)
 {
@@ -69,6 +74,8 @@ void	reset_input(t_data *data)
 	if (data->token_list)
 		free_list(&data->token_list, free_token);
 }
+=======
+>>>>>>> main
 
 int	error_handle(t_data *data, char *cmd, char *msg, int terminate)
 {
@@ -84,6 +91,7 @@ int	error_handle(t_data *data, char *cmd, char *msg, int terminate)
 	if (terminate)
 	{
 		free_data(data);
+		rl_clear_history();
 		exit(exit_code);
 	}
 	else
