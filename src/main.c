@@ -6,11 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/28 20:23:47 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 01:43:58 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	init_data(t_data *data, char **env)
 {
@@ -24,10 +24,10 @@ void	init_data(t_data *data, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	(void)ac;
-	(void)av;
 	t_data	*data;
 
+	(void)ac;
+	(void)av;
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);
 //	print_env(data->env_list);

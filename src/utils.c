@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/03/27 11:46:04 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 01:46:03 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,6 @@ int	wait_and_status(t_data *data)
 	return (exit_code);
 }
 */
-void	print_env(t_list *env_list)
-{
-	while (env_list)
-	{
-		printf("%s\n", (char *)env_list->content);
-		env_list = env_list->next;
-	}
-}
-
 void	print_token_list(t_list *token_list)
 {
 	t_token	*tmp_token;
@@ -58,22 +49,6 @@ void	print_token_list(t_list *token_list)
 	}
 }
 
-void	get_env(t_list **env_list, char **env)
-{
-	char	*tmp_content;
-	int		i;
-
-	i = 0;
-	tmp_content = NULL;
-	while (env[i])
-	{
-		tmp_content = ft_strdup(env[i]);
-		if (!tmp_content)
-			return ;
-		ft_lstadd_back(env_list, ft_lstnew(tmp_content));
-		i++;
-	}
-}
 
 static void	complete_path(char **path)
 {
@@ -92,7 +67,7 @@ static void	complete_path(char **path)
 
 char	**get_path(char **path, t_list *env)
 {
-	t_list *tmp_head;
+	t_list	*tmp_head;
 
 	tmp_head = env;
 	while (tmp_head)
@@ -105,7 +80,7 @@ char	**get_path(char **path, t_list *env)
 		tmp_head = tmp_head->next;
 	}
 	if (!path)
-		error_handle(NULL , "", "path not found", 1);
+		error_handle(NULL, "", "path not found", 1);
 	complete_path(path);
 	return (path);
 }

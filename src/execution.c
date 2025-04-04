@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
+/*   Updated: 2025/04/04 02:07:32 by odruke-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
-int  exec_builtin(t_cmd *cmd, t_list *env_list)
+int	exec_builtin(t_cmd *cmd, t_list *env_list)
 {
-
 	if (cmd->type == BI_CD)
 	{
 		if ( !cmd->cmd_args || !cmd->cmd_args[0])// manage cd with no arguments. still not finished
@@ -72,27 +83,25 @@ void	redirect_in_out(t_data *data, t_fds *fds)
 
 void	restore_in_out(t_data *data, t_fds *fds)
 {
-		if (!(fds->prev_pipe < 0))
+	if (!(fds->prev_pipe < 0))
 		close(fds->prev_pipe);
-		fds->prev_pipe = -1;
-		if (dup2(fds->pipefd[1], STDIN_FILENO) == -1)  // Redirect pipe[0] as standard input
-			error_handle(data, "pipefd[0]", "Error:\ndup2 failed", 1);
-		if (dup2(fds->std_out, STDOUT_FILENO) == -1) // Restore standard output to terminal
-			error_handle(data, "std out", "Error:\ndup2 failed", 1);
-		close(fds->pipefd[1]);  
-		close(fds->std_out);
-		if (dup2(fds->std_in, STDIN_FILENO) == -1) // Restore standard input to terminal
-			error_handle(data, "std in", "Error:\ndup2 failed", 1);
-		close(fds->std_in);
-
-
+	fds->prev_pipe = -1;
+	if (dup2(fds->pipefd[1], STDIN_FILENO) == -1)  // Redirect pipe[0] as standard input
+		error_handle(data, "pipefd[0]", "Error:\ndup2 failed", 1);
+	if (dup2(fds->std_out, STDOUT_FILENO) == -1) // Restore standard output to terminal
+		error_handle(data, "std out", "Error:\ndup2 failed", 1);
+	close(fds->pipefd[1]);  
+	close(fds->std_out);
+	if (dup2(fds->std_in, STDIN_FILENO) == -1) // Restore standard input to terminal
+		error_handle(data, "std in", "Error:\ndup2 failed", 1);
+	close(fds->std_in);
 }
 
 void	execution(t_data *data)
 {
-	t_cmd 	*tmp_cmd;
-	t_list  *tmp_head;
-    t_fds   fds;
+	t_cmd	*tmp_cmd;
+	t_list	*tmp_head;
+	t_fds	fds;
 
 	tmp_head = data->cmd_list;
 	fds.prev_pipe = -1;
@@ -100,7 +109,7 @@ void	execution(t_data *data)
 	{
 		tmp_cmd = (t_cmd *)tmp_head->content;
 		if (pipe(fds.pipefd) == -1)
-			error_handle(data, tmp_cmd->cmd_args[0] , "File: execution.c || Function: execution || Pipe failed", 1);
+			error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
 		if (tmp_cmd->type <= 6)// built in commands
 			exec_builtin(tmp_cmd, data->env_list);
 		else if (tmp_cmd->type == COMMAND)

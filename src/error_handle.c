@@ -6,76 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/27 12:11:00 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 01:36:45 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_table(char **table)
-{
-	int	i;
-
-	i = 0;
-	while (table[i])
-		free(table[i++]);
-	free(table);
-}
-
-static void	free_token(void *token_void)
-{
-	t_token	*token;
-
-	token = (t_token *)token_void;
-	if (token->str)
-		free(token->str);
-	free(token);
-}
-
-static void	free_list(t_list **list, void (*del)(void *))
-{
-	t_list	*tmp;
-
-	if (!list || !*list)
-		return ;
-	while (*list)
-	{
-		tmp = (*list)->next;
-		if ((*list)->content && del)
-			del((*list)->content);
-		free(*list);
-		*list = tmp;
-	}
-	*list = NULL;
-}
-
-void	free_data(t_data *data)
-{
-	if (data->input)
-		free(data->input);
-	if (data->env_list)
-		free_list(&data->env_list, free);
-	if (data->token_list)
-		free_list(&data->token_list, free_token);
-	if (data->path)
-		free_table(data->path);
-	if (data)
-		free(data);
-}
-
-void	reset_input(t_data *data)
-{
-	if (data->input)
-	{
-		free(data->input);
-		data->input = NULL;
-	}
-	if (data->token_list)
-	{
-		free_list(&data->token_list, free_token);
-		data->token_list = NULL;
-	}
-}
 
 int	error_handle(t_data *data, char *cmd, char *msg, int terminate)
 {

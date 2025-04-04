@@ -85,7 +85,7 @@ typedef struct s_data
 	t_list	*token_list;
 	t_list	*cmd_list;
     char    *input;
-	char	**path;	
+	char	**path;// should be this here??
 	pid_t	pid;
 }	t_data;
 
@@ -95,8 +95,12 @@ void    print_env(t_list *env);
 int	    error_handle(t_data *data, char *cmd, char *msg, int terminate);
 void	free_table(char **table);
 void	free_data(t_data *data);
+void	free_cmd(void *cmd_void);
+void	free_token(void *token_void);
+void	free_list(t_list **list, void (*del)(void *));
 void    get_env(t_list **env_list, char **env);
 char	**get_path(char **path, t_list *env);
+char	**get_env_tab(t_list *env_list);
 void	lexing_tokens(t_data *data, char *input);
 void    print_token_list(t_list *token_list);
 void	reset_input(t_data *data);

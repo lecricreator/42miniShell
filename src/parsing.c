@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/03/27 22:30:10 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/04 01:42:04 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_type	next_token(t_token *token, t_type state)
 
 void	parsing(t_data *data)
 {
-	t_token *tmp_token;
+	t_token	*tmp_token;
 	t_list	*tmp_head;
 	t_type	state;
 
