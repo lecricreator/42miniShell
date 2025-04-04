@@ -6,13 +6,13 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/04 15:43:21 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 17:22:55 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-char	*give_var_linked_list(char *value, t_list **env_list)
+char	*give_var_linked_list(char *value, t_list *env_list)
 {
 	char	*tmp_content;
 	int		size_value;
@@ -20,7 +20,7 @@ char	*give_var_linked_list(char *value, t_list **env_list)
 	size_value = (int)ft_strlen(value);
 	while (env_list)
 	{
-		tmp_content = *(env_list)->content;
+		tmp_content = (env_list)->content;
 		if (ft_strncmp(value, tmp_content, size_value) == 0)
 			break ;
 		env_list = env_list->next;
@@ -53,7 +53,7 @@ int	exec_pwd(void)
 	return (errno);
 }
 
-int	exec_cd(char *str, t_list **env_list)
+int	exec_cd(char *str, t_list *env_list)
 {
 		char	buffer[1024];
 
@@ -72,16 +72,17 @@ int	exec_cd(char *str, t_list **env_list)
 	return (errno);
 }
 
-int	exec_echo(char *str, t_list *env_list)
+int	exec_echo(char **cmd_args, t_list *env_list)
 {
 	(void)env_list;
-	if (str[0] == '$')
-	{
+	(void)**cmd_args;
+	// if (cmd_args[0] == '$')
+	// {
 
-	}
-	else
-	{
-		ft_printf_fd(1, "%s\n", str);
-	}
+	// }
+	// else
+	// {
+	// 	ft_printf_fd(1, "%s\n", cmd_args);
+	// }
 	return (1);
 }

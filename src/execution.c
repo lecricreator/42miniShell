@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 02:07:32 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/04 17:22:02 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,12 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		exec_pwd();
 		return (errno);
 	}
-	if (tmp_token->type == BI_ECHO)
+	if (cmd->type == BI_ECHO)
 	{
-		token_list = token_list->next;
-		tmp_token = token_list->content;
-		exec_cd(tmp_token->str);
-		return (token_list->next);
+		exec_echo(cmd->cmd_args, env_list);
+		return(errno);
 	}
-	if (tmp_token->type == BI_PWD)
+	if (cmd->type == BI_PWD)
 	{
 		exec_pwd();
 		return (errno);

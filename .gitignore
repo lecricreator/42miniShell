@@ -3,6 +3,7 @@
 !.gitignore
 
 # at ignore
+val_out.log
 mini_shell
 ./src/target/
 *.o

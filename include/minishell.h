@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/04 15:00:27 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/04 17:21:27 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,6 @@ t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd);
 int		exec_pwd(void);
-int		exec_cd(char *str, t_list **env_list);
-int		exec_echo(char *str, t_list *env_list);
+int		exec_cd(char *str, t_list *env_list);
+int		exec_echo(char **cmd_args, t_list *env_list);
 #endif
