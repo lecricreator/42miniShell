@@ -87,6 +87,7 @@ typedef struct s_data
     char    *input;
 	char	**path;// should be this here??
 	int		status;
+	int		n_fork;
 	pid_t	pid;
 }	t_data;
 

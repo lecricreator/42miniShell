@@ -20,7 +20,7 @@ void	init_data(t_data *data, char **env)
 	data->path = NULL;
 	data->token_list = NULL;
 	data->cmd_list = NULL;
-	//data->pid =	1;
+	data->n_fork = 0;
 }
 
 int	main(int ac, char **av, char **env)

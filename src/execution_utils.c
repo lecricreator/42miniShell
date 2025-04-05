@@ -110,6 +110,7 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds)
 	data->pid = fork();
 	if (data->pid == -1)
 		error_handle(data, "", "Error:\nFork failed", 1);
+	data->n_fork++;
 	if (!data->pid)
 		handle_procesess(data, cmd, fds, env_tab);
 	if (env_tab)

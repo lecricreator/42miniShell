@@ -14,14 +14,12 @@
 
 int	wait_and_status(t_data *data)
 {
-	t_list	*tmp_head;
 	int	exit_code;
 	int	child_exit;
 
 	exit_code = 0;
-	tmp_head = data->cmd_list;
 	data->status = 0;
-	while (tmp_head)
+	while (data->n_fork--)
 	{
 		if (waitpid(data->pid, &data->status, 0) > 0)
 		{
@@ -34,7 +32,6 @@ int	wait_and_status(t_data *data)
 			else if (WIFSIGNALED(data->status))
 				exit_code = 127;
 		}
-		tmp_head = tmp_head->next;
 	}
 	return (exit_code);
 }
