@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 17:22:02 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:52:22 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 {
 	if (cmd->type == BI_CD)
 	{
-		exec_cd(cmd->cmd_args[1], env_list);
+		exec_cd(cmd->cmd_args[1], &env_list);
 		return (errno);
 	}
 	if (cmd->type == BI_PWD)
