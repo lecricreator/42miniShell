@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/06 10:52:22 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/06 16:01:00 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 {
 	if (cmd->type == BI_CD)
 	{
-		exec_cd(cmd->cmd_args[1], &env_list);
+		if (cmd->nbr_arg <= 1)
+			chdir(give_var_env_list("HOME", env_list));
+		else if (cmd->nbr_arg <= 2)
+			exec_cd(cmd->cmd_args[1], &env_list);
+		else
+			ft_printf_fd(2, "Minishell: cd: too many arguments\n");
 		return (errno);
 	}
 	if (cmd->type == BI_PWD)
@@ -40,11 +45,6 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		exec_exit();
 		return (token_list->next);
 	}
-	if (tmp_token->type == BI_EXIT)
-	{
-		exec_exit();
-		return (token_list->next);
-	}
 	*/
 	if (cmd->type == BI_ENV)
 	{
@@ -60,11 +60,6 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 	if (tmp_token->type == BI_UNSET)
 	{
 		exec_unset();
-		return (token_list->next);
-	}
-	if (tmp_token->type == BI_ECHO)
-	{
-		exec_echo(argument?);
 		return (token_list->next);
 	}
 	*/
@@ -118,7 +113,10 @@ void	execution(t_data *data)
 		if (pipe(fds.pipefd) == -1)
 			error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
 		if (tmp_cmd->type <= 6)// built in commands
+		{
+			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);
 			exec_builtin(tmp_cmd, data->env_list);
+		}
 		else if (tmp_cmd->type == COMMAND)
 			exec_cmd(data, tmp_cmd);
 		tmp_head = tmp_head->next;

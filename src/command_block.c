@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_block.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:02:16 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 02:02:18 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/06 11:25:33 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	cmd_tab_len(t_list *token_list)
 	return (i);
 }
 
-/*extracts the currend command and his arguments into a 2D array, 
+/*extracts the currend command and his arguments into a 2D array,
 and sets the head of the token_list to the next operator, or the end of the command line*/
 static char  **get_cmd_tab(t_data *data, t_list **token_list)
 {
@@ -65,7 +65,7 @@ void	fill_redir(t_data *data, t_list **redir, t_list **token_list)
 	t_redir	*redir_node;
 
 	tmp_token = (t_token *)(*token_list)->content;
-	redir_node = (t_redir *)malloc(sizeof(t_redir));
+	redir_node = (t_redir *)calloc(sizeof(t_redir), 1);
 	if (redir_node)
 		error_handle(data, tmp_token->str, "command_block.c:56, malloc failed", 1);
 	init_redir(redir_node);
