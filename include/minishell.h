@@ -52,6 +52,7 @@ typedef enum e_type
 	COMMAND,
 	FILENAME,
 	ARGUMENT,
+	DELIMITER,
 	BAD_TOKEN,
 	UNKNOW,
 	NONE

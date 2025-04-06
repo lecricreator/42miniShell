@@ -50,6 +50,7 @@ FILES = ft_isalpha\
 		ft_lstdelone\
 		ft_lstclear\
 		ft_lstiter\
+		ft_lstdel_node\
 
 SRC = $(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 
