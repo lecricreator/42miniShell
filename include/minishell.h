@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/06 13:25:03 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:01:41 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	exec_cmd(t_data *data, t_cmd *cmd);
 int		exec_pwd(void);
 int		exec_cd(char *str, t_list **env_list);
 void	exec_echo(char **cmd_args, t_list *env_list);
+void	exec_export(char **cmd_args, t_list **env_list);
 char	*give_var_env_list(char *value, t_list *env_list);
-void	write_env_list(char *old_value, char *env_value, t_list **env_list);
+void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 #endif

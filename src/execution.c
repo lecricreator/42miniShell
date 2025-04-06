@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/06 16:01:00 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:15:58 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,13 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		print_env(env_list);
 		return (errno);
 	}
-	/*
-	if (tmp_token->type == BI_EXPORT)
+	if (cmd->type == BI_EXPORT)
 	{
-		exec_export();
-		return (token_list->next);
+		if (cmd->nbr_arg == 2)
+			exec_export(cmd->cmd_args, &env_list);
+		return (errno);
 	}
+	/*
 	if (tmp_token->type == BI_UNSET)
 	{
 		exec_unset();

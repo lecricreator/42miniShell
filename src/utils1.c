@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/06 13:26:59 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/06 16:58:51 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ char	*give_var_env_list(char *value, t_list *env_list)
 	return (&tmp_content[size_value + 1]);
 }
 
-void	write_env_list(char *old_value, char *env_value, t_list **env_list)
+void	write_env_list(char *value_modify, char *env_value, t_list **env_list)
 {
 	char	*tmp_content;
 	t_list	*head_env;
@@ -116,7 +116,7 @@ void	write_env_list(char *old_value, char *env_value, t_list **env_list)
 			break ;
 		(*env_list) = (*env_list)->next;
 	}
-	(*env_list)->content = ft_strjoin(env_value, old_value);
+	(*env_list)->content = ft_strjoin(env_value, value_modify);
 	(*env_list) = head_env;
 }
 

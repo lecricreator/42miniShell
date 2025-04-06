@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/06 13:25:15 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:09:44 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,30 @@ void	exec_echo(char **cmd_args, t_list *env_list)
 	}
 	if (flags <= 0)
 		ft_printf_fd(1, "\n", cmd_args);
+}
+
+void	exec_export(char **cmd_args, t_list **env_list)
+{
+	char	*var_in_env_list;
+	int		i;
+
+	i = -1;
+	while (cmd_args[1][++i])
+	{
+		if (cmd_args[1][i - 1] == '=')
+			break ;
+	}
+	var_in_env_list = calloc(1, 1 + i);
+	i = -1;
+	while (cmd_args[1][++i])
+	{
+		if (cmd_args[1][i - 1] == '=')
+			break ;
+		else
+			var_in_env_list[i] = cmd_args[1][i];
+	}
+	// ft_printf_fd(2, "var env : %s\n", var_in_env_list);
+	// ft_printf_fd(2, "args : %s\n", cmd_args[1]);
+	(void)env_list;
+	write_env_list(&cmd_args[1][i], var_in_env_list, env_list);
 }
