@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/04 01:46:03 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:26:59 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,38 @@ int	is_redir_op(t_type type)
 	else
 		return (0);
 }
+char	*give_var_env_list(char *value, t_list *env_list)
+{
+	char	*tmp_content;
+	int		size_value;
+
+	size_value = (int)ft_strlen(value);
+	while (env_list)
+	{
+		tmp_content = (env_list)->content;
+		if (ft_strncmp(value, tmp_content, size_value) == 0)
+			break ;
+		env_list = env_list->next;
+	}
+	return (&tmp_content[size_value + 1]);
+}
+
+void	write_env_list(char *old_value, char *env_value, t_list **env_list)
+{
+	char	*tmp_content;
+	t_list	*head_env;
+	int		size_value;
+
+	head_env = (*env_list);
+	size_value = (int)ft_strlen(env_value);
+	while ((*env_list))
+	{
+		tmp_content = (*env_list)->content;
+		if (ft_strncmp(env_value, tmp_content, size_value) == 0)
+			break ;
+		(*env_list) = (*env_list)->next;
+	}
+	(*env_list)->content = ft_strjoin(env_value, old_value);
+	(*env_list) = head_env;
+}
+

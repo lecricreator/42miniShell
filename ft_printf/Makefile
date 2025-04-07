@@ -31,16 +31,17 @@ CFLAGS = -Wall -Werror -Wextra -g
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
+	@ar rcs $(NAME) $(OBJ)
 
 %.o: %.c
-	$(CC) -I$(INCDIR) $(CFLAGS) -c $< -o $@
+	@printf "Compiling: %s                                    \r" $<
+	@$(CC) -I$(INCDIR) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

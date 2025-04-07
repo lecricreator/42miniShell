@@ -28,7 +28,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
-FILES = main.c parsing.c utils.c error_handle.c lexing.c execution.c exec_built.c execution_utils.c command_block.c environment.c free_data.c free_data_utils.c
+FILES = main.c parsing.c utils1.c utils2.c error_handle.c lexing.c execution.c exec_built.c execution_utils.c command_block.c environment.c free_data.c free_data_utils.c
 INC_FILES = minishell.h
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
@@ -41,55 +41,57 @@ INC = $(addprefix $(INC_DIR)%.h, $(INC_FILES))
 all: aux_libraries $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) $(LFLAGS) $(FT_PRINTF) $(LIBFT) -o $@
+	@$(CC) $(OBJ) $(LFLAGS) $(FT_PRINTF) $(LIBFT) -o $@
 	@$(MAKE) compilation_success
 
 # create .o file
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+	@printf "Compiling: %s                                    \r" $<
+	@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	printf "Starting compilation..."
+	@mkdir -p $(OBJ_DIR)
 
 aux_libraries:
-	make -C $(LIBFT_DIR) all
-	make -C $(FT_PRINTF_DIR) all
+	@make -C $(LIBFT_DIR) -s all
+	@make -C $(FT_PRINTF_DIR) -s all
 
 # delete just file OBJ_DIR and o file inside
 clean:
-	rm -rf $(OBJ_DIR)
-	make -C $(LIBFT_DIR) clean
-	make -C $(FT_PRINTF_DIR) clean
+	@rm -rf $(OBJ_DIR)
+	@make -C $(LIBFT_DIR) -s clean
+	@make -C $(FT_PRINTF_DIR) -s clean
 
 # executes clean and deletes the executable
 fclean: clean
-	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
-	make -C $(FT_PRINTF_DIR) fclean
+	@rm -f $(NAME)
+	@make -C $(LIBFT_DIR) -s fclean
+	@make -C $(FT_PRINTF_DIR) -s fclean
 
 re: fclean all
 
 compilation_success:
-	@echo "▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌"
-	@echo "▐-██████---██████--███--------------███-----------▌"
-	@echo "▐░░██████-██████--░░░--------------░░░------------▌"
-	@echo "▐-░███░█████░███--████--████████---████-----------▌"
-	@echo "▐-░███░░███-░███-░░███-░░███░░███-░░███-----------▌"
-	@echo "▐-░███-░░░--░███--░███--░███-░███--░███-----------▌"
-	@echo "▐-░███------░███--░███--░███-░███--░███-----------▌"
-	@echo "▐-█████-----█████-█████-████-█████-█████----------▌"
-	@echo "▐░░░░░-----░░░░░-░░░░░-░░░░-░░░░░-░░░░░-----------▌"
-	@echo "▐-------------------------------------------------▌"
-	@echo "▐-------------------------------------------------▌"
-	@echo "▐-------------------------------------------------▌"
-	@echo "▐--█████████--█████---█████-██████████-████--████-▌"
-	@echo "▐-███░░░░░███░░███---░░███-░░███░░░░░█░░███-░░███-▌"
-	@echo "▐░███----░░░--░███----░███--░███--█-░--░███--░███-▌"
-	@echo "▐░░█████████--░███████████--░██████----░███--░███-▌"
-	@echo "▐-░░░░░░░░███-░███░░░░░███--░███░░█----░███--░███-▌"
-	@echo "▐-███----░███-░███----░███--░███-░---█-░███--░███-▌"
-	@echo "▐░░█████████--█████---█████-██████████-█████-█████▌"
-	@echo "▐-░░░░░░░░░--░░░░░---░░░░░-░░░░░░░░░░-░░░░░-░░░░░-▌"
-	@echo "▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌"
+	@echo "▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌"
+	@echo "▐----------██████---██████--███--------------███-----------▌"
+	@echo "▐---------░░██████-██████--░░░--------------░░░------------▌"
+	@echo "▐----------░███░█████░███--████--████████---████-----------▌"
+	@echo "▐----------░███░░███-░███-░░███-░░███░░███-░░███-----------▌"
+	@echo "▐----------░███-░░░--░███--░███--░███-░███--░███-----------▌"
+	@echo "▐----------░███------░███--░███--░███-░███--░███-----------▌"
+	@echo "▐----------█████-----█████-█████-████-█████-█████----------▌"
+	@echo "▐---------░░░░░-----░░░░░-░░░░░-░░░░-░░░░░-░░░░░-----------▌"
+	@echo "▐----------------------------------------------------------▌"
+	@echo "▐----------------------------------------------------------▌"
+	@echo "▐----------------------------------------------------------▌"
+	@echo "▐--█████████--█████---█████-██████████-████------████------▌"
+	@echo "▐-███░░░░░███░░███---░░███-░░███░░░░░█░░███-----░░███------▌"
+	@echo "▐░███----░░░--░███----░███--░███--█-░--░███------░███------▌"
+	@echo "▐░░█████████--░███████████--░██████----░███------░███------▌"
+	@echo "▐-░░░░░░░░███-░███░░░░░███--░███░░█----░███------░███------▌"
+	@echo "▐-███----░███-░███----░███--░███-░---█-░███----█-░███----█-▌"
+	@echo "▐░░█████████--█████---█████-██████████-█████████-█████████-▌"
+	@echo "▐-░░░░░░░░░--░░░░░---░░░░░-░░░░░░░░░░-░░░░░░░░░-░░░░░░░░░--▌"
+	@echo "▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌"
 
 .PHONY: clean fclean re all aux_libraries compilation_success
