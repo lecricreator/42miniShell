@@ -22,13 +22,42 @@ t_list	*exec_pipe(t_data *data, t_list *token_list, t_fds *fds)
 	return (token_list->next);
 }
 
-t_list	*exec_redir(t_data *data, t_list *token_list, t_fds *fds)
+void	change_io(t_data *data, t_redir *redir, t_fds *fds)
 {
-	close(fds->pipefd[0]);
-	if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-		error_handle(data, (char *)((t_token *)token_list->content)->str, "File: execution_utils || Function: exec_pipe || dup2 failed", 1);
-	/*command*/
-	return (token_list->next);
+	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
+	{
+		fds->std_out = dup(STDOUT_FILENO);
+		if (redir->type == OP_REDIR_OUT)
+			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);// check shell convention for permissions
+		else
+			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fds->outfile < 0)
+			error_handle(data, redir->filename, strerror(errno), 1);
+		dup2(fds->outfile, STDOUT_FILENO);
+	}
+	/*
+	if (redir->type == OP_REDIR_IN)
+	{
+		fds->std_in = dup(STDOUT_FILENO);
+		fds->infile = open(redir->filename, O_RDONLY);
+		if (fds->infile < 0)
+			error_handle(data, redir->filename, strerror(errno), 1);
+	}
+	*/
+}
+
+void	exec_redir(t_data *data, t_list *redir, t_fds *fds)
+{
+	t_redir *tmp_redir;
+	t_list	*tmp_head;
+
+	tmp_redir = (t_redir *)redir->content;
+	tmp_head = 	redir;
+	while (tmp_head)
+	{
+		change_io(data, tmp_redir, fds);
+		tmp_head = tmp_head->next;
+	}
 }
 
 int	cmd_if_absolute_path(t_cmd *cmd)

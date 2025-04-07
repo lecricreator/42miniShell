@@ -21,7 +21,7 @@ static int	cmd_tab_len(t_list *token_list)
 	i = 0;
 	tmp_head = token_list;
 	tmp_token = (t_token *)tmp_head->content;
-	while (tmp_head && ((tmp_token->type == COMMAND && !i) || tmp_token->type == ARGUMENT))
+	while (tmp_head && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
 	{
 		i++;
 		tmp_head = tmp_head->next;
@@ -32,7 +32,9 @@ static int	cmd_tab_len(t_list *token_list)
 			{
 				tmp_head = tmp_head->next;
 				if (tmp_head)
-					tmp_token = (t_token *)tmp_head->content;
+					tmp_head = tmp_head->next;
+				if (tmp_head)
+					tmp_token = (t_token *)(tmp_head)->content;
 				while (tmp_head && tmp_token->type == ARGUMENT)
 				{
 					i++;
@@ -59,12 +61,13 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 	i = 0;
 	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len(*token_list) + 1);
 	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "File: command_block || Function: get_cmd_tab || ft_calloc failed", 1);
+		error_handle(data, "cmd_tab", "command_block.c:64\nft_calloc failed", 1);
 	tmp_token = (t_token *)(*token_list)->content;
-	while (*token_list && ((tmp_token->type == COMMAND && !i) || tmp_token->type == ARGUMENT))
+	save_position = NULL;
+	while (*token_list && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
 	{
 		cmd_tab[i++] = ft_strdup(tmp_token->str);
-		save_position = (*token_list)->next;// check if this is correct assignation
+		save_position = (*token_list)->next;
 		*token_list = (*token_list)->next;
 		if (*token_list)
 		{
@@ -72,6 +75,8 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 			if (tmp_token->type == OP_REDIR_OUT || tmp_token->type == OP_APPEND)
 			{
 				*token_list = (*token_list)->next;
+				if (*token_list)
+					*token_list = (*token_list)->next;
 				if (*token_list)
 					tmp_token = (t_token *)(*token_list)->content;
 				while (*token_list && tmp_token->type == ARGUMENT)
@@ -84,7 +89,8 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 			}
 		}
 	}
-	*token_list = save_position;//check if this is correct asignation
+	if (save_position)
+ 		*token_list = save_position;
 	return (cmd_tab);
 }
 
@@ -94,7 +100,7 @@ void	init_redir(t_redir *redir)
 	redir->type = NONE;
 }
 
-void	fill_redir(t_data *data, t_list **redir, t_list **token_list)//refactor this to set tokens after filename as arguments for the command and NOT fordward the token list
+void	fill_redir(t_data *data, t_list **redir, t_list **token_list)
 {
 	t_token	*tmp_token;
 	t_list	*new_node;
@@ -103,9 +109,9 @@ void	fill_redir(t_data *data, t_list **redir, t_list **token_list)//refactor thi
 	tmp_token = (t_token *)(*token_list)->content;
 	redir_node = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_node)
-		error_handle(data, tmp_token->str, "command_block.c:106, malloc failed", 1);
+		error_handle(data, tmp_token->str, "command_block.c:112\nmMalloc failed", 1);
 	init_redir(redir_node);
-	while (*token_list && (tmp_token->type >= 7 && tmp_token->type <= 11))
+	while (*token_list && is_redir_op(tmp_token->type))// is this the correct range of type?
 	{
 		redir_node->type = tmp_token->type;
 		*token_list = (*token_list)->next;
@@ -118,8 +124,10 @@ void	fill_redir(t_data *data, t_list **redir, t_list **token_list)//refactor thi
 				*token_list = (*token_list)->next;
 			}
 			else
-				error_handle(data, "function: fill_redir", "no file to redir", 1);
+				error_handle(data, tmp_token->str, "command_block.c:127\nBad token type to redir", 1);//should this stop the program?
 		}
+		else
+			error_handle(data, tmp_token->str, "command_block.c:130\nNo file to redir", 1);//should this stop the program?
 		new_node = ft_lstnew(redir_node);
 		ft_lstadd_back(redir, new_node);
 	}
@@ -174,9 +182,10 @@ void	fill_cmd_block(t_data *data, t_list **token_list, t_list **cmd_list)
 	{
 		cmd_node = create_cmd(data, token_list);
 		new_node = ft_lstnew(cmd_node);
+		ft_lstadd_back(cmd_list, new_node);
 		if(*token_list)
 			*token_list = (*token_list)->next;
-		ft_lstadd_back(cmd_list, new_node);
+		
 	}
 }
 

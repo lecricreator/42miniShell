@@ -84,3 +84,27 @@ char	**get_path(char **path, t_list *env)
 	complete_path(path);
 	return (path);
 }
+
+int	is_builtin(t_type type)
+{
+	if (type <= 6)
+		return (1);
+	else
+		return (0);
+}
+
+int	is_any_cmd(t_type type)
+{
+	if (is_builtin(type) || type == COMMAND)
+		return (1);
+	else
+		return (0);
+}
+
+int	is_redir_op(t_type type)
+{
+	if (type >= 8 && type <= 11)
+		return (1);
+	else
+		return (0);
+}

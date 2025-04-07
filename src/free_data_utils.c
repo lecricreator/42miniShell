@@ -39,6 +39,8 @@ static void	free_redir(void *redir_void)
 	redir = (t_redir *)redir_void;
 	if (redir->filename)
 		free(redir->filename);
+	if (redir)
+		free(redir);
 }
 
 void	free_cmd(void *cmd_void)

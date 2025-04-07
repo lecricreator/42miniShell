@@ -71,22 +71,6 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 	return (errno);
 }
 
-void	redirect_in_out(t_data *data, t_fds *fds)
-{
-	if (fds->prev_pipe == -1)
-	{
-		fds->std_in = dup(STDIN_FILENO); // backup for stdin
-		fds->std_out = dup(STDOUT_FILENO); //backup for stdout
-		fds->prev_pipe = dup(STDIN_FILENO);
-		close(fds->pipefd[0]);
-	}
-	else
-	{
-		if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-			error_handle(data, "prev_pipe", "Error:\ndup2 failed", 1);
-	}
-}
-
 void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 {
 	if (cmd->is_pipe || fds->prev_pipe > 0)
@@ -120,20 +104,26 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 
 }
 
-void	restore_in_out(t_data *data, t_fds *fds)
+void	reset_io(t_data *data, t_fds *fds)
 {
-	if (!(fds->prev_pipe < 0))
-		close(fds->prev_pipe);
-	fds->prev_pipe = -1;
-	if (dup2(fds->pipefd[1], STDIN_FILENO) == -1)  // Redirect pipe[0] as standard input
-		error_handle(data, "pipefd[0]", "Error:\ndup2 failed", 1);
-	if (dup2(fds->std_out, STDOUT_FILENO) == -1) // Restore standard output to terminal
-		error_handle(data, "std out", "Error:\ndup2 failed", 1);
-	close(fds->pipefd[1]);
-	close(fds->std_out);
-	if (dup2(fds->std_in, STDIN_FILENO) == -1) // Restore standard input to terminal
-		error_handle(data, "std in", "Error:\ndup2 failed", 1);
-	close(fds->std_in);
+	if (fds->outfile)
+	{
+		dup2(fds->std_out, STDOUT_FILENO);
+		if (fds->std_out < 0)
+			error_handle(data, "std out", "execution.c:133:\ndup2 failed", 1);
+		close(fds->std_out);
+		close(fds->outfile);
+	}
+	/*
+	if (fds->infile)
+	{
+		dup2(fds->std_in, STDIN_FILENO);
+		if (fds->std_in < 0)
+			error_handle(data, "std out", "execution.c:121:\ndup2 failed", 1);
+		close(fds->std_in);
+		close(fds->infile);
+	}
+	*/
 }
 
 void	execution(t_data *data)
@@ -152,35 +142,21 @@ void	execution(t_data *data)
 		{
 			if (pipe(fds.pipefd) == -1)
 				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
-				/*
-			if (fds.prev_pipe == -1)
-			{
-			//	fds.std_in = dup(STDIN_FILENO); // backup for stdin
-		//		fds.std_out = dup(STDOUT_FILENO); //backup for stdout
-				//fds.prev_pipe = dup(STDIN_FILENO);
-			}
 		}
-		else
-		{
-			if (fds.prev_pipe > 0)
-			{
-				if (dup2(fds.std_out, STDOUT_FILENO) == -1)
-					error_handle(data, tmp_cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-			*/
-		}		
-		if (tmp_cmd->type <= 6)// built in commands
+		if (tmp_cmd->redir)
+			exec_redir(data, tmp_cmd->redir, &fds);		
+		if (is_builtin(tmp_cmd->type))// built in commands
 			exec_builtin_before_fork(data, tmp_cmd, &fds);
 		else if (tmp_cmd->type == COMMAND)
 			exec_cmd(data, tmp_cmd, &fds);
 		if (tmp_cmd->is_pipe)
 		{
-		//	close(fds.prev_pipe);
 			close(fds.pipefd[1]);
 			fds.prev_pipe = dup(fds.pipefd[0]);
 			close(fds.pipefd[0]);
 		}
-	//	else
-	//		close(fds.pipefd[0]);
+		if (tmp_cmd->redir)
+			reset_io(data, &fds);
 		tmp_head = tmp_head->next;
 	}
 }

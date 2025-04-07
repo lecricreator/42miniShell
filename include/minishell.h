@@ -22,6 +22,7 @@
 # include <termios.h>
 # include <limits.h>
 # include <sys/types.h>
+# include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
 
@@ -110,10 +111,13 @@ void	reset_input(t_data *data);
 void	execution(t_data *data);
 void    create_cmd_block(t_data *data, t_list *token_list);
 int		wait_and_status(t_data *data);
-t_list  *exec_redir(t_data *data, t_list *token_list, t_fds *fds);
+void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
 t_list  *exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds);
 int		exec_pwd(void);
 int		exec_cd(char *str, t_list *env_list);
 int		exec_echo(char **cmd_args, t_list *env_list);
+int		is_builtin(t_type type);
+int		is_any_cmd(t_type type);
+int		is_redir_op(t_type type);
 #endif

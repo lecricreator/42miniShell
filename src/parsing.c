@@ -71,7 +71,7 @@ void	parsing(t_data *data)
 	t_type	last;
 
 	lexing_tokens(data, data->input);
-	print_token_list(data->token_list);
+//	print_token_list(data->token_list);
 	tmp_head = data->token_list;
 	state = COMMAND;
 	last = COMMAND;
