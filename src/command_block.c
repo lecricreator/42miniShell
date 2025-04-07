@@ -74,18 +74,20 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 			tmp_token = (t_token *)(*token_list)->content;
 			if (tmp_token->type == OP_REDIR_OUT || tmp_token->type == OP_APPEND)
 			{
-				*token_list = (*token_list)->next;
-				if (*token_list)
-					*token_list = (*token_list)->next;
-				if (*token_list)
-					tmp_token = (t_token *)(*token_list)->content;
-				while (*token_list && tmp_token->type == ARGUMENT)
+				*token_list = (*token_list)->next;//skip redirection token
+				if (*token_list && (*token_list)->next)//if this token(filename) exists and there is another one  with possible argument
 				{
-					cmd_tab[i++] = ft_strdup(tmp_token->str);
-					ft_lstdel_node(token_list, free_token);
-					if (*token_list)
-						tmp_token = (t_token *)(*token_list)->content;
+					tmp_token = ((t_token *)(*token_list)->next->content);//tmp_token has the token of the argument
+					while (*token_list && (*token_list)->next && tmp_token->type == ARGUMENT)//token_list is first in filename and tmp_token in the argument
+					{
+						cmd_tab[i++] = ft_strdup(tmp_token->str);// we coppy the argument from the next token in the tab
+						ft_lstdel_nxtnode(token_list, free_token);//we delete the next token and set the next one or Null if there is no more
+						if (*token_list && (*token_list)->next)//now the list should point to the next argument or NULL
+							tmp_token = ((t_token *)(*token_list)->next->content);//if there is another argument, we actualize contetn
+					}
+					tmp_token = ((t_token *)(*token_list)->content);
 				}
+
 			}
 		}
 	}
