@@ -90,26 +90,6 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 	}
 }
 
-void	reset_io(t_data *data, t_fds *fds)
-{
-	if (fds->outfile != -1)
-	{
-		dup2(fds->std_out, STDOUT_FILENO);
-		if (fds->std_out < 0)
-			error_handle(data, "std out", "execution.c:108:\ndup2 failed", 1);
-		close(fds->std_out);
-		close(fds->outfile);
-	}
-	if (fds->infile != -1)
-	{
-		dup2(fds->std_in, STDIN_FILENO);
-		if (fds->std_in < 0)
-			error_handle(data, "std in", "execution.c:116:\ndup2 failed", 1);
-		close(fds->std_in);
-		close(fds->infile);
-	}
-}
-
 void	init_fds(t_fds *fds)
 {
 	fds->infile = -1;
@@ -138,7 +118,7 @@ void	execution(t_data *data)
 			if (pipe(fds.pipefd) == -1)
 				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
 		}	
-		if (is_builtin(tmp_cmd->type))// built in commands
+		if (is_builtin(tmp_cmd->type))
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);
 			exec_builtin_before_fork(data, tmp_cmd, &fds);

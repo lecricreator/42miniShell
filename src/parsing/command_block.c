@@ -98,16 +98,16 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 			tmp_token = (t_token *)(*token_list)->content;
 			if (tmp_token->type == OP_REDIR_OUT || tmp_token->type == OP_APPEND)
 			{
-				*token_list = (*token_list)->next;//skip redirection token
-				if (*token_list && (*token_list)->next)//if this token(filename) exists and there is another one  with possible argument
+				*token_list = (*token_list)->next;
+				if (*token_list && (*token_list)->next)
 				{
-					tmp_token = ((t_token *)(*token_list)->next->content);//tmp_token has the token of the argument
-					while (*token_list && (*token_list)->next && tmp_token->type == ARGUMENT)//token_list is first in filename and tmp_token in the argument
+					tmp_token = ((t_token *)(*token_list)->next->content);
+					while (*token_list && (*token_list)->next && tmp_token->type == ARGUMENT)
 					{
-						cmd_tab[i++] = ft_strdup(tmp_token->str);// we coppy the argument from the next token in the tab
-						ft_lstdel_nxtnode(token_list, free_token);//we delete the next token and set the next one or Null if there is no more
-						if (*token_list && (*token_list)->next)//now the list should point to the next argument or NULL
-							tmp_token = ((t_token *)(*token_list)->next->content);//if there is another argument, we actualize contetn
+						cmd_tab[i++] = ft_strdup(tmp_token->str);
+						ft_lstdel_nxtnode(token_list, free_token);
+						if (*token_list && (*token_list)->next)
+							tmp_token = ((t_token *)(*token_list)->next->content);
 					}
 					tmp_token = ((t_token *)(*token_list)->content);
 				}
@@ -137,8 +137,8 @@ static char  **get_cmd_tab_ri(t_data *data, t_list **token_list)
 	tmp_token = (t_token *)(*token_list)->next->content;
 	while (*token_list && (*token_list)->next && ((is_any_cmd(tmp_token->type) && !i ) || tmp_token->type == ARGUMENT))
 	{
-		cmd_tab[i++] = ft_strdup(tmp_token->str);  //add argument
-		ft_lstdel_nxtnode(token_list, free_token); //delete and argument
+		cmd_tab[i++] = ft_strdup(tmp_token->str);
+		ft_lstdel_nxtnode(token_list, free_token);
 		if (*token_list && (*token_list)->next)
 			tmp_token = (t_token *)(*token_list)->next->content;
 	}
@@ -212,7 +212,7 @@ t_type	seek_type(t_list **token_list)
 			return (tmp_token->type);
 		tmp_head = tmp_head->next;
 	}
-	return (COMMAND);// should this return this?
+	return (COMMAND);
 }
 t_cmd	*create_cmd(t_data *data, t_list **token_list)
 {
@@ -230,16 +230,16 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 	}
 	else
 		cmd->cmd_args = get_cmd_tab(data, token_list);
-	if (*token_list)// should be a loop?
+	if (*token_list)
 	{
 		fill_redir(data, &cmd->redir, token_list);
-		if (*token_list && ((t_token *)(*token_list)->content)->type == OP_PIPE)// this never arrives when multiple redir 
+		if (*token_list && ((t_token *)(*token_list)->content)->type == OP_PIPE)
 			cmd->is_pipe = 1;
 
 	}
 	return (cmd);
 }
-
+/*mix with create_cmd_block*/
 void	fill_cmd_block(t_data *data, t_list **token_list, t_list **cmd_list)
 {
 	t_cmd	*cmd_node;
@@ -255,7 +255,7 @@ void	fill_cmd_block(t_data *data, t_list **token_list, t_list **cmd_list)
 		
 	}
 }
-
+/*mix with fill_cmd_block*/
 void	create_cmd_block(t_data *data, t_list *token_list)
 {
 //	t_token	*tmp_token;
@@ -264,13 +264,6 @@ void	create_cmd_block(t_data *data, t_list *token_list)
 	tmp_head = token_list;
 	while (tmp_head)
 	{
-		/*
-		tmp_token = (t_token *)tmp_head->content;
-		if ((tmp_token->type == COMMAND) || tmp_token->type <= 6)
-			fill_cmd_block(data, &tmp_head, &data->cmd_list);
-		if (tmp_token->type == OP_REDIR_OUT && tmp_token->index == 0) //starting with redir
-			fill_cmd_block(data, &tmp_head, &data->cmd_list);// check this function to fill redir out without cmd when is the first token
-		*/
 		fill_cmd_block(data, &tmp_head, &data->cmd_list);
 	}
 }
