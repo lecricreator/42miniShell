@@ -76,49 +76,49 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 		data->n_fork++;
 		if (!data->pid)
 		{
-			if (cmd->is_pipe)
-			{
-				close(fds->pipefd[0]);
-				if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-					error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-				close(fds->pipefd[1]);
-			}
-			if (fds->prev_pipe > 0)
-			{
-				if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-					error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-				close(fds->prev_pipe);
-			}
+			exec_redir(data, cmd->redir, fds);
+			exec_pipe(data, cmd, fds);
 			exec_builtin(cmd, data->env_list);
 			free_data(data);
 			exit(errno);
 		}
 	}
 	else
-		exec_builtin(cmd, data->env_list);
-
+	{
+		exec_redir(data, cmd->redir, fds);
+		exec_builtin(cmd, data->env_list);		
+	}
 }
 
 void	reset_io(t_data *data, t_fds *fds)
 {
-	if (fds->outfile)
+	if (fds->outfile != -1)
 	{
 		dup2(fds->std_out, STDOUT_FILENO);
 		if (fds->std_out < 0)
-			error_handle(data, "std out", "execution.c:133:\ndup2 failed", 1);
+			error_handle(data, "std out", "execution.c:108:\ndup2 failed", 1);
 		close(fds->std_out);
 		close(fds->outfile);
 	}
-	/*
-	if (fds->infile)
+	if (fds->infile != -1)
 	{
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)
-			error_handle(data, "std out", "execution.c:121:\ndup2 failed", 1);
+			error_handle(data, "std in", "execution.c:116:\ndup2 failed", 1);
 		close(fds->std_in);
 		close(fds->infile);
 	}
-	*/
+}
+
+void	init_fds(t_fds *fds)
+{
+	fds->infile = -1;
+	fds->outfile = -1;
+	fds->pipefd[0] = -1;
+	fds->pipefd[1] = -1;
+	fds->prev_pipe = -1;
+	fds->std_in = -1;
+	fds->std_out = -1;
 }
 
 void	execution(t_data *data)
@@ -127,8 +127,8 @@ void	execution(t_data *data)
 	t_list	*tmp_head;
 	t_fds	fds;
 
+	init_fds(&fds);
 	tmp_head = data->cmd_list;
-	fds.prev_pipe = -1;
 	while (tmp_head)
 	{
 		tmp_cmd = (t_cmd *)tmp_head->content;
@@ -137,9 +137,7 @@ void	execution(t_data *data)
 		{
 			if (pipe(fds.pipefd) == -1)
 				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
-		}
-		if (tmp_cmd->redir)
-			exec_redir(data, tmp_cmd->redir, &fds);		
+		}	
 		if (is_builtin(tmp_cmd->type))// built in commands
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);
@@ -153,7 +151,7 @@ void	execution(t_data *data)
 			fds.prev_pipe = dup(fds.pipefd[0]);
 			close(fds.pipefd[0]);
 		}
-		if (tmp_cmd->redir)
+		if (fds.std_in != -1 || fds.std_out != -1)
 			reset_io(data, &fds);
 		tmp_head = tmp_head->next;
 	}

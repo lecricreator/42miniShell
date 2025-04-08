@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	cmd_tab_len(t_list *token_list)
+static int	cmd_tab_len(t_list *token_list)// this function counts one more argument than it should, it could cause leaks
 {
 	t_list	*tmp_head;
 	t_token	*tmp_token;
@@ -45,6 +45,30 @@ static int	cmd_tab_len(t_list *token_list)
 			}
 
 		}
+	}
+	return (i);
+}
+
+static int	cmd_tab_len_ri(t_list *token_list)
+{
+	t_list	*tmp_head;
+	t_token	*tmp_token;
+	int		i;
+
+	i = 0;
+	tmp_head = token_list->next;
+	if (!tmp_head)
+		return (i);
+	tmp_head = tmp_head->next;
+	if (!tmp_head)
+		return (i);
+	tmp_token = (t_token *)tmp_head->content;
+	while (tmp_head && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
+	{
+			i++;
+		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_token = (t_token *)tmp_head->content;
 	}
 	return (i);
 }
@@ -96,6 +120,33 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 	return (cmd_tab);
 }
 
+static char  **get_cmd_tab_ri(t_data *data, t_list **token_list)
+{
+	t_token	*tmp_token;
+	t_list	*save_position;
+	char	**cmd_tab;
+	int		i;
+
+	i = 0;
+	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len_ri(*token_list) + 1);
+	if (!cmd_tab)
+		error_handle(data, "cmd_tab", "command_block.c:64\nft_calloc failed", 1);
+	
+	save_position = *token_list;
+	*token_list = (*token_list)->next;
+	tmp_token = (t_token *)(*token_list)->next->content;
+	while (*token_list && (*token_list)->next && ((is_any_cmd(tmp_token->type) && !i ) || tmp_token->type == ARGUMENT))
+	{
+		cmd_tab[i++] = ft_strdup(tmp_token->str);  //add argument
+		ft_lstdel_nxtnode(token_list, free_token); //delete and argument
+		if (*token_list && (*token_list)->next)
+			tmp_token = (t_token *)(*token_list)->next->content;
+	}
+	if (save_position)
+ 		*token_list = save_position;
+	return (cmd_tab);
+}
+
 void	init_redir(t_redir *redir)
 {
 	redir->filename = NULL;
@@ -109,29 +160,32 @@ void	fill_redir(t_data *data, t_list **redir, t_list **token_list)
 	t_redir	*redir_node;
 
 	tmp_token = (t_token *)(*token_list)->content;
-	redir_node = (t_redir *)malloc(sizeof(t_redir));
-	if (!redir_node)
-		error_handle(data, tmp_token->str, "command_block.c:112\nmMalloc failed", 1);
-	init_redir(redir_node);
 	while (*token_list && is_redir_op(tmp_token->type))// is this the correct range of type?
 	{
+		redir_node = (t_redir *)malloc(sizeof(t_redir));
+		if (!redir_node)
+			error_handle(data, tmp_token->str, "command_block.c:167\nMalloc failed", 1);
+		init_redir(redir_node);
 		redir_node->type = tmp_token->type;
 		*token_list = (*token_list)->next;
 		if (*token_list)
 		{
 			tmp_token = (t_token *)(*token_list)->content;
 			if (tmp_token->type == FILENAME)
-			{
 				redir_node->filename = ft_strdup(tmp_token->str);
-				*token_list = (*token_list)->next;
-			}
 			else
-				error_handle(data, tmp_token->str, "command_block.c:127\nBad token type to redir", 1);//should this stop the program?
+			{
+				free_redir(redir_node);
+				error_handle(data, tmp_token->str, "command_block.c:178\nBad token type to redir", 1);//should this stop the program?
+			}
 		}
 		else
-			error_handle(data, tmp_token->str, "command_block.c:130\nNo file to redir", 1);//should this stop the program?
+			error_handle(data, tmp_token->str, "command_block.c:181\nNo file to redir", 1);//should this stop the program?
 		new_node = ft_lstnew(redir_node);
 		ft_lstadd_back(redir, new_node);
+		*token_list = (*token_list)->next;
+		if (*token_list)
+			tmp_token = (t_token *)(*token_list)->content;
 	}
 }
 
@@ -144,6 +198,22 @@ static void	init_cmd(t_cmd *cmd)
 	cmd->type = NONE;
 }
 
+
+t_type	seek_type(t_list **token_list)
+{
+	t_list	*tmp_head;
+	t_token	*tmp_token;
+
+	tmp_head = *token_list;
+	tmp_token = (t_token *)(tmp_head)->content;
+	while (tmp_head && tmp_token->type)
+	{
+		if (tmp_token->type == COMMAND || is_any_cmd(tmp_token->type))
+			return (tmp_token->type);
+		tmp_head = tmp_head->next;
+	}
+	return (COMMAND);// should this return this?
+}
 t_cmd	*create_cmd(t_data *data, t_list **token_list)
 {
 	t_cmd	*cmd;
@@ -153,24 +223,19 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 		error_handle(data, "function create_cmd", "file: command_block malloc failed", 1);
 	init_cmd(cmd);
 	cmd->type = ((t_token *)(*token_list)->content)->type;
-	cmd->cmd_args = get_cmd_tab(data, token_list);
-	if (*token_list)
+	if (cmd->type == OP_REDIR_IN)
 	{
-		if (((t_token *)(*token_list)->content)->type == OP_PIPE)
-		{
-			cmd->redir = NULL;
-			cmd->is_pipe = 1;
-		}
-		else
-		{
-			fill_redir(data, &cmd->redir, token_list);
-			cmd->is_pipe = 0;
-		}
+		cmd->type = seek_type(token_list);
+		cmd->cmd_args = get_cmd_tab_ri(data, token_list);
 	}
 	else
+		cmd->cmd_args = get_cmd_tab(data, token_list);
+	if (*token_list)// should be a loop?
 	{
-		cmd->is_pipe = 0;
-		cmd->redir = NULL;
+		fill_redir(data, &cmd->redir, token_list);
+		if (*token_list && ((t_token *)(*token_list)->content)->type == OP_PIPE)// this never arrives when multiple redir 
+			cmd->is_pipe = 1;
+
 	}
 	return (cmd);
 }
@@ -193,16 +258,19 @@ void	fill_cmd_block(t_data *data, t_list **token_list, t_list **cmd_list)
 
 void	create_cmd_block(t_data *data, t_list *token_list)
 {
-	t_token	*tmp_token;
+//	t_token	*tmp_token;
 	t_list	*tmp_head;
 
 	tmp_head = token_list;
 	while (tmp_head)
 	{
+		/*
 		tmp_token = (t_token *)tmp_head->content;
 		if ((tmp_token->type == COMMAND) || tmp_token->type <= 6)
 			fill_cmd_block(data, &tmp_head, &data->cmd_list);
 		if (tmp_token->type == OP_REDIR_OUT && tmp_token->index == 0) //starting with redir
 			fill_cmd_block(data, &tmp_head, &data->cmd_list);// check this function to fill redir out without cmd when is the first token
+		*/
+		fill_cmd_block(data, &tmp_head, &data->cmd_list);
 	}
 }

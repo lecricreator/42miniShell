@@ -12,14 +12,21 @@
 
 #include "minishell.h"
 
-t_list	*exec_pipe(t_data *data, t_list *token_list, t_fds *fds)
+void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds)
 {
-	if (dup2(fds->pipefd[0], fds->prev_pipe) == -1)// Redirect pipe[0] as standard input
-		error_handle(data, "pipefd[0]", "Error:\ndup2 failed", 1);
-	close(fds->pipefd[0]);
-		error_handle(data, "std in", "Error:\ndup2 failed", 1);
-	close(fds->std_in);
-	return (token_list->next);
+	if (cmd->is_pipe)
+	{
+		close(fds->pipefd[0]);
+		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
+			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
+		close(fds->pipefd[1]);
+	}
+	if (fds->prev_pipe > 0)
+	{
+		if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
+			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
+		close(fds->prev_pipe);
+	}
 }
 
 void	change_io(t_data *data, t_redir *redir, t_fds *fds)
@@ -34,16 +41,20 @@ void	change_io(t_data *data, t_redir *redir, t_fds *fds)
 		if (fds->outfile < 0)
 			error_handle(data, redir->filename, strerror(errno), 1);
 		dup2(fds->outfile, STDOUT_FILENO);
+		if (fds->outfile < 0)
+			error_handle(data, redir->filename, strerror(errno), 1);
 	}
-	/*
 	if (redir->type == OP_REDIR_IN)
 	{
-		fds->std_in = dup(STDOUT_FILENO);
+		fds->std_in = dup(STDIN_FILENO);
 		fds->infile = open(redir->filename, O_RDONLY);
 		if (fds->infile < 0)
 			error_handle(data, redir->filename, strerror(errno), 1);
+		dup2(fds->infile, STDIN_FILENO);
+		if (fds->infile < 0)
+			error_handle(data, redir->filename, strerror(errno), 1);
+		close(fds->infile);
 	}
-	*/
 }
 
 void	exec_redir(t_data *data, t_list *redir, t_fds *fds)
@@ -51,12 +62,15 @@ void	exec_redir(t_data *data, t_list *redir, t_fds *fds)
 	t_redir *tmp_redir;
 	t_list	*tmp_head;
 
-	tmp_redir = (t_redir *)redir->content;
+	if (redir)
+		tmp_redir = (t_redir *)redir->content;
 	tmp_head = 	redir;
 	while (tmp_head)
 	{
 		change_io(data, tmp_redir, fds);
 		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_redir = (t_redir *)tmp_head->content;
 	}
 }
 
@@ -109,19 +123,8 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 		free_data(data);
 		exit(127);
 	}
-	if (cmd->is_pipe)
-	{
-		close(fds->pipefd[0]);
-		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-		close(fds->pipefd[1]);
-	}
-	if (fds->prev_pipe > 0)
-	{
-		if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
-		close(fds->prev_pipe);
-	}
+	exec_redir(data, cmd->redir, fds);
+	exec_pipe(data, cmd, fds);
 	if (execve(cmd->command_path, cmd->cmd_args, env_tab) == -1)
 	{
 		free_table(env_tab);

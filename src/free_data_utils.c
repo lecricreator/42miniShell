@@ -32,7 +32,7 @@ void	free_token(void *token_void)
 	free(token);
 }
 
-static void	free_redir(void *redir_void)
+ void	free_redir(void *redir_void)
 {
 	t_redir	*redir;
 

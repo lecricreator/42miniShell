@@ -59,6 +59,11 @@ static t_type	next_token(t_token *token, t_type state, t_type last)
 		token->type = FILENAME;
 		return (COMMAND);
 	}
+	if (state == DELIMITER)
+	{
+		token->type = DELIMITER;
+		return (COMMAND);
+	}
 	else
 		return (BAD_TOKEN);
 }
