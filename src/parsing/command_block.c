@@ -214,6 +214,7 @@ t_type	seek_type(t_list **token_list)
 	}
 	return (COMMAND);
 }
+
 t_cmd	*create_cmd(t_data *data, t_list **token_list)
 {
 	t_cmd	*cmd;
