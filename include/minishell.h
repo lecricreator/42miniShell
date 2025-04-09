@@ -113,7 +113,7 @@ void	lexing_tokens(t_data *data, char *input);
 void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
-void	create_cmd_block(t_data *data, t_list *token_list);
+void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list);
 int		wait_and_status(t_data *data);
 void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
 void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds);

@@ -241,30 +241,19 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 	return (cmd);
 }
 /*mix with create_cmd_block*/
-void	fill_cmd_block(t_data *data, t_list **token_list, t_list **cmd_list)
+void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list)
 {
 	t_cmd	*cmd_node;
 	t_list	*new_node;
-
-	while (*token_list)
-	{
-		cmd_node = create_cmd(data, token_list);
-		new_node = ft_lstnew(cmd_node);
-		ft_lstadd_back(cmd_list, new_node);
-		if(*token_list)
-			*token_list = (*token_list)->next;
-		
-	}
-}
-/*mix with fill_cmd_block*/
-void	create_cmd_block(t_data *data, t_list *token_list)
-{
-//	t_token	*tmp_token;
 	t_list	*tmp_head;
 
 	tmp_head = token_list;
 	while (tmp_head)
 	{
-		fill_cmd_block(data, &tmp_head, &data->cmd_list);
+		cmd_node = create_cmd(data, &tmp_head);
+		new_node = ft_lstnew(cmd_node);
+		ft_lstadd_back(cmd_list, new_node);
+		if(tmp_head)
+			tmp_head = tmp_head->next;
 	}
 }
