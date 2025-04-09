@@ -68,6 +68,23 @@ static t_type	next_token(t_token *token, t_type state, t_type last)
 		return (BAD_TOKEN);
 }
 
+void	check_env_var(t_data *data, t_token *token)
+{
+	char *tmp;
+
+	if (token->type != ENV_VAR)
+		return ;
+	token->type = UNKNOW;
+	if (!token->str[1])
+		return ;
+	tmp = token->str;
+	token->str = ft_strdup(give_var_env_list(token->str + 1, data->env_list));
+	if (!token->str)
+		error_handle(data, "token->str", "parsing.c:83\nft_strdup failed", 1);
+	free(tmp);
+
+}
+
 void	parsing(t_data *data)
 {
 	t_token	*tmp_token;
@@ -83,6 +100,7 @@ void	parsing(t_data *data)
 	while (tmp_head)
 	{
 		tmp_token = (t_token *)tmp_head->content;
+		check_env_var(data, tmp_token);
 		if (tmp_token->index == 0)
 			state = token_zero(tmp_token);
 		else

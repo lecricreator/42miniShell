@@ -40,7 +40,15 @@ static int	token_len(const char *input, int *i)
 	int	len;
 
 	len = 0;
-	if (input[*i] == 39)
+	if (input[*i] == '$')
+	{
+		while (input[*i] && !ft_isblank(input[*i]))
+		{
+			(*i)++;
+			len++;
+		}
+	}
+	else if (input[*i] == 39)
 	{
 		(*i)++;
 		while (input[*i] && input[*i] != 39)
@@ -82,32 +90,6 @@ static int	token_len(const char *input, int *i)
 	return (len);
 }
 
-t_token *create_token(char *str, int index)
-{
-	t_token	*token;
-
-	token = (t_token *)malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->str = str;
-	token->type = 0;
-	token->index = index;
-	return (token);
-}
-
-static void fill_token_list(t_data *data, char *token, int token_index)
-{
-	t_list	*new_node;
-	t_token	*token_node;
-
-	token_node = create_token(token, token_index);
-	if (!token_node)
-		error_handle(data, "token_node", "create_token failed", 1);
-	new_node = ft_lstnew(token_node);
-	if (!new_node)
-		error_handle(data, "new_node", "ft_lstnew failed", 1);
-	ft_lstadd_back(&data->token_list, new_node);
-}
 
 static int	get_type(char *token)
 {
@@ -135,21 +117,36 @@ static int	get_type(char *token)
 		return (OP_APPEND);
 	if (!ft_strncmp(token, "<<", ft_strlen(token)))
 		return (OP_HEREDOC);
+	if (token[0] == '$')
+		return (ENV_VAR);
 	return (UNKNOW);
 }
 
-static void	fill_types(t_data *data)
+t_token *create_token(char *str, int index)
 {
-	t_token	*tmp_token;
-	t_list	*tmp_head;
+	t_token	*token;
 
-	tmp_head = data->token_list;
-	while (tmp_head)
-	{
-		tmp_token = (t_token *)tmp_head->content;
-		tmp_token->type = get_type(tmp_token->str);
-		tmp_head = tmp_head->next;
-	}
+	token = (t_token *)malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->str = str;
+	token->type = get_type(token->str);
+	token->index = index;
+	return (token);
+}
+
+static void fill_token_list(t_data *data, char *token, int token_index)
+{
+	t_list	*new_node;
+	t_token	*token_node;
+
+	token_node = create_token(token, token_index);
+	if (!token_node)
+		error_handle(data, "token_node", "create_token failed", 1);
+	new_node = ft_lstnew(token_node);
+	if (!new_node)
+		error_handle(data, "new_node", "ft_lstnew failed", 1);
+	ft_lstadd_back(&data->token_list, new_node);
 }
 
 void	lexing_tokens(t_data *data, char *input)
@@ -157,22 +154,22 @@ void	lexing_tokens(t_data *data, char *input)
 	int		i;
 	int		len;
 	int		token_index;
-	char	*tmp_token;
+	char	*token_str;
 
 	i = 0;
 	len = 0;
 	token_index = -1;
-	tmp_token = NULL;
+	token_str = NULL;
 	while (input[i])
 	{
 		if (!ft_isblank(input[i]))
 		{
 			token_index++;
 			len = token_len(input, &i);
-			tmp_token = ft_strndup(input + (i - len), len);
-			if (!tmp_token)
-				error_handle(data, "tmp_token", "ft_strndup failed", 1);
-			fill_token_list(data, tmp_token, token_index);
+			token_str = ft_strndup(input + (i - len), len);
+			if (!token_str)
+				error_handle(data, "token_str", "lexing.c:183\nft_strndup failed", 1);
+			fill_token_list(data, token_str, token_index);
 		}
 		if (input[i] == '\0')
 			break ;
@@ -182,5 +179,4 @@ void	lexing_tokens(t_data *data, char *input)
 			while (ft_isblank(input[i]))
 				i++;
 	}
-	fill_types(data);
 }

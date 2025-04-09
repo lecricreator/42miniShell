@@ -56,6 +56,7 @@ typedef enum e_type
 	DELIMITER,
 	BAD_TOKEN,
 	UNKNOW,
+	ENV_VAR,
 	NONE
 }t_type;
 
