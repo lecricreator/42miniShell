@@ -22,6 +22,7 @@
 # include <termios.h>
 # include <limits.h>
 # include <sys/types.h>
+# include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
 
@@ -52,8 +53,10 @@ typedef enum e_type
 	COMMAND,
 	FILENAME,
 	ARGUMENT,
+	DELIMITER,
 	BAD_TOKEN,
 	UNKNOW,
+	ENV_VAR,
 	NONE
 }t_type;
 
@@ -87,6 +90,8 @@ typedef struct s_data
 	t_list	*cmd_list;
 	char	*input;
 	char	**path;// should be this here??
+	int		status;
+	int		n_fork;
 	pid_t	pid;
 }t_data;
 
@@ -99,6 +104,7 @@ void	free_data(t_data *data);
 void	free_cmd(void *cmd_void);
 void	free_token(void *token_void);
 void	free_list(t_list **list, void (*del)(void *));
+void	free_redir(void *redir_void);
 void	get_env(t_list **env_list, char **env);
 char	**get_path(char **path, t_list *env);
 int		count_table(char **table);
@@ -107,15 +113,23 @@ void	lexing_tokens(t_data *data, char *input);
 void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
-void	create_cmd_block(t_data *data, t_list *token_list);
+void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list);
 int		wait_and_status(t_data *data);
-t_list	*exec_redir(t_data *data, t_list *token_list, t_fds *fds);
-t_list	*exec_pipe(t_data *data, t_list *token_list, t_fds *fds);
-void	exec_cmd(t_data *data, t_cmd *cmd);
+void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
+void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds);
+void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds);
+void	reset_io(t_data *data, t_fds *fds);
+void	change_io(t_data *data, t_redir *redir, t_fds *fds);
 int		exec_pwd(void);
 int		exec_cd(char *str, t_list **env_list);
 void	exec_echo(char **cmd_args, t_list *env_list);
+<<<<<<< HEAD
 void	exec_export(char **cmd_args, t_list **env_list);
+=======
+int		is_builtin(t_type type);
+int		is_any_cmd(t_type type);
+int		is_redir_op(t_type type);
+>>>>>>> main
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 #endif

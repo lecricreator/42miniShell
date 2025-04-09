@@ -11,14 +11,15 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
+
 int	wait_and_status(t_data *data)
 {
 	int	exit_code;
 	int	child_exit;
 
 	exit_code = 0;
-	while (data->n_cmd--)
+	data->status = 0;
+	while (data->n_fork--)
 	{
 		if (waitpid(data->pid, &data->status, 0) > 0)
 		{
@@ -32,10 +33,9 @@ int	wait_and_status(t_data *data)
 				exit_code = 127;
 		}
 	}
-	free_data(data);
 	return (exit_code);
 }
-*/
+
 void	print_token_list(t_list *token_list)
 {
 	t_token	*tmp_token;
@@ -85,6 +85,29 @@ char	**get_path(char **path, t_list *env)
 	return (path);
 }
 
+int	is_builtin(t_type type)
+{
+	if (type <= 6)
+		return (1);
+	else
+		return (0);
+}
+
+int	is_any_cmd(t_type type)
+{
+	if (is_builtin(type) || type == COMMAND)
+		return (1);
+	else
+		return (0);
+}
+
+int	is_redir_op(t_type type)
+{
+	if (type >= 8 && type <= 11)
+		return (1);
+	else
+		return (0);
+}
 char	*give_var_env_list(char *value, t_list *env_list)
 {
 	char	*tmp_content;

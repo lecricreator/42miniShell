@@ -32,13 +32,15 @@ void	free_token(void *token_void)
 	free(token);
 }
 
-static void	free_redir(void *redir_void)
+ void	free_redir(void *redir_void)
 {
 	t_redir	*redir;
 
 	redir = (t_redir *)redir_void;
 	if (redir->filename)
 		free(redir->filename);
+	if (redir)
+		free(redir);
 }
 
 void	free_cmd(void *cmd_void)
@@ -67,6 +69,7 @@ void	reset_input(t_data *data)
 		free_list(&data->token_list, free_token);
 	if (data->cmd_list)
 		free_list(&data->cmd_list, free_cmd);
+	data->n_fork = 0;
 	//if	(data->path)
 	//	free_table(data->path);
 }
