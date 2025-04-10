@@ -118,6 +118,7 @@ int		wait_and_status(t_data *data);
 void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
 void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds);
+void    exec_heredoc(t_data *data, t_cmd *heredoc);
 void	reset_io(t_data *data, t_fds *fds);
 void	change_io(t_data *data, t_redir *redir, t_fds *fds);
 int		exec_pwd(void);

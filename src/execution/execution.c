@@ -21,7 +21,7 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		else if (cmd->nbr_arg <= 2)
 			exec_cd(cmd->cmd_args[1], &env_list);
 		else
-			ft_printf_fd(2, "Minishell: cd: too many arguments\n");
+			ft_printf_fd(2, "Minishell: cd: too many arguments\n");//we should use the error funtion, it will display the same msg
 		return (errno);
 	}
 	if (cmd->type == BI_PWD)
@@ -72,7 +72,7 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 	{
 		data->pid = fork();
 		if (data->pid == -1)
-			error_handle(data, cmd->cmd_args[0], "execution:96:\nFork failed", 1);
+			error_handle(data, cmd->cmd_args[0], "execution:75:\nFork failed", 1);
 		data->n_fork++;
 		if (!data->pid)
 		{
@@ -116,8 +116,10 @@ void	execution(t_data *data)
 		if (tmp_cmd->is_pipe)
 		{
 			if (pipe(fds.pipefd) == -1)
-				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
-		}	
+				error_handle(data, tmp_cmd->cmd_args[0], "execution.c:119\nPipe failed", 1);
+		}
+		if (tmp_cmd->type == OP_HEREDOC)
+			exec_heredoc(data, tmp_cmd);
 		if (is_builtin(tmp_cmd->type))
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);

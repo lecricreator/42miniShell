@@ -103,7 +103,7 @@ int	is_any_cmd(t_type type)
 
 int	is_redir_op(t_type type)
 {
-	if (type >= 8 && type <= 11)
+	if (type >= 8 && type <= 10)
 		return (1);
 	else
 		return (0);

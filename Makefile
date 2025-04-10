@@ -31,7 +31,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
-EXEC_FILES = execution.c exec_built.c exec_cmd.c
+EXEC_FILES = execution.c exec_built.c exec_cmd.c exec_heredoc.c
 PARS_FILES = parsing.c lexing.c command_block.c
 ERR_FILES = error_handle.c free_data.c free_data_utils.c
 FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) $(addprefix $(PARS_DIR), $(PARS_FILES)) $(addprefix $(ERR_DIR), $(ERR_FILES)) main.c  utils1.c utils2.c  environment.c in_out_manage.c

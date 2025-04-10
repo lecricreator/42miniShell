@@ -85,7 +85,7 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 	i = 0;
 	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len(*token_list) + 1);
 	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "command_block.c:64\nft_calloc failed", 1);
+		error_handle(data, "cmd_tab", "command_block.c:88\nft_calloc failed", 1);
 	tmp_token = (t_token *)(*token_list)->content;
 	save_position = NULL;
 	while (*token_list && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
@@ -120,6 +120,27 @@ static char  **get_cmd_tab(t_data *data, t_list **token_list)
 	return (cmd_tab);
 }
 
+static char  **get_heredoc(t_data *data, t_list **token_list)
+{
+	t_token	*tmp_token;
+	char	**cmd_tab;
+	int		i;
+
+	i = 0;
+	cmd_tab = ft_calloc(sizeof(char *), 3);
+	if (!cmd_tab)
+		error_handle(data, "cmd_tab", "command_block.c:132\nft_calloc failed", 1);
+
+	tmp_token = (t_token *)(*token_list)->content;
+	while (*token_list && ((tmp_token->type == OP_HEREDOC && !i ) || tmp_token->type == DELIMITER))
+	{
+		cmd_tab[i++] = ft_strdup(tmp_token->str);
+		if (*token_list)
+			tmp_token = (t_token *)(*token_list)->content;
+	}
+	return (cmd_tab);
+}
+
 static char  **get_cmd_tab_ri(t_data *data, t_list **token_list)
 {
 	t_token	*tmp_token;
@@ -130,7 +151,7 @@ static char  **get_cmd_tab_ri(t_data *data, t_list **token_list)
 	i = 0;
 	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len_ri(*token_list) + 1);
 	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "command_block.c:64\nft_calloc failed", 1);
+		error_handle(data, "cmd_tab", "command_block.c:154\nft_calloc failed", 1);
 	
 	save_position = *token_list;
 	*token_list = (*token_list)->next;
@@ -164,7 +185,7 @@ void	fill_redir(t_data *data, t_list **redir, t_list **token_list)
 	{
 		redir_node = (t_redir *)malloc(sizeof(t_redir));
 		if (!redir_node)
-			error_handle(data, tmp_token->str, "command_block.c:167\nMalloc failed", 1);
+			error_handle(data, tmp_token->str, "command_block.c:188\nMalloc failed", 1);
 		init_redir(redir_node);
 		redir_node->type = tmp_token->type;
 		*token_list = (*token_list)->next;
@@ -176,11 +197,11 @@ void	fill_redir(t_data *data, t_list **redir, t_list **token_list)
 			else
 			{
 				free_redir(redir_node);
-				error_handle(data, tmp_token->str, "command_block.c:178\nBad token type to redir", 1);//should this stop the program?
+				error_handle(data, tmp_token->str, "command_block.c:200\nBad token type to redir", 1);//should this stop the program?
 			}
 		}
 		else
-			error_handle(data, tmp_token->str, "command_block.c:181\nNo file to redir", 1);//should this stop the program?
+			error_handle(data, tmp_token->str, "command_block.c:204\nNo file to redir", 1);//should this stop the program?
 		new_node = ft_lstnew(redir_node);
 		ft_lstadd_back(redir, new_node);
 		*token_list = (*token_list)->next;
@@ -229,6 +250,8 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 		cmd->type = seek_type(token_list);
 		cmd->cmd_args = get_cmd_tab_ri(data, token_list);
 	}
+	else if (cmd->type == OP_HEREDOC)
+		cmd->cmd_args = get_heredoc(data, token_list);
 	else
 		cmd->cmd_args = get_cmd_tab(data, token_list);
 	if (*token_list)
@@ -240,7 +263,7 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 	}
 	return (cmd);
 }
-/*mix with create_cmd_block*/
+
 void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list)
 {
 	t_cmd	*cmd_node;
@@ -253,7 +276,7 @@ void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list)
 		cmd_node = create_cmd(data, &tmp_head);
 		new_node = ft_lstnew(cmd_node);
 		ft_lstadd_back(cmd_list, new_node);
-		if(tmp_head)
+		if(tmp_head && ((t_token *)(token_list)->content)->type != OP_HEREDOC)
 			tmp_head = tmp_head->next;
 	}
 }
