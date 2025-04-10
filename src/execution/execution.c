@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/06 17:15:58 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:26:47 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,8 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 	}
 	if (cmd->type == BI_ECHO)
 	{
-		exec_echo(cmd->cmd_args, env_list);
+		exec_echo(cmd->cmd_args);
 		return(errno);
-	}
-	if (cmd->type == BI_PWD)
-	{
-		exec_pwd();
-		return (errno);
 	}
 	/*
 	if (tmp_token->type == BI_EXIT)
@@ -57,13 +52,11 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 			exec_export(cmd->cmd_args, &env_list);
 		return (errno);
 	}
-	/*
-	if (tmp_token->type == BI_UNSET)
+	if (cmd->type == BI_UNSET)
 	{
-		exec_unset();
-		return (token_list->next);
+		exec_unset(cmd->cmd_args, &env_list);
+		return (errno);
 	}
-	*/
 	return (errno);
 }
 
@@ -87,7 +80,7 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 	else
 	{
 		exec_redir(data, cmd->redir, fds);
-		exec_builtin(cmd, data->env_list);		
+		exec_builtin(cmd, data->env_list);
 	}
 }
 
@@ -113,12 +106,12 @@ void	execution(t_data *data)
 	while (tmp_head)
 	{
 		tmp_cmd = (t_cmd *)tmp_head->content;
-	
+
 		if (tmp_cmd->is_pipe)
 		{
 			if (pipe(fds.pipefd) == -1)
 				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
-		}	
+		}
 		if (is_builtin(tmp_cmd->type))
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);

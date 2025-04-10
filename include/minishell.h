@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/06 17:01:41 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/10 22:23:02 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,14 +122,13 @@ void	reset_io(t_data *data, t_fds *fds);
 void	change_io(t_data *data, t_redir *redir, t_fds *fds);
 int		exec_pwd(void);
 int		exec_cd(char *str, t_list **env_list);
-void	exec_echo(char **cmd_args, t_list *env_list);
-<<<<<<< HEAD
+void	exec_echo(char **cmd_args);
 void	exec_export(char **cmd_args, t_list **env_list);
-=======
+void	exec_unset(char **cmd_args, t_list **env_list);
 int		is_builtin(t_type type);
 int		is_any_cmd(t_type type);
 int		is_redir_op(t_type type);
->>>>>>> main
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
+char	*strdup_limiter(char *str, char stop);
 #endif
