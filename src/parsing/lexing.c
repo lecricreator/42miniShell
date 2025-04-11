@@ -37,7 +37,6 @@ static int	is_double_arrow(const char *input, int *i)
 
 void	init_exp(t_expansion *exp, int start)
 {
-	exp->b = 0;
 	exp->i = start + 1;
 	exp->new_input = NULL;
 	exp->str_back = NULL;
@@ -60,63 +59,65 @@ char	*dollar_expansion(t_data *data, char *input, int start, t_list *env_list)
 	t_expansion	vars;
 
 	init_exp(&vars, start);
-	vars.i = start + 1;
-	vars.b = 0;
 	if (input[vars.i] == '?')
+	{
 		vars.var = ft_itoa(data->status);
+		vars.i++;
+	}
 	else
 	{
 		while (input[vars.i] && !ft_isblank(input[vars.i]))
 			vars.i++;
 		vars.var = ft_strndup(input + (start + 1), vars.i);
+		vars.tmp = vars.var;
+		vars.var = give_var_env_list(vars.var, env_list);
+		free(vars.tmp);
 	}
-	vars.var[vars.b] = '\0';
-	vars.var = give_var_env_list(vars.var, env_list);
 	vars.str_front = ft_strndup(input, start - 1);
 	vars.str_back = ft_strdup(input + (start + vars.i));
 	vars.new_input = ft_strjoin(vars.str_front, vars.var);
 	vars.tmp = vars.new_input;
 	vars.new_input = ft_strjoin(vars.new_input, vars.str_back);
-	//free(input);
+	free(input);
 	free_vars(&vars);
 	return (vars.new_input);
 }
 
-static int	token_len(t_data *data, char *input, int *i)
+static int	token_len(t_data *data, char **input, int *i)
 {
 	int	len;
 
 	len = 0;
-	if (input[*i] == '$')
+	if (input[0][*i] == '$')
 	{
-		input = dollar_expansion(data, input, *i, data->env_list);
-		while (input[*i] && !ft_isblank(input[*i]))
+		*input = dollar_expansion(data, *input, *i, data->env_list);
+		while (input[0][*i] && !ft_isblank(input[0][*i]))
 		{
 			(*i)++;
 			len++;
 		}
 	}
-	else if (input[*i] == 39)
+	else if (input[0][*i] == 39)
 	{
 		(*i)++;
-		while (input[*i] && input[*i] != 39)
+		while (input[0][*i] && input[0][*i] != 39)
 		{
 			(*i)++;
 			len++;
 		}
 	}
-	else if (input[*i] == 34)
+	else if (input[0][*i] == 34)
 	{
 		(*i)++;
-		while (input[*i] && input[*i] != 34)
+		while (input[0][*i] && input[0][*i] != 34)
 		{
 			(*i)++;
 			len++;
 		}
 	}
-	else if (is_special_symbol(input[*i]))
+	else if (is_special_symbol(input[0][*i]))
 	{
-		if (is_double_arrow(input, i))
+		if (is_double_arrow(*input, i))
 		{
 			(*i) += 2;
 			len = 2;
@@ -129,7 +130,7 @@ static int	token_len(t_data *data, char *input, int *i)
 	}
 	else
 	{
-		while (input[*i] && !ft_isblank(input[*i]) && !is_special_symbol(input[*i]))
+		while (input[0][*i] && !ft_isblank(input[0][*i]) && !is_special_symbol(input[0][*i]))
 		{
 			(*i)++;
 			len++;
@@ -165,8 +166,6 @@ static int	get_type(char *token)
 		return (OP_APPEND);
 	if (!ft_strncmp(token, "<<", ft_strlen(token)))
 		return (OP_HEREDOC);
-	if (token[0] == '$')
-		return (ENV_VAR);
 	return (UNKNOW);
 }
 
@@ -215,7 +214,7 @@ void	lexing_tokens(t_data *data, char *input)
 		if (!ft_isblank(input[i]))
 		{
 			token_index++;
-			len = token_len(data, input, &i);
+			len = token_len(data, &input, &i);
 			token_str = ft_strndup(input + (i - len), len);
 			if (!token_str)
 				error_handle(data, "token_str", "lexing.c:216\nft_strndup failed", 1);

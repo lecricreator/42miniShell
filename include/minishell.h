@@ -58,7 +58,6 @@ typedef enum e_type
 	DELIMITER,
 	BAD_TOKEN,
 	UNKNOW,
-	ENV_VAR,
 	NONE
 }t_type;
 
@@ -100,7 +99,6 @@ typedef struct s_data
 typedef struct s_expansion
 {
 	int		i;
-	int		b;
 	char	*var;
 	char	*new_input;
 	char	*str_front;
