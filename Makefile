@@ -20,6 +20,7 @@ LFLAGS = -lreadline -lncurses
 EXEC_DIR = execution/
 PARS_DIR = parsing/
 ERR_DIR = error_and_free/
+SIG_DIR = signal/
 SRC_DIR = ./src/
 OBJ_DIR = $(SRC_DIR)target/
 INC_DIR = ./include/
@@ -31,10 +32,13 @@ LIBFT = $(LIBFT_DIR)libft.a
 FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
-EXEC_FILES = execution.c exec_built.c exec_cmd.c
+EXEC_FILES = execution.c exec_built_01.c exec_built_02.c exec_cmd.c
 PARS_FILES = parsing.c lexing.c command_block.c
 ERR_FILES = error_handle.c free_data.c free_data_utils.c
-FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) $(addprefix $(PARS_DIR), $(PARS_FILES)) $(addprefix $(ERR_DIR), $(ERR_FILES)) main.c  utils1.c utils2.c  environment.c in_out_manage.c
+SIG_FILES = signal_init.c
+FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) $(addprefix $(PARS_DIR), $(PARS_FILES)) \
+		$(addprefix $(ERR_DIR), $(ERR_FILES)) $(addprefix $(SIG_DIR), $(SIG_FILES)) \
+		main.c  utils1.c utils2.c  environment.c in_out_manage.c
 INC_FILES = minishell.h
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))

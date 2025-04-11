@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_built.c                                       :+:      :+:    :+:   */
+/*   exec_built_01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/10 22:26:08 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/11 18:38:51 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	exec_pwd(void)
-{
-	char	buffer[1024];
-
-	getcwd(buffer, sizeof(buffer));
-	printf("%s\n", buffer);
-	return (errno);
-}
 
 int	exec_cd(char *str, t_list **env_list)
 {
@@ -98,6 +89,8 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	else
 	{
 		new_value = ft_strdup(cmd_args[1]);
+		if (!new_value)
+			//ERROR MALLOC // EXIT WITH MESSAGE ERROR MALLOC
 		ft_lstadd_back(env_list, ft_lstnew(new_value));
 	}
 	free(var_in_env_list);
@@ -108,10 +101,11 @@ void	exec_unset(char **cmd_args, t_list **env_list)
 	char	*var_in_env_list;
 	t_list	*tmp_head;
 	t_list	*tmp_linked_list;
-	//char	*new_value;
 
 	tmp_head = *env_list;
 	var_in_env_list = strdup_limiter(cmd_args[1], '=');
+	if (!var_in_env_list)
+		return ;
 	if (give_var_env_list(var_in_env_list, *env_list))
 	{
 		while((*env_list)->next)
