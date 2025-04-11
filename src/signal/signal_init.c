@@ -12,6 +12,26 @@
 
 #include "minishell.h"
 
+void disable_echoctl(void)
+{
+	struct termios term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+	{
+		perror("tcgetattr");
+		return;
+	}
+
+	// Clear the ECHOCTL flag to disable the echoing of control characters.
+	term.c_lflag &= ~ECHOCTL;
+
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+	{
+		perror("tcsetattr");
+		return;
+	}
+}
+
 void	test(int sigtype)
 {
 	t_data *data;
@@ -21,20 +41,21 @@ void	test(int sigtype)
 		if (data->pid)
 		{
 			kill(data->pid, SIGINT);
-			ft_printf_fd(1, "\n");
+			ft_printf_fd(1, "^C\n");
 		}
 		else
-			ft_printf_fd(1,"\nMinishell $ ");
+		{
+			ft_printf_fd(1, "\n^C\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
+		}
 	}
 	else if (sigtype == SIGQUIT)
 	{
-		// //ft_printf_fd(1,"Minishell $ ");
-		//rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
-		// write(STDOUT_FILENO, "  ", 2);
-		// // ft_printf_fd(1, "Ctrl + \\\n");
-		return ;
+		rl_replace_line(rl_line_buffer, 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
@@ -42,6 +63,7 @@ void	sig_init()
 {
 	struct sigaction sa;
 
+	disable_echoctl();
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = &test;
 	sa.sa_flags = 0;

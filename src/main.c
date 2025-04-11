@@ -55,7 +55,7 @@ int	main(int ac, char **av, char **env)
 		reset_input(data);
 		data->input = readline("Minishell $ ");
 		if (!data->input)
-			error_handle(data, data->input, strerror(errno), 1);
+			exec_exit();
 		add_history(data->input);
 		parsing(data);
 //		print_token_list(data->token_list);
