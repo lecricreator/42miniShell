@@ -35,13 +35,61 @@ static int	is_double_arrow(const char *input, int *i)
 	return (0);
 }
 
-static int	token_len(const char *input, int *i)
+void	init_exp(t_expansion *exp, int start)
+{
+	exp->b = 0;
+	exp->i = start + 1;
+	exp->new_input = NULL;
+	exp->str_back = NULL;
+	exp->str_front = NULL;
+	exp->var = NULL;
+}
+
+void	free_vars(t_expansion *vars)
+{
+	if (vars->str_back)
+		free(vars->str_back);
+	if (vars->str_front)
+		free(vars->str_front);
+	if (vars->tmp)
+		free(vars->tmp);
+}
+
+char	*dollar_expansion(t_data *data, char *input, int start, t_list *env_list)
+{
+	t_expansion	vars;
+
+	init_exp(&vars, start);
+	vars.i = start + 1;
+	vars.b = 0;
+	if (input[vars.i] == '?')
+		vars.var = ft_itoa(data->status);
+	else
+	{
+		while (input[vars.i] && !ft_isblank(input[vars.i]))
+			vars.i++;
+		vars.var = ft_strndup(input + (start + 1), vars.i);
+	}
+	vars.var[vars.b] = '\0';
+	vars.var = give_var_env_list(vars.var, env_list);
+	vars.str_front = ft_strndup(input, start - 1);
+	vars.str_back = ft_strdup(input + (start + vars.i));
+	vars.new_input = ft_strjoin(vars.str_front, vars.var);
+	vars.tmp = vars.new_input;
+	vars.new_input = ft_strjoin(vars.new_input, vars.str_back);
+	//free(input);
+	free_vars(&vars);
+	return (vars.new_input);
+}
+
+static int	token_len(t_data *data, char *input, int *i)
 {
 	int	len;
 
 	len = 0;
 	if (input[*i] == '$')
 	{
+		input = dollar_expansion(data, input, *i, data->env_list);
 		while (input[*i] && !ft_isblank(input[*i]))
 		{
 			(*i)++;
@@ -142,10 +190,10 @@ static void fill_token_list(t_data *data, char *token, int token_index)
 
 	token_node = create_token(token, token_index);
 	if (!token_node)
-		error_handle(data, "token_node", "create_token failed", 1);
+		error_handle(data, "token_node", "lexing.c:190\ncreate_token failed", 1);
 	new_node = ft_lstnew(token_node);
 	if (!new_node)
-		error_handle(data, "new_node", "ft_lstnew failed", 1);
+		error_handle(data, "new_node", "lexing.c:193\nft_lstnew failed", 1);
 	ft_lstadd_back(&data->token_list, new_node);
 }
 
@@ -165,10 +213,10 @@ void	lexing_tokens(t_data *data, char *input)
 		if (!ft_isblank(input[i]))
 		{
 			token_index++;
-			len = token_len(input, &i);
+			len = token_len(data, input, &i);
 			token_str = ft_strndup(input + (i - len), len);
 			if (!token_str)
-				error_handle(data, "token_str", "lexing.c:183\nft_strndup failed", 1);
+				error_handle(data, "token_str", "lexing.c:216\nft_strndup failed", 1);
 			fill_token_list(data, token_str, token_index);
 		}
 		if (input[i] == '\0')

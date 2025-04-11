@@ -21,6 +21,7 @@ void	init_data(t_data *data, char **env)
 	data->token_list = NULL;
 	data->cmd_list = NULL;
 	data->n_fork = 0;
+	data->status = 0;
 }
 
 int	main(int ac, char **av, char **env)

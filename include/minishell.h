@@ -96,6 +96,17 @@ typedef struct s_data
 	pid_t	pid;
 }t_data;
 
+typedef struct s_expansion
+{
+	int		i;
+	int		b;
+	char	*var;
+	char	*new_input;
+	char	*str_front;
+	char	*str_back;
+	char	*tmp;
+}t_expansion;
+
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
