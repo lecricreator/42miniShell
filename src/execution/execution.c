@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/06 16:01:00 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:26:47 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,8 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 	}
 	if (cmd->type == BI_ECHO)
 	{
-		exec_echo(cmd->cmd_args, env_list);
+		exec_echo(cmd->cmd_args);
 		return(errno);
-	}
-	if (cmd->type == BI_PWD)
-	{
-		exec_pwd();
-		return (errno);
 	}
 	/*
 	if (tmp_token->type == BI_EXIT)
@@ -51,18 +46,17 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		print_env(env_list);
 		return (errno);
 	}
-	/*
-	if (tmp_token->type == BI_EXPORT)
+	if (cmd->type == BI_EXPORT)
 	{
-		exec_export();
-		return (token_list->next);
+		if (cmd->nbr_arg == 2)
+			exec_export(cmd->cmd_args, &env_list);
+		return (errno);
 	}
-	if (tmp_token->type == BI_UNSET)
+	if (cmd->type == BI_UNSET)
 	{
-		exec_unset();
-		return (token_list->next);
+		exec_unset(cmd->cmd_args, &env_list);
+		return (errno);
 	}
-	*/
 	return (errno);
 }
 
@@ -139,9 +133,8 @@ void	execution(t_data *data)
 		if (tmp_cmd->is_pipe)
 		{
 			if (pipe(fds.pipefd) == -1)
-				error_handle(data, tmp_cmd->cmd_args[0], "execution.c:119\nPipe failed", 1);
+				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
 		}
-		check_heredoc(data, tmp_cmd->redir, &fds);
 		if (is_builtin(tmp_cmd->type))
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);
