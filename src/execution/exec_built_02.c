@@ -1,41 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   singnal_init.c                                     :+:      :+:    :+:   */
+/*   exec_built_02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/11 10:52:33 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/11 10:59:54 by lomorale         ###   ########.fr       */
+/*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
+/*   Updated: 2025/04/11 18:53:35 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	test(int sigtype)
+int	exec_pwd(void)
 {
-	if (sigtype == SIGINT)
-		{
-			ft_putstr(1, "\n");
-			rl_replace_line("", 0);
-			rl_on_new_line();
-			rl_redisplay();
-			//exit_status = 130;
-		}
-	else if (sigtype == SIGQUIT)
-	{
-		rl_redisplay();
-		ft_printf_fd(1, "Ctrl + \\\n");
-	}
+	char	buffer[1024];
+
+	getcwd(buffer, sizeof(buffer));
+	printf("%s\n", buffer);
+	return (errno);
 }
 
-void	sig_init()
+void	exec_exit()
 {
-	struct sigaction sa;
+	t_data	*tmp_data;
 
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = &test;
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	ft_printf_fd(2, "exit\n");
+	tmp_data = recover_data_address(NULL);
+	free_data(tmp_data);
+	exit(errno);
 }

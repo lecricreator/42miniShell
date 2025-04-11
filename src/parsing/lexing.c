@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:31:14 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 01:40:19 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/11 17:29:09 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,8 @@ void	lexing_tokens(t_data *data, char *input)
 	int		token_index;
 	char	*token_str;
 
+	if (!input)
+		return ;
 	i = 0;
 	len = 0;
 	token_index = -1;
