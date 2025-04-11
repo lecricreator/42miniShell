@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/10 22:23:02 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/11 10:59:21 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
+#include <signal.h>
 
 typedef struct s_fds
 {
@@ -131,4 +132,5 @@ int		is_redir_op(t_type type);
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 char	*strdup_limiter(char *str, char stop);
+void	sig_init();
 #endif
