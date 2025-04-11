@@ -22,7 +22,7 @@ void	reset_io(t_data *data, t_fds *fds)
 		close(fds->std_out);
 		close(fds->outfile);
 	}
-	if (fds->infile != -1)
+	if (fds->infile != -1 || fds->std_in)
 	{
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)
@@ -36,6 +36,11 @@ void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds)
 {
 	if (cmd->is_pipe)
 	{
+		if (STDOUT_FILENO != 1)
+		{
+			cmd->is_pipe = 0;
+			return ;
+		}
 		close(fds->pipefd[0]);
 		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
 			error_handle(data, cmd->cmd_args[0], "execution_utils.c:87:\ndup2 failed", 1);
@@ -66,6 +71,8 @@ void	change_io(t_data *data, t_redir *redir, t_fds *fds)
 	}
 	if (redir->type == OP_REDIR_IN)
 	{
+		if (STDIN_FILENO != 1)
+			return ;
 		fds->std_in = dup(STDIN_FILENO);
 		fds->infile = open(redir->filename, O_RDONLY);
 		if (fds->infile < 0)
@@ -82,9 +89,9 @@ void	exec_redir(t_data *data, t_list *redir, t_fds *fds)
 	t_redir *tmp_redir;
 	t_list	*tmp_head;
 
-	if (redir)
-		tmp_redir = (t_redir *)redir->content;
-	tmp_head = 	redir;
+	tmp_head = redir;
+	if (tmp_head)
+		tmp_redir = (t_redir *)tmp_head->content;
 	while (tmp_head)
 	{
 		change_io(data, tmp_redir, fds);

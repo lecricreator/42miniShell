@@ -86,7 +86,7 @@ void	exec_builtin_before_fork(t_data * data, t_cmd *cmd, t_fds *fds)
 	else
 	{
 		exec_redir(data, cmd->redir, fds);
-		exec_builtin(cmd, data->env_list);		
+		exec_builtin(cmd, data->env_list);
 	}
 }
 
@@ -96,9 +96,32 @@ void	init_fds(t_fds *fds)
 	fds->outfile = -1;
 	fds->pipefd[0] = -1;
 	fds->pipefd[1] = -1;
+	fds->herepipe[0] = -1;
+	fds->herepipe[1] = -1;
 	fds->prev_pipe = -1;
 	fds->std_in = -1;
 	fds->std_out = -1;
+}
+
+void	check_heredoc(t_data *data, t_list *redir, t_fds *fds)
+{
+	t_list	*tmp_head;
+	t_redir	*tmp_redir;
+
+	tmp_head = redir;
+	if (tmp_head)
+	tmp_redir = ((t_redir *)(tmp_head)->content);
+	while(tmp_head)
+	{
+		if (tmp_redir->type == OP_HEREDOC)
+		{
+			exec_heredoc(data, tmp_redir, fds);
+			break ;
+		}
+		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_redir = ((t_redir *)(tmp_head)->content);
+	}
 }
 
 void	execution(t_data *data)
@@ -112,14 +135,13 @@ void	execution(t_data *data)
 	while (tmp_head)
 	{
 		tmp_cmd = (t_cmd *)tmp_head->content;
-	
+
 		if (tmp_cmd->is_pipe)
 		{
 			if (pipe(fds.pipefd) == -1)
 				error_handle(data, tmp_cmd->cmd_args[0], "execution.c:119\nPipe failed", 1);
 		}
-		if (tmp_cmd->type == OP_HEREDOC)
-			exec_heredoc(data, tmp_cmd);
+		check_heredoc(data, tmp_cmd->redir, &fds);
 		if (is_builtin(tmp_cmd->type))
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);
