@@ -60,6 +60,7 @@ void	free_cmd(void *cmd_void)
 
 void	reset_input(t_data *data)
 {
+	data->n_fork = 0;
 	if (data->input)
 	{
 		free(data->input);
@@ -69,7 +70,5 @@ void	reset_input(t_data *data)
 		free_list(&data->token_list, free_token);
 	if (data->cmd_list)
 		free_list(&data->cmd_list, free_cmd);
-	data->n_fork = 0;
-	//if	(data->path)
-	//	free_table(data->path);
+	
 }

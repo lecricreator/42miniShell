@@ -32,7 +32,6 @@ void	init_data(t_data *data, char **env)
 	data->input = NULL;
 	data->env_list = NULL;
 	get_env(&data->env_list, env);
-	data->path = NULL;
 	data->token_list = NULL;
 	data->cmd_list = NULL;
 	data->n_fork = 0;

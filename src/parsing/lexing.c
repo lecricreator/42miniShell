@@ -68,13 +68,13 @@ char	*dollar_expansion(t_data *data, char *input, int start, t_list *env_list)
 	{
 		while (input[vars.i] && !ft_isblank(input[vars.i]))
 			vars.i++;
-		vars.var = ft_strndup(input + (start + 1), vars.i);
+		vars.var = ft_strndup(input + (start + 1),  vars.i - start - 1);
 		vars.tmp = vars.var;
 		vars.var = give_var_env_list(vars.var, env_list);
 		free(vars.tmp);
 	}
-	vars.str_front = ft_strndup(input, start - 1);
-	vars.str_back = ft_strdup(input + (start + vars.i));
+	vars.str_front = ft_strndup(input, start);
+	vars.str_back = ft_strdup(input + vars.i);
 	vars.new_input = ft_strjoin(vars.str_front, vars.var);
 	vars.tmp = vars.new_input;
 	vars.new_input = ft_strjoin(vars.new_input, vars.str_back);

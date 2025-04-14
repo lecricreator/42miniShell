@@ -39,8 +39,6 @@ void	free_data(t_data *data)
 		free_list(&data->token_list, free_token);
 	if (data->cmd_list)
 		free_list(&data->cmd_list, free_cmd);
-	if (data->path)
-		free_table(data->path);
 	if (data)
 		free(data);
 }

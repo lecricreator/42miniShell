@@ -22,33 +22,43 @@ int	cmd_if_absolute_path(t_cmd *cmd)
 		return (1);
 }
 
-void	find_program(t_data *data, t_cmd *cmd)
+int	find_program(t_data *data, t_cmd *cmd)
 {
 	int		i;
+	char	**path;
 
 	i = 0;
-	data->path = get_path(data->path, data->env_list);
+	path = NULL;
+	path = get_path(path, data->env_list);
 	if (ft_strchr(cmd->cmd_args[0], '/'))
 	{
 		if (!cmd_if_absolute_path(cmd))
-			return ;
+		{
+			free(path);
+			return (0);
+		}
 		else
 		{
-			error_handle(data, cmd->cmd_args[0], "directory not found", 0);
-			return ;
+			free(path);
+			return (error_handle(data, cmd->cmd_args[0], "directory not found", 0));
 		}
 	}
-	while (data->path[i])
+	while (path[i])
 	{
-		cmd->command_path = ft_strjoin(data->path[i], cmd->cmd_args[0]);
+		cmd->command_path = ft_strjoin(path[i], cmd->cmd_args[0]);
 		if (!access(cmd->command_path, X_OK))
-			return ;
+		{
+			free(path);
+			return (0);
+		}
 		free(cmd->command_path);
 		cmd->command_path = NULL;
 		i++;
 	}
-	error_handle(data,
-		cmd->cmd_args[0], "command not found", 0);
+	free(path);
+	return (error_handle(data,
+		cmd->cmd_args[0], "command not found", 0));
+	
 }
 
 int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
@@ -75,8 +85,9 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds)
 {
 	char	**env_tab;
 
+	if(find_program(data, cmd))
+		return ;
 	env_tab = get_env_tab(data->env_list);
-	find_program(data, cmd);
 	data->pid = fork();
 	if (data->pid == -1)
 		error_handle(data, "", "Error:\nFork failed", 1);

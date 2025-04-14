@@ -11,167 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-static int	cmd_tab_len(t_list *token_list)// this function counts one more argument than it should, it could cause leaks
-{
-	t_list	*tmp_head;
-	t_token	*tmp_token;
-	int		i;
 
-	i = 0;
-	tmp_head = token_list;
-	tmp_token = (t_token *)tmp_head->content;
-	while (tmp_head && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
-	{
-		i++;
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-		{
-			tmp_token = (t_token *)tmp_head->content;
-			if (tmp_token->type == OP_REDIR_OUT || tmp_token->type == OP_APPEND)
-			{
-				tmp_head = tmp_head->next;
-				if (tmp_head)
-					tmp_head = tmp_head->next;
-				if (tmp_head)
-					tmp_token = (t_token *)(tmp_head)->content;
-				while (tmp_head && tmp_token->type == ARGUMENT)
-				{
-					i++;
-					tmp_head = tmp_head->next;
-					if (tmp_head)
-						tmp_token = (t_token *)tmp_head->content;
-				}
-			}
-
-		}
-	}
-	return (i);
-}
-*/
-/*
-static int	cmd_tab_len_ri(t_list *token_list)
-{
-	t_list	*tmp_head;
-	t_token	*tmp_token;
-	int		i;
-
-	i = 0;
-	tmp_head = token_list->next;
-	if (!tmp_head)
-		return (i);
-	tmp_head = tmp_head->next;
-	if (!tmp_head)
-		return (i);
-	tmp_token = (t_token *)tmp_head->content;
-	while (tmp_head && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
-	{
-			i++;
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_token = (t_token *)tmp_head->content;
-	}
-	return (i);
-}
-*/
-/*extracts the currend command and his arguments into a 2D array,
-and sets the head of the token_list to the next operator, or the end of the command line*/
-/*
-static char  **get_cmd_tab(t_data *data, t_list **token_list)
-{
-	t_token	*tmp_token;
-	t_list	*save_position;
-	char	**cmd_tab;
-	int		i;
-
-	i = 0;
-	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len(*token_list) + 1);
-	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "command_block.c:88\nft_calloc failed", 1);
-	tmp_token = (t_token *)(*token_list)->content;
-	save_position = NULL;
-	while (*token_list && ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT))
-	{
-		cmd_tab[i++] = ft_strdup(tmp_token->str);
-		save_position = (*token_list)->next;
-		*token_list = (*token_list)->next;
-		if (*token_list)
-		{
-			tmp_token = (t_token *)(*token_list)->content;
-			if (tmp_token->type == OP_REDIR_OUT || tmp_token->type == OP_APPEND)
-			{
-				*token_list = (*token_list)->next;
-				if (*token_list && (*token_list)->next)
-				{
-					tmp_token = ((t_token *)(*token_list)->next->content);
-					while (*token_list && (*token_list)->next && tmp_token->type == ARGUMENT)
-					{
-						cmd_tab[i++] = ft_strdup(tmp_token->str);
-						ft_lstdel_nxtnode(token_list, free_token);
-						if (*token_list && (*token_list)->next)
-							tmp_token = ((t_token *)(*token_list)->next->content);
-					}
-					tmp_token = ((t_token *)(*token_list)->content);
-				}
-
-			}
-		}
-	}
-	if (save_position)
- 		*token_list = save_position;
-	return (cmd_tab);
-}
-*/
-/*
-static char  **get_heredoc(t_data *data, t_list **token_list)
-{
-	t_token	*tmp_token;
-	char	**cmd_tab;
-	int		i;
-
-	i = 0;
-	cmd_tab = ft_calloc(sizeof(char *), 3);
-	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "command_block.c:132\nft_calloc failed", 1);
-
-	tmp_token = (t_token *)(*token_list)->content;
-	while (*token_list && ((tmp_token->type == OP_HEREDOC && !i ) || tmp_token->type == DELIMITER))
-	{
-		cmd_tab[i++] = ft_strdup(tmp_token->str);
-		if (*token_list)
-			tmp_token = (t_token *)(*token_list)->content;
-	}
-	return (cmd_tab);
-}
-*/
-/*
-static char  **get_cmd_tab_ri(t_data *data, t_list **token_list)
-{
-	t_token	*tmp_token;
-	t_list	*save_position;
-	char	**cmd_tab;
-	int		i;
-
-	i = 0;
-	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len_ri(*token_list) + 1);
-	if (!cmd_tab)
-		error_handle(data, "cmd_tab", "command_block.c:154\nft_calloc failed", 1);
-
-	save_position = *token_list;
-	*token_list = (*token_list)->next;
-	tmp_token = (t_token *)(*token_list)->next->content;
-	while (*token_list && (*token_list)->next && ((is_any_cmd(tmp_token->type) && !i ) || tmp_token->type == ARGUMENT))
-	{
-		cmd_tab[i++] = ft_strdup(tmp_token->str);
-		ft_lstdel_nxtnode(token_list, free_token);
-		if (*token_list && (*token_list)->next)
-			tmp_token = (t_token *)(*token_list)->next->content;
-	}
-	if (save_position)
- 		*token_list = save_position;
-	return (cmd_tab);
-}
-*/
 void	init_redir(t_redir *redir)
 {
 	redir->filename = NULL;
@@ -223,52 +63,6 @@ static void	init_cmd(t_cmd *cmd)
 	cmd->type = NONE;
 }
 
-/*
-t_type	seek_type(t_list **token_list)
-{
-	t_list	*tmp_head;
-	t_token	*tmp_token;
-
-	tmp_head = *token_list;
-	tmp_token = (t_token *)(tmp_head)->content;
-	while (tmp_head && tmp_token->type)
-	{
-		if (tmp_token->type == COMMAND || is_any_cmd(tmp_token->type))
-			return (tmp_token->type);
-		tmp_head = tmp_head->next;
-	}
-	return (COMMAND);
-}
-*/
-/*
-t_cmd	*create_cmd(t_data *data, t_list **token_list)
-{
-	t_cmd	*cmd;
-
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!cmd)
-		error_handle(data, "function create_cmd", "file: command_block malloc failed", 1);
-	init_cmd(cmd);
-	cmd->type = ((t_token *)(*token_list)->content)->type;
-	if (cmd->type == OP_REDIR_IN)
-	{
-		cmd->type = seek_type(token_list);
-		cmd->cmd_args = get_cmd_tab_ri(data, token_list);
-	}
-	else if (cmd->type == OP_HEREDOC)
-		cmd->cmd_args = get_heredoc(data, token_list);
-	else
-		cmd->cmd_args = get_cmd_tab(data, token_list);
-	if (*token_list)
-	{
-		fill_redir(data, &cmd->redir, token_list);
-		if (*token_list && ((t_token *)(*token_list)->content)->type == OP_PIPE)
-			cmd->is_pipe = 1;
-
-	}
-	return (cmd);
-}
-*/
 static int	cmd_tab_len(t_list *token_list)
 {
 	t_list	*tmp_head;
@@ -354,9 +148,8 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 		if (tmp_head)
 			tmp_token = ((t_token *)(tmp_head)->content);
 	}
-	tmp_head = *token_list;
-	tmp_token = ((t_token *)(tmp_head)->content);
-	while (tmp_head && tmp_token->type != OP_PIPE)
+	tmp_token = ((t_token *)(*token_list)->content);
+	while (*token_list && tmp_token->type != OP_PIPE)
 	{
 		if (is_any_cmd(tmp_token->type))
 		{
@@ -364,9 +157,9 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 			cmd->cmd_args = get_cmd_tab(data, token_list);
 			break ;
 		}
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_token = ((t_token *)(tmp_head)->content);
+		*token_list = (*token_list)->next;
+		if (*token_list)
+			tmp_token = ((t_token *)(*token_list)->content);
 	}
 	return (cmd);
 }
