@@ -59,7 +59,7 @@ char	*give_var_env_list(char *value, t_list *env_list)
 	size_value = (int)ft_strlen(value);
 	while (env_list)
 	{
-		tmp_content = (env_list)->content;
+		tmp_content = ((t_env *)(env_list)->content)->var;
 		if (ft_strncmp_env_var(value, tmp_content, size_value) == 0)
 			return (&tmp_content[size_value + 1]);
 		env_list = env_list->next;

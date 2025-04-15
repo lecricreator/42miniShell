@@ -56,6 +56,8 @@ typedef enum e_type
 	FILENAME,
 	ARGUMENT,
 	DELIMITER,
+	ENV_VAR,
+	TMP_VAR,
 	BAD_TOKEN,
 	UNKNOW,
 	NONE
@@ -104,6 +106,12 @@ typedef struct s_expansion
 	char	*str_back;
 	char	*tmp;
 }t_expansion;
+
+typedef struct s_env
+{
+	char	*var;
+	int		exported;
+}t_env;
 
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);

@@ -72,15 +72,15 @@ char	**get_path(char **path, t_list *env)
 	tmp_head = env;
 	while (tmp_head)
 	{
-		if (!ft_strncmp("PATH=", (char *)tmp_head->content, 5))
+		if (!ft_strncmp("PATH=", ((t_env *)(tmp_head)->content)->var, 5))
 		{
-			path = ft_split((char *)tmp_head->content + 5, ':');
+			path = ft_split(((t_env *)(tmp_head)->content)->var + 5, ':');
 			break ;
 		}
 		tmp_head = tmp_head->next;
 	}
 	if (!path)
-		error_handle(NULL, "", "path not found", 1);
+		error_handle(NULL, "", "path not found", 1);//this segfaults
 	complete_path(path);
 	return (path);
 }

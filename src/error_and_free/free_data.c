@@ -29,12 +29,21 @@ void	free_list(t_list **list, void (*del)(void *))
 	*list = NULL;
 }
 
+void	free_env(void *var_void)
+{
+	t_env	*var;
+
+	var = (t_env *)var_void;
+	if (var->var)
+		free(var->var);
+}
+
 void	free_data(t_data *data)
 {
 	if (data->input)
 		free(data->input);
 	if (data->env_list)
-		free_list(&data->env_list, free);
+		free_list(&data->env_list, free_env);
 	if (data->token_list)
 		free_list(&data->token_list, free_token);
 	if (data->cmd_list)

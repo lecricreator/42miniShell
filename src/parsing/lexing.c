@@ -88,6 +88,7 @@ char	*dollar_expansion(t_data *data, char *input, int *start, t_list *env_list)
 	free_vars(&vars);
 	return (vars.new_input);
 }
+
 void	check_for_expansion(t_data *data, char **input)
 {
 	int		i;
@@ -188,6 +189,8 @@ static int	get_type(char *token)
 		return (OP_APPEND);
 	if (!ft_strncmp(token, "<<", ft_strlen(token)))
 		return (OP_HEREDOC);
+	if (ft_strchr(token, '='))
+		return (ENV_VAR);
 	return (UNKNOW);
 }
 

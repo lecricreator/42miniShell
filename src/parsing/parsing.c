@@ -12,8 +12,27 @@
 
 #include "minishell.h"
 
-static t_type	token_zero(t_token *token)//re test this and correct if needed
+static t_type	check_env_var_type(t_token *next_token)
 {
+	if (!next_token)
+		return (ENV_VAR);
+	if (is_redir_op(next_token->type))
+		return (FILENAME);
+	if (is_any_cmd(next_token->type) || next_token->type == UNKNOW)
+		return (TMP_VAR);
+	if (next_token->type == OP_PIPE)
+		return (COMMAND);
+	return (ENV_VAR);
+
+}
+
+static t_type	token_zero(t_token *token, t_list *token_list)//re test this and correct if needed
+{
+	t_token *next_token;
+
+	next_token = NULL;
+	if (token_list->next)
+		next_token = (t_token *)token_list->next->content;
 	if (token->type <= 6)
 		return (ARGUMENT);
 	else if (token->type >= 8 && token->type <= 10)
@@ -26,6 +45,11 @@ static t_type	token_zero(t_token *token)//re test this and correct if needed
 	{
 		token->type = COMMAND;
 		return (ARGUMENT);
+	}
+	else if (token->type == ENV_VAR)
+	{
+		token->type = check_env_var_type(next_token);
+		return (ENV_VAR);
 	}
 	return (BAD_TOKEN);
 }
@@ -84,7 +108,7 @@ void	parsing(t_data *data)
 	{
 		tmp_token = (t_token *)tmp_head->content;
 		if (tmp_token->index == 0)
-			state = token_zero(tmp_token);
+			state = token_zero(tmp_token, tmp_head);
 		else
 			state = next_token(tmp_token, state, last);
 		if (state == BAD_TOKEN)
