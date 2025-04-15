@@ -133,6 +133,7 @@ void	execution(t_data *data)
 			if (pipe(fds.pipefd) == -1)
 				error_handle(data, tmp_cmd->cmd_args[0], "File: execution.c || Function: execution || Pipe failed", 1);
 		}
+		check_heredoc(data, tmp_cmd->redir, &fds);
 		if (is_builtin(tmp_cmd->type))
 		{
 			tmp_cmd->nbr_arg = count_table(tmp_cmd->cmd_args);
