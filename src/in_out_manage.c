@@ -71,7 +71,7 @@ void	change_io(t_data *data, t_redir *redir, t_fds *fds)
 	}
 	if (redir->type == OP_REDIR_IN)
 	{
-		if (STDIN_FILENO != 1)
+		if (STDIN_FILENO != 0)
 			return ;
 		fds->std_in = dup(STDIN_FILENO);
 		fds->infile = open(redir->filename, O_RDONLY);

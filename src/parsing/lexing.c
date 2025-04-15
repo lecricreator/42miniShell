@@ -52,13 +52,15 @@ void	free_vars(t_expansion *vars)
 		free(vars->str_front);
 	if (vars->tmp)
 		free(vars->tmp);
+	if (vars->var)
+		free(vars->var);
 }
 
-char	*dollar_expansion(t_data *data, char *input, int start, t_list *env_list)
+char	*dollar_expansion(t_data *data, char *input, int *start, t_list *env_list)
 {
 	t_expansion	vars;
 
-	init_exp(&vars, start);
+	init_exp(&vars, *start);
 	if (input[vars.i] == '?')
 	{
 		vars.var = ft_itoa(data->status);
@@ -68,36 +70,54 @@ char	*dollar_expansion(t_data *data, char *input, int start, t_list *env_list)
 	{
 		while (input[vars.i] && !ft_isblank(input[vars.i]))
 			vars.i++;
-		vars.var = ft_strndup(input + (start + 1),  vars.i - start - 1);
+		vars.var = ft_strndup(input + (*start + 1),  vars.i - *start - 1);
 		vars.tmp = vars.var;
-		vars.var = give_var_env_list(vars.var, env_list);
+		vars.var = ft_strdup(give_var_env_list(vars.var, env_list));
 		free(vars.tmp);
 	}
-	vars.str_front = ft_strndup(input, start);
+	if (!vars.var)
+		vars.var = ft_strdup("");
+	vars.str_front = ft_strndup(input, *start);
 	vars.str_back = ft_strdup(input + vars.i);
 	vars.new_input = ft_strjoin(vars.str_front, vars.var);
 	vars.tmp = vars.new_input;
 	vars.new_input = ft_strjoin(vars.new_input, vars.str_back);
-	free(input);
+	*start += ft_strlen(vars.var);
 	free_vars(&vars);
 	return (vars.new_input);
 }
+void	check_for_expansion(t_data *data, char **input)
+{
+	int		i;
+	char	*tmp;
 
-static int	token_len(t_data *data, char **input, int *i)
+	i = 0;
+	tmp = NULL;
+	while ((*input)[i])
+	{
+		if ((*input)[i] == '$')
+		{	
+			tmp = *input;
+			*input = dollar_expansion(data, *input, &i, data->env_list);
+			free(tmp);
+		}
+		if (is_special_symbol((*input)[i]))
+			i++;
+		while ((*input)[i] == 34)
+			i++;
+		while ((*input)[i] == 39)
+			i++;
+		if ((*input)[i])
+			i++;
+	}
+}
+
+static int	token_len(char **input, int *i)
 {
 	int	len;
 
 	len = 0;
-	if (input[0][*i] == '$')
-	{
-		*input = dollar_expansion(data, *input, *i, data->env_list);
-		while (input[0][*i] && !ft_isblank(input[0][*i]))
-		{
-			(*i)++;
-			len++;
-		}
-	}
-	else if (input[0][*i] == 39)
+	if (input[0][*i] == 39)
 	{
 		(*i)++;
 		while (input[0][*i] && input[0][*i] != 39)
@@ -196,36 +216,37 @@ static void fill_token_list(t_data *data, char *token, int token_index)
 	ft_lstadd_back(&data->token_list, new_node);
 }
 
-void	lexing_tokens(t_data *data, char *input)
+void	lexing_tokens(t_data *data, char **input)
 {
 	int		i;
 	int		len;
 	int		token_index;
 	char	*token_str;
 
-	if (!input)
+	if (!(*input))
 		return ;
 	i = 0;
 	len = 0;
 	token_index = -1;
 	token_str = NULL;
-	while (input[i])
+	check_for_expansion(data, input);
+	while ((*input)[i])
 	{
-		if (!ft_isblank(input[i]))
+		if (!ft_isblank((*input)[i]))
 		{
 			token_index++;
-			len = token_len(data, &input, &i);
-			token_str = ft_strndup(input + (i - len), len);
+			len = token_len(input, &i);
+			token_str = ft_strndup((*input) + (i - len), len);
 			if (!token_str)
 				error_handle(data, "token_str", "lexing.c:216\nft_strndup failed", 1);
 			fill_token_list(data, token_str, token_index);
 		}
-		if (input[i] == '\0')
+		if ((*input)[i] == '\0')
 			break ;
-		if (input[i] == 39 || input[i] == 34)
+		if ((*input)[i] == 39 || (*input)[i] == 34)
 			i++;
 		else
-			while (ft_isblank(input[i]))
+			while (ft_isblank((*input)[i]))
 				i++;
 	}
 }

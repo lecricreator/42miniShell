@@ -119,7 +119,7 @@ void	get_env(t_list **env_list, char **env);
 char	**get_path(char **path, t_list *env);
 int		count_table(char **table);
 char	**get_env_tab(t_list *env_list);
-void	lexing_tokens(t_data *data, char *input);
+void	lexing_tokens(t_data *data, char **input);
 void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
