@@ -61,7 +61,9 @@ char	*dollar_expansion(t_data *data, char *input, int *start, t_list *env_list)
 	t_expansion	vars;
 
 	init_exp(&vars, *start);
-	if (input[vars.i] == '?')
+	if (!input[vars.i] || ft_isblank(input[vars.i]))
+		vars.var = ft_strdup("$");
+	else if (input[vars.i] == '?')
 	{
 		vars.var = ft_itoa(data->status);
 		vars.i++;
