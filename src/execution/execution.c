@@ -116,6 +116,69 @@ void	check_heredoc(t_data *data, t_list *redir, t_fds *fds)
 	}
 }
 
+int	var_len(char *var)
+{
+	int	i;
+
+	i = 0;
+	while(var[i] && var[i] != '=')
+		i++;
+	return (i);
+}
+
+void	add_var_value(t_env **var, char *new_value)
+{
+	char	*tmp;
+	char	*var_name;
+
+	tmp = (*var)->var;
+	var_name = ft_strndup((*var)->var, var_len((*var)->var) + 1);
+	(*var)->var = ft_strjoin(var_name, new_value);
+	free(tmp);
+	free(var_name);
+	free(new_value);
+}
+
+void	add_var(t_list **env_list, char *var)
+{
+	t_list	*new_node;
+	t_env	*new_var;
+
+	new_var = (t_env *)malloc(sizeof(t_env));
+	new_var->var = ft_strdup(var);
+	new_var->exported = 0;
+	new_node = ft_lstnew(new_var);
+	ft_lstadd_back(env_list, new_node);
+}
+
+void	create_var(t_data *data, t_cmd *cmd)
+{
+	t_list	*tmp_head;
+	t_env	*tmp_var;
+	char	*var_name;
+	char	*value;
+
+	var_name = ft_strndup(cmd->cmd_args[0], var_len(cmd->cmd_args[0]) + 1);
+	value = ft_strdup(cmd->cmd_args[0] + (var_len(cmd->cmd_args[0]) + 1));
+	tmp_head = data->env_list;
+	tmp_var = (t_env *)(tmp_head)->content;
+	while (tmp_head)
+	{
+		if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var)))
+		{
+			add_var_value(&tmp_var, value);
+			free(var_name);
+			return ;
+		}
+		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_var = (t_env *)(tmp_head)->content;
+	}
+	add_var(&data->env_list, cmd->cmd_args[0]);
+	free(value);
+	free(var_name);
+}
+
 void	execution(t_data *data)
 {
 	t_cmd	*tmp_cmd;
@@ -127,7 +190,12 @@ void	execution(t_data *data)
 	while (tmp_head)
 	{
 		tmp_cmd = (t_cmd *)tmp_head->content;
-
+		if (is_var_declaration(tmp_cmd->type, 0))
+		{
+			create_var(data, tmp_cmd);
+			tmp_head = tmp_head->next;
+			continue ;
+		}
 		if (tmp_cmd->is_pipe)
 		{
 			if (pipe(fds.pipefd) == -1)

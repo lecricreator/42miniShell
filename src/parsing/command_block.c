@@ -126,6 +126,23 @@ int	cmd_has_pipe(t_list *token_list)
 	return (0);
 }
 
+int	is_var_declaration(t_type type, int index)
+{
+	if ((type == ENV_VAR && !index) || (type == TMP_VAR && !index))
+		return (1);
+	else
+		return (0);
+}
+
+t_cmd	*cmd_if_var(t_cmd **cmd, t_token *token)
+{
+	(*cmd)->cmd_args = ft_calloc(sizeof(char), 2);
+	(*cmd)->type = token->type;
+	(*cmd)->cmd_args[0] = ft_strdup(token->str);
+	(*cmd)->cmd_args[1] = NULL;
+	return (*cmd);
+}
+
 t_cmd	*create_cmd(t_data *data, t_list **token_list)
 {
 	t_cmd	*cmd;
@@ -138,6 +155,8 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 	if (!cmd)
 		error_handle(data, "function create_cmd", "file: command_block malloc failed", 1);
 	init_cmd(cmd);
+	if (is_var_declaration(tmp_token->type, tmp_token->index))
+		return (cmd_if_var(&cmd, tmp_token));
 	cmd->is_pipe = cmd_has_pipe(*token_list);
 	while (tmp_head && tmp_token->type != OP_PIPE)
 	{

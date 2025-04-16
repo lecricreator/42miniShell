@@ -148,9 +148,12 @@ void	exec_exit();
 int		is_builtin(t_type type);
 int		is_any_cmd(t_type type);
 int		is_redir_op(t_type type);
+int		is_var_declaration(t_type type, int index);
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 char	*strdup_limiter(char *str, char stop);
 void	sig_init();
 t_data	*recover_data_address(t_data *data);
+int		ft_strncmp_env_var(const char *s1, const char *s2, size_t n);
+
 #endif
