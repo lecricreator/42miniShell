@@ -17,6 +17,9 @@ CFLAGS = -Wall -Werror -Wextra -g
 LFLAGS = -lreadline -lncurses
 
 # directories
+IO_DIR = input_output/
+MAIN_DIR = main/
+ENV_DIR = environment/
 EXEC_DIR = execution/
 PARS_DIR = parsing/
 ERR_DIR = error_and_free/
@@ -32,13 +35,18 @@ LIBFT = $(LIBFT_DIR)libft.a
 FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
+IO_FILES = in_out_manage.c
+MAIN_FILES = main.c utils1.c utils2.c
+ENV_FILES = environment.c env_utils.c env_print_utils.c
 EXEC_FILES = execution.c exec_built_01.c exec_built_02.c exec_cmd.c exec_heredoc.c
 PARS_FILES = parsing.c lexing.c command_block.c
 ERR_FILES = error_handle.c free_data.c free_data_utils.c
 SIG_FILES = signal_init.c
 FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) $(addprefix $(PARS_DIR), $(PARS_FILES)) \
 		$(addprefix $(ERR_DIR), $(ERR_FILES)) $(addprefix $(SIG_DIR), $(SIG_FILES)) \
-		main.c  utils1.c utils2.c  environment.c in_out_manage.c
+		$(addprefix $(ENV_DIR), $(ENV_FILES)) $(addprefix $(MAIN_DIR), $(MAIN_FILES)) \
+		$(addprefix $(IO_DIR), $(IO_FILES)) \
+		
 INC_FILES = minishell.h
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))

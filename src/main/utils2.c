@@ -51,40 +51,6 @@ int	ft_strncmp_env_var(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-char	*give_var_env_list(char *value, t_list *env_list)
-{
-	char	*tmp_content;
-	int		size_value;
-
-	size_value = (int)ft_strlen(value);
-	while (env_list)
-	{
-		tmp_content = ((t_env *)(env_list)->content)->var;
-		if (ft_strncmp_env_var(value, tmp_content, size_value) == 0)
-			return (&tmp_content[size_value + 1]);
-		env_list = env_list->next;
-	}
-	return (NULL);
-}
-
-void	write_env_list(char *value_modify, char *env_value, t_list **env_list)
-{
-	char	*tmp_content;
-	t_list	*head_env;
-	int		size_value;
-
-	head_env = (*env_list);
-	size_value = (int)ft_strlen(env_value);
-	while ((*env_list))
-	{
-		tmp_content = (*env_list)->content;
-		if (ft_strncmp_env_var(env_value, tmp_content, size_value) == 0)
-			break ;
-		(*env_list) = (*env_list)->next;
-	}
-	(*env_list)->content = ft_strjoin(env_value, value_modify);
-	(*env_list) = head_env;
-}
 
 char	*strdup_limiter(char *str, char stop)
 {
