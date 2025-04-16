@@ -126,7 +126,7 @@ void	free_redir(void *redir_void);
 void	get_env(t_list **env_list, char **env);
 char	**get_path(char **path, t_list *env);
 int		count_table(char **table);
-char	**get_env_tab(t_list *env_list);
+char	**get_env_tab(t_list *env_list, char *tmp_var);
 void	lexing_tokens(t_data *data, char **input);
 void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
@@ -135,7 +135,7 @@ void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list);
 int		wait_and_status(t_data *data);
 void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
 void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds);
-void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds);
+void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char *tmp_var);
 void    exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds);
 void	reset_io(t_data *data, t_fds *fds);
 void	change_io(t_data *data, t_redir *redir, t_fds *fds);
@@ -156,6 +156,6 @@ void	sig_init();
 t_data	*recover_data_address(t_data *data);
 int		ft_strncmp_env_var(const char *s1, const char *s2, size_t n);
 int		var_len(char *var);
-void	create_var(t_data *data, t_cmd *cmd);
+char	*create_var(t_data *data, t_cmd *cmd);
 
 #endif

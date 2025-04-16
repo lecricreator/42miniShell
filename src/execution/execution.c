@@ -121,15 +121,17 @@ void	execution(t_data *data)
 	t_cmd	*tmp_cmd;
 	t_list	*tmp_head;
 	t_fds	fds;
+	char	*tmp_var;
 
 	init_fds(&fds);
+	tmp_var = NULL;
 	tmp_head = data->cmd_list;
 	while (tmp_head)
 	{
 		tmp_cmd = (t_cmd *)tmp_head->content;
 		if (is_var_declaration(tmp_cmd->type, 0))
 		{
-			create_var(data, tmp_cmd);
+			tmp_var = create_var(data, tmp_cmd);
 			tmp_head = tmp_head->next;
 			continue ;
 		}
@@ -145,7 +147,7 @@ void	execution(t_data *data)
 			exec_builtin_before_fork(data, tmp_cmd, &fds);
 		}
 		else if (tmp_cmd->type == COMMAND)
-			exec_cmd(data, tmp_cmd, &fds);
+			exec_cmd(data, tmp_cmd, &fds, tmp_var);
 		if (tmp_cmd->is_pipe)
 		{
 			close(fds.pipefd[1]);

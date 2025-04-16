@@ -82,13 +82,23 @@ static void	add_var(t_list **env_list, char *var)
 	ft_lstadd_back(env_list, new_node);
 }
 
-void	create_var(t_data *data, t_cmd *cmd)
+char	*create_tmp_var(t_cmd *cmd)
+{
+	char	*tmp_var;
+
+	tmp_var = ft_strdup(cmd->cmd_args[0]);
+	return (tmp_var);
+}
+
+char	*create_var(t_data *data, t_cmd *cmd)
 {
 	t_list	*tmp_head;
 	t_env	*tmp_var;
 	char	*var_name;
 	char	*value;
 
+	if (cmd->type == TMP_VAR)
+		return(create_tmp_var(cmd));
 	var_name = ft_strndup(cmd->cmd_args[0], var_len(cmd->cmd_args[0]) + 1);
 	value = ft_strdup(cmd->cmd_args[0] + (var_len(cmd->cmd_args[0]) + 1));
 	tmp_head = data->env_list;
@@ -99,7 +109,7 @@ void	create_var(t_data *data, t_cmd *cmd)
 		{
 			add_var_value(&tmp_var, value);
 			free(var_name);
-			return ;
+			return (NULL);
 		}
 		tmp_head = tmp_head->next;
 		if (tmp_head)
@@ -108,4 +118,5 @@ void	create_var(t_data *data, t_cmd *cmd)
 	add_var(&data->env_list, cmd->cmd_args[0]);
 	free(value);
 	free(var_name);
+	return (NULL);
 }

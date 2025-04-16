@@ -51,27 +51,32 @@ static int	env_size(t_list *env_list)
 	return (i);
 }
 
-char	**get_env_tab(t_list *env_list)
+char	**get_env_tab(t_list *env_list, char *tmp_var)
 {
 	t_list	*tmp_head;
-	t_env	*tmp_var;
+	t_env	*tmp_env_var;
 	char	**env_tab;
 	int		i;
 
 	i = 0;
 	tmp_head = env_list;
-	tmp_var = (t_env *)tmp_head->content;
-	env_tab = (char **)malloc(sizeof(char *) * (env_size(env_list) + 1));
+	tmp_env_var = (t_env *)tmp_head->content;
+	if (!tmp_var)
+		env_tab = (char **)malloc(sizeof(char *) * (env_size(env_list) + 1));
+	else
+		env_tab = (char **)malloc(sizeof(char *) * (env_size(env_list) + 2));
 	if (!env_tab)
-		error_handle(NULL, "env_tab function", "environment.c:53 malloc failed", 1); // change this line
+		error_handle(NULL, "env_tab function", "environment.c:69\nmalloc failed", 1); // change this line
 	while (tmp_head)
 	{
-		if (tmp_var->exported)
-			env_tab[i++] = ft_strdup(tmp_var->var);
+		if (tmp_env_var->exported)
+			env_tab[i++] = ft_strdup(tmp_env_var->var);
 		tmp_head = tmp_head->next;
 		if (tmp_head)
-			tmp_var = (t_env *)tmp_head->content;
+			tmp_env_var = (t_env *)tmp_head->content;
 	}
+	if (tmp_var)
+		env_tab[i++] = ft_strdup(tmp_var);
 	env_tab[i] = NULL;
 	return (env_tab);
 }

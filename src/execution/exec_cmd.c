@@ -81,13 +81,13 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 	return (0);
 }
 
-void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds)
+void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char *tmp_var)
 {
 	char	**env_tab;
 
 	if(find_program(data, cmd))
 		return ;
-	env_tab = get_env_tab(data->env_list);
+	env_tab = get_env_tab(data->env_list, tmp_var);
 	data->pid = fork();
 	if (data->pid == -1)
 		error_handle(data, "", "Error:\nFork failed", 1);
