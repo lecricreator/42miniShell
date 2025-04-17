@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-char	*give_var_env_list(char *value, t_list *env_list)
+char	*give_var_env_list(char *var_name, t_list *env_list)
 {
 	char	*tmp_content;
-	int		size_value;
+	int		var_name_len;
 
-	size_value = (int)ft_strlen(value);
+	var_name_len = (int)ft_strlen(var_name);
 	while (env_list)
 	{
 		tmp_content = ((t_env *)(env_list)->content)->var;
-		if (ft_strncmp_env_var(value, tmp_content, size_value) == 0)
-			return (&tmp_content[size_value + 1]);
+		if (ft_strncmp_env_var(var_name, tmp_content, var_name_len) == 0)
+			return (&tmp_content[var_name_len + 1]);
 		env_list = env_list->next;
 	}
 	return (NULL);
