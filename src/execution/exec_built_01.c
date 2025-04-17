@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 13:35:20 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:39:17 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	exec_export(char **cmd_args, t_list **env_list)
 void	exec_unset(char **cmd_args, t_list **env_list)
 {
 	t_list	*tmp_head;
-	t_list	*tmp_linked_list;
+	t_list	*tmp_linked_list_at_delete;
 
 	tmp_head = *env_list;
 	if (ft_strchr(cmd_args[1], '=') != 0)
@@ -124,13 +124,13 @@ void	exec_unset(char **cmd_args, t_list **env_list)
 	{
 		while((*env_list)->next)
 		{
-			if (strncmp(cmd_args[1], ((t_env *)(*env_list)->content)->var,
+			if (strncmp(cmd_args[1], ((t_env *)(*env_list)->next->content)->var,
 				ft_strlen(cmd_args[1])) == 0)
 			{
-				free(((t_env *)(*env_list)->content)->var);
-				tmp_linked_list = (*env_list)->next;
+				free(((t_env *)(*env_list)->next->content)->var);
+				tmp_linked_list_at_delete = (*env_list)->next;
 				(*env_list)->next = (*env_list)->next->next;
-				free(tmp_linked_list);
+				free(tmp_linked_list_at_delete);
 				(*env_list) = tmp_head;
 				break ;
 			}
