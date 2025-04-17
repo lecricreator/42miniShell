@@ -121,7 +121,7 @@ void	execution(t_data *data)
 	t_cmd	*tmp_cmd;
 	t_list	*tmp_head;
 	t_fds	fds;
-	char	*tmp_var;
+	char	**tmp_var;
 
 	init_fds(&fds);
 	tmp_var = NULL;

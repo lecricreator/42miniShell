@@ -67,7 +67,6 @@ static void	add_var_value(t_env **var, char *new_value)
 	(*var)->var = ft_strjoin(var_name, new_value);
 	free(tmp);
 	free(var_name);
-	free(new_value);
 }
 
 static void	add_var(t_list **env_list, char *var)
@@ -82,41 +81,58 @@ static void	add_var(t_list **env_list, char *var)
 	ft_lstadd_back(env_list, new_node);
 }
 
-char	*create_tmp_var(t_cmd *cmd)
+char	**create_tmp_var(t_cmd *cmd)
 {
-	char	*tmp_var;
+	char	**tmp_vars;
+	int		i;
+	int		tab_size;
 
-	tmp_var = ft_strdup(cmd->cmd_args[0]);
-	return (tmp_var);
+	i = 0;
+	tab_size = count_table(cmd->cmd_args);
+	tmp_vars = ft_calloc(sizeof(char *), tab_size + 1);
+	while (i < tab_size)
+	{
+		tmp_vars[i] = ft_strdup(cmd->cmd_args[i]);
+		i++;
+	}
+	tmp_vars[i] = 0;
+	return (tmp_vars);
 }
-
-char	*create_var(t_data *data, t_cmd *cmd)
+/*recheck this function*/
+char	**create_var(t_data *data, t_cmd *cmd)
 {
 	t_list	*tmp_head;
 	t_env	*tmp_var;
 	char	*var_name;
 	char	*value;
+	int		i;
 
 	if (cmd->type == TMP_VAR)
 		return(create_tmp_var(cmd));
-	var_name = ft_strndup(cmd->cmd_args[0], var_len(cmd->cmd_args[0]) + 1);
-	value = ft_strdup(cmd->cmd_args[0] + (var_len(cmd->cmd_args[0]) + 1));
-	tmp_head = data->env_list;
-	tmp_var = (t_env *)(tmp_head)->content;
-	while (tmp_head)
+	i = 0;
+	while (cmd->cmd_args[i])
 	{
-		if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var)))
+		var_name = ft_strndup(cmd->cmd_args[i], var_len(cmd->cmd_args[i]) + 1);
+		value = ft_strdup(cmd->cmd_args[i] + (var_len(cmd->cmd_args[i]) + 1));
+		tmp_head = data->env_list;
+		tmp_var = (t_env *)(tmp_head)->content;
+		while (tmp_head)
 		{
-			add_var_value(&tmp_var, value);
-			free(var_name);
-			return (NULL);
+			if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var)))
+			{
+				add_var_value(&tmp_var, value);
+				free(value);
+				free(var_name);
+				break ;
+			}
+			tmp_head = tmp_head->next;
+			if (tmp_head)
+				tmp_var = (t_env *)(tmp_head)->content;
 		}
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_var = (t_env *)(tmp_head)->content;
+		add_var(&data->env_list, cmd->cmd_args[i]);
+		free(value);
+		free(var_name);
+		i++;
 	}
-	add_var(&data->env_list, cmd->cmd_args[0]);
-	free(value);
-	free(var_name);
 	return (NULL);
 }

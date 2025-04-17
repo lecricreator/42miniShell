@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 static t_type	check_env_var_type(t_token *next_token)
 {
 	if (!next_token)
@@ -27,14 +27,9 @@ static t_type	check_env_var_type(t_token *next_token)
 	return (ENV_VAR);
 
 }
-
-static t_type	token_zero(t_token *token, t_list *next_node)//re test this and correct if needed
+*/
+static t_type	token_zero(t_token *token)//re test this and correct if needed
 {
-	t_token *next_token;
-
-	next_token = NULL;
-	if (next_node)
-		next_token = (t_token *)next_node->content;
 	if (token->type <= 6)
 		return (ARGUMENT);
 	else if (token->type >= 8 && token->type <= 10)
@@ -50,8 +45,8 @@ static t_type	token_zero(t_token *token, t_list *next_node)//re test this and co
 	}
 	else if (token->type == ENV_VAR)
 	{
-		token->type = check_env_var_type(next_token);
-		return (COMMAND);
+		token->type = COMMAND;
+		return (ARGUMENT);
 	}
 	return (BAD_TOKEN);
 }
@@ -90,13 +85,29 @@ static t_type	next_token(t_token *token, t_type state, t_type last)
 		token->type = DELIMITER;
 		return (COMMAND);
 	}
-	if (token->type == ENV_VAR && last == TMP_VAR)
+	if (token->type == ENV_VAR)
 	{
-		token->type = TMP_VAR;
-		return (COMMAND);
+		token->type = state;
+		return (state);
 	}
 	else
 		return (BAD_TOKEN);
+}
+
+void	make_var_temp(t_list *token_list)
+{
+	t_token	*tmp_token;
+	t_list	*tmp_head;
+
+	tmp_head = token_list;
+	tmp_token = (t_token *)tmp_head->content;
+	while (tmp_head && tmp_token->type == ENV_VAR)
+	{
+		tmp_token->type = TMP_VAR;
+		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_token = (t_token *)tmp_head->content;
+	}
 }
 
 void	parsing(t_data *data)
@@ -105,19 +116,39 @@ void	parsing(t_data *data)
 	t_list	*tmp_head;
 	t_type	state;
 	t_type	last;
+	int		i;
 
 	lexing_tokens(data, &data->input);
-	print_token_list(data->token_list);
-	tmp_head = data->token_list;
+//	print_token_list(data->token_list);
+	i = 0;
 	state = COMMAND;
 	last = COMMAND;
+	tmp_head = data->token_list;
+	if (tmp_head)
+		tmp_token = (t_token *)tmp_head->content;
+	while (tmp_head && tmp_token->type == ENV_VAR)
+	{
+		tmp_token->index = 0;
+		i++;
+		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_token = (t_token *)tmp_head->content;
+	}
+	if (tmp_head)
+	{
+		tmp_token->index -= i;
+		make_var_temp(data->token_list);
+	}
 	while (tmp_head)
 	{
 		tmp_token = (t_token *)tmp_head->content;
 		if (tmp_token->index == 0)
-			state = token_zero(tmp_token, tmp_head->next);
+			state = token_zero(tmp_token);
 		else
+		{
+			tmp_token->index -= i;
 			state = next_token(tmp_token, state, last);
+		}
 		if (state == BAD_TOKEN)
 		{
 			error_handle(data, tmp_token->str, "syntax error near elemnt", 0);//modify error handle to output the correct error format

@@ -81,7 +81,7 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 	return (0);
 }
 
-void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char *tmp_var)
+void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var)
 {
 	char	**env_tab;
 
@@ -96,4 +96,6 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char *tmp_var)
 		handle_procesess(data, cmd, fds, env_tab);
 	if (env_tab)
 		free_table(env_tab);
+	if (tmp_var)
+		free_table(tmp_var);
 }
