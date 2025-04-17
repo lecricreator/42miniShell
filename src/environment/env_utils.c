@@ -123,15 +123,14 @@ char	**create_var(t_data *data, t_cmd *cmd)
 			if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var)))
 			{
 				add_var_value(&tmp_var, value);
-				free(value);
-				free(var_name);
 				break ;
 			}
 			tmp_head = tmp_head->next;
 			if (tmp_head)
 				tmp_var = (t_env *)(tmp_head)->content;
 		}
-		add_var(&data->env_list, cmd->cmd_args[i]);
+		if (!tmp_head)
+			add_var(&data->env_list, cmd->cmd_args[i]);
 		free(value);
 		free(var_name);
 		i++;
