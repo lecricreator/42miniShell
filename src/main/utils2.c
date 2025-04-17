@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 12:21:38 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:27:33 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ft_strncmp_env_var(const char *var_name, const char *var_env, size_t var_nam
 	var_env_len = (size_t)var_len((char *)var_env);
 	if (var_env_len != var_name_len)
 		return (1);
-	while ((var_name[i] || var_env[i]))
+	while ((var_name[i] && var_env[i]))
 	{
 		if (var_name[i] != var_env[i])
 			return (((unsigned char *)var_name)[i] - ((unsigned char *)var_env)[i]);
