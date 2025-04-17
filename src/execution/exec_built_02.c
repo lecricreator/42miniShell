@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/11 18:53:35 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 10:46:39 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	exec_pwd(void)
 	char	buffer[1024];
 
 	getcwd(buffer, sizeof(buffer));
-	printf("%s\n", buffer);
+	ft_printf_fd(1, "%s\n", buffer);
 	return (errno);
 }
 

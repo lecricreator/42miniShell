@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/11 18:38:51 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:39:17 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,19 @@ void	exec_echo(char **cmd_args)
 
 void	exec_export(char **cmd_args, t_list **env_list)
 {
-	char	*var_in_env_list;
+	char	*var_env_list;
 	char	*new_value;
 	int		i;
 
 	i = -1;
-	var_in_env_list = strdup_limiter(cmd_args[1], '=');
-	if (give_var_env_list(var_in_env_list, *env_list) != NULL)
+	var_env_list = strdup_limiter(cmd_args[1], '=');
+	if (give_var_env_list(var_env_list, *env_list) != NULL)
 	{
 		while (cmd_args[1][++i])
 			if (cmd_args[1][i] == '=')
 				break ;
 		ft_printf_fd(1, "%s\n", &cmd_args[1][i]);
-		write_env_list(&cmd_args[1][i], var_in_env_list, env_list);
+		write_env_list(&cmd_args[1][i], var_env_list, env_list);
 	}
 	else
 	{
@@ -93,35 +93,48 @@ void	exec_export(char **cmd_args, t_list **env_list)
 			//ERROR MALLOC // EXIT WITH MESSAGE ERROR MALLOC
 		ft_lstadd_back(env_list, ft_lstnew(new_value));
 	}
-	free(var_in_env_list);
+	free(var_env_list);
 }
+
+// void	print_env(t_list *env_list)
+// {
+// 	t_env	*tmp_var;
+
+// 	tmp_var = (t_env *)env_list->content;
+// 	while (env_list)
+// 	{
+// 		if (tmp_var->exported)
+// 			printf("%s\n", tmp_var->var);
+// 		env_list = env_list->next;
+// 		if (env_list)
+// 		tmp_var = (t_env *)env_list->content;
+// 	}
+// }
+
 
 void	exec_unset(char **cmd_args, t_list **env_list)
 {
-	char	*var_in_env_list;
 	t_list	*tmp_head;
-	t_list	*tmp_linked_list;
+	t_list	*tmp_linked_list_at_delete;
 
 	tmp_head = *env_list;
-	var_in_env_list = strdup_limiter(cmd_args[1], '=');
-	if (!var_in_env_list)
-		return ;
-	if (give_var_env_list(var_in_env_list, *env_list))
+	if (ft_strchr(cmd_args[1], '=') != 0)
+		ft_printf_fd(2, "unset: %s: invalid parameter name\n", cmd_args[1]);
+	if (give_var_env_list(cmd_args[1], *env_list))
 	{
 		while((*env_list)->next)
 		{
-			if (strncmp(cmd_args[1], (*env_list)->next->content,
+			if (strncmp(cmd_args[1], ((t_env *)(*env_list)->next->content)->var,
 				ft_strlen(cmd_args[1])) == 0)
 			{
-				free((*env_list)->next->content);
-				tmp_linked_list = (*env_list)->next;
+				free(((t_env *)(*env_list)->next->content)->var);
+				tmp_linked_list_at_delete = (*env_list)->next;
 				(*env_list)->next = (*env_list)->next->next;
-				free(tmp_linked_list);
+				free(tmp_linked_list_at_delete);
 				(*env_list) = tmp_head;
 				break ;
 			}
 			(*env_list) = (*env_list)->next;
 		}
 	}
-	free(var_in_env_list);
 }
