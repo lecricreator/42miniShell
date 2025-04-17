@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 18:39:17 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:54:00 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	exec_echo(char **cmd_args)
 
 	i = 0;
 	flags = 0;
+	ft_printf_fd(2, "LU\n");
 	while (cmd_args[++i])
 	{
 		flags = exec_echo_write(cmd_args, flags, i);
@@ -78,6 +79,8 @@ void	exec_export(char **cmd_args, t_list **env_list)
 
 	i = -1;
 	var_env_list = strdup_limiter(cmd_args[1], '=');
+	if (!var_env_list)
+		return ;
 	if (give_var_env_list(var_env_list, *env_list) != NULL)
 	{
 		while (cmd_args[1][++i])
@@ -96,22 +99,6 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	free(var_env_list);
 }
 
-// void	print_env(t_list *env_list)
-// {
-// 	t_env	*tmp_var;
-
-// 	tmp_var = (t_env *)env_list->content;
-// 	while (env_list)
-// 	{
-// 		if (tmp_var->exported)
-// 			printf("%s\n", tmp_var->var);
-// 		env_list = env_list->next;
-// 		if (env_list)
-// 		tmp_var = (t_env *)env_list->content;
-// 	}
-// }
-
-
 void	exec_unset(char **cmd_args, t_list **env_list)
 {
 	t_list	*tmp_head;
@@ -119,7 +106,7 @@ void	exec_unset(char **cmd_args, t_list **env_list)
 
 	tmp_head = *env_list;
 	if (ft_strchr(cmd_args[1], '=') != 0)
-		ft_printf_fd(2, "unset: %s: invalid parameter name\n", cmd_args[1]);
+		return ;
 	if (give_var_env_list(cmd_args[1], *env_list))
 	{
 		while((*env_list)->next)

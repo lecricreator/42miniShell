@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 12:21:38 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:21:46 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	ft_strncmp_env_var(const char *s1, const char *s2, size_t n)
 
 	i = 0;
 	s2_len = (size_t)var_len((char *)s2);
+	ft_printf_fd(2, "S1 : %d || S2 : %d", n, s2_len);
 	if (s2_len > n || n > s2_len)
 	{
 		if (n > s2_len)

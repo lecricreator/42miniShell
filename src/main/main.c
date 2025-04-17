@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/11 21:36:31 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:01:55 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	main(int ac, char **av, char **env)
 			exec_exit();
 		add_history(data->input);
 		parsing(data);
-//		print_token_list(data->token_list);
+		print_token_list(data->token_list);
 		create_cmd_block(data, data->token_list, &data->cmd_list);
 		execution(data);
 		wait_and_status(data);
