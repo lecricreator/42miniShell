@@ -116,6 +116,7 @@ typedef struct s_env
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
+void	print_export(t_list *env_list);
 int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
 void	free_table(char **table);
 void	free_data(t_data *data);

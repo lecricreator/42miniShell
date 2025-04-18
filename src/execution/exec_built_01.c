@@ -72,6 +72,11 @@ void	exec_echo(char **cmd_args)
 
 void	exec_export(char **cmd_args, t_list **env_list)
 {
+	if (!cmd_args[1])
+		print_export(*env_list);
+}
+/*
+{
 	char	*var_env_list;
 	char	*new_value;
 	int		i;
@@ -95,7 +100,7 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	}
 	free(var_env_list);
 }
-
+*/
 // void	print_env(t_list *env_list)
 // {
 // 	t_env	*tmp_var;
