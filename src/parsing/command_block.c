@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:02:16 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/06 11:25:33 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:41:59 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,12 +134,42 @@ int	is_var_declaration(t_type type, int index)
 		return (0);
 }
 
-t_cmd	*cmd_if_var(t_cmd **cmd, t_token *token)
+int	var_tab_size(t_list *token_list)
 {
-	(*cmd)->cmd_args = ft_calloc(sizeof(char), 2);
-	(*cmd)->type = token->type;
-	(*cmd)->cmd_args[0] = ft_strdup(token->str);
-	(*cmd)->cmd_args[1] = NULL;
+	t_list	*tmp_head;
+	t_token	*tmp_token;
+	int		i;
+
+	i = 0;
+	tmp_head = token_list;
+	tmp_token = (t_token *)tmp_head->content;
+	while (tmp_head && (tmp_token->type == ENV_VAR || tmp_token->type == TMP_VAR))
+	{
+		i++;
+		tmp_head = tmp_head->next;
+		if (tmp_head)
+			tmp_token = (t_token *)tmp_head->content;
+	}
+	return (i);
+}
+
+
+t_cmd	*cmd_if_var(t_cmd **cmd, t_list **token_list)
+{
+	int	i;
+	int	tab_size;
+
+	i = 0;
+	tab_size = var_tab_size(*token_list);
+	(*cmd)->cmd_args = ft_calloc(sizeof(char *), tab_size + 1);
+	while (i < tab_size && *token_list)
+	{
+		(*cmd)->type = ((t_token *)(*token_list)->content)->type;
+		(*cmd)->cmd_args[i++] = ft_strdup(((t_token *)(*token_list)->content)->str);
+		if (i < tab_size)
+			*token_list = (*token_list)->next;
+	}
+	(*cmd)->cmd_args[i] = NULL;
 	return (*cmd);
 }
 
@@ -156,7 +186,7 @@ t_cmd	*create_cmd(t_data *data, t_list **token_list)
 		error_handle(data, "function create_cmd", "file: command_block malloc failed", 1);
 	init_cmd(cmd);
 	if (is_var_declaration(tmp_token->type, tmp_token->index))
-		return (cmd_if_var(&cmd, tmp_token));
+		return (cmd_if_var(&cmd, token_list));
 	cmd->is_pipe = cmd_has_pipe(*token_list);
 	while (tmp_head && tmp_token->type != OP_PIPE)
 	{

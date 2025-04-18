@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 20:21:46 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:59:26 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,19 @@ int	count_table(char **table)
  *
  * @return 0 true // supp false
  */
-int	ft_strncmp_env_var(const char *s1, const char *s2, size_t n)
+int	ft_strncmp_env_var(const char *var_name, const char *var_env, size_t var_name_len)
 {
 	size_t	i;
-	size_t	s2_len;
+	size_t	var_env_len;
 
 	i = 0;
-	s2_len = (size_t)var_len((char *)s2);
-	ft_printf_fd(2, "S1 : %d || S2 : %d", n, s2_len);
-	if (s2_len > n || n > s2_len)
+	var_env_len = (size_t)var_len((char *)var_env);
+	if (var_env_len != var_name_len)
+		return (1);
+	while ((var_name[i] && var_env[i]))
 	{
-		if (n > s2_len)
-			i = n;
-		else
-			i = s2_len;
-		return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
-	}
-	while ((s1[i] || s2[i]) && i < n && s2[i] != '=')
-	{
-		if (s1[i] != s2[i])
-			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
+		if (var_name[i] != var_env[i])
+			return (((unsigned char *)var_name)[i] - ((unsigned char *)var_env)[i]);
 		i++;
 	}
 	return (0);

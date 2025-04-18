@@ -6,37 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 19:54:00 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:57:16 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	exec_cd(char *str, t_list **env_list)
-{
-	char	buffer[1024];
-
-	if (str[0] == '~' && str[1] == '\0')
-	{
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
-		chdir(give_var_env_list("HOME", (*env_list)));
-	}
-	else if (str[0] == '-' && str[1] == '\0')
-	{
-		chdir(give_var_env_list("OLDPWD", (*env_list)));
-	}
-	else if (str[0] == '$')
-	{
-		chdir(give_var_env_list(&str[1], (*env_list)));
-	}
-	else
-	{
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
-		chdir(str);
-	}
-	write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
-	return (errno);
-}
 
 int	exec_echo_write(char **cmd_args, int flags, int i)
 {
