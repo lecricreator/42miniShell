@@ -190,7 +190,8 @@ static int	get_type(char *token)
 	if (!ft_strncmp(token, "<<", 3))
 		return (OP_HEREDOC);
 	if (ft_strchr(token, '='))
-		return (ENV_VAR);
+		if (var_syntax(token))
+			return (ENV_VAR);
 	return (UNKNOW);
 }
 

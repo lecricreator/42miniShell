@@ -49,6 +49,14 @@ void	write_env_list(char *value_modify, char *env_value, t_list **env_list)
 	(*env_list) = head_env;
 }
 
+int	var_syntax(char *var)
+{
+	if (ft_isalpha(var[0]) || var[0] == '_')
+		return (1);
+	else
+		return (0);
+}
+
 int	var_len(char *var)
 {
 	int	i;

@@ -90,6 +90,11 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	tmp = NULL;
 	while (cmd_args[i])
 	{
+		if (!var_syntax(cmd_args[i]))
+		{
+			ft_printf_fd(2, "Minishell: export: `%s': not a valid identifier\n", cmd_args[i]);// change this for error handle to stop the execution and return to the prompt
+			return ;
+		}
 		tmp_head = *env_list;
 		while(tmp_head)
 		{
