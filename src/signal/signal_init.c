@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 10:52:33 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/11 21:43:13 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:00:28 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void disable_echoctl(void)
 void	test(int sigtype)
 {
 	t_data *data;
+
 	if (sigtype == SIGINT)
 	{
 		data = recover_data_address(NULL);
@@ -59,7 +60,7 @@ void	test(int sigtype)
 	}
 }
 
-void	sig_init()
+void	sig_init(void)
 {
 	struct sigaction sa;
 

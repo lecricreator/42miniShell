@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 10:49:55 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:25:49 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,8 @@ char	**get_path(char **path, t_list *env)
 		}
 		tmp_head = tmp_head->next;
 	}
-	if (!path)
-		error_handle(NULL, "", "path not found", 1);//this segfaults
-	complete_path(path);
+	if (path)
+		complete_path(path);
 	return (path);
 }
 

@@ -6,37 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 18:39:17 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:57:16 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	exec_cd(char *str, t_list **env_list)
-{
-	char	buffer[1024];
-
-	if (str[0] == '~' && str[1] == '\0')
-	{
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
-		chdir(give_var_env_list("HOME", (*env_list)));
-	}
-	else if (str[0] == '-' && str[1] == '\0')
-	{
-		chdir(give_var_env_list("OLDPWD", (*env_list)));
-	}
-	else if (str[0] == '$')
-	{
-		chdir(give_var_env_list(&str[1], (*env_list)));
-	}
-	else
-	{
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
-		chdir(str);
-	}
-	write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
-	return (errno);
-}
 
 int	exec_echo_write(char **cmd_args, int flags, int i)
 {
@@ -62,6 +36,7 @@ void	exec_echo(char **cmd_args)
 
 	i = 0;
 	flags = 0;
+	ft_printf_fd(2, "LU\n");
 	while (cmd_args[++i])
 	{
 		flags = exec_echo_write(cmd_args, flags, i);
@@ -175,7 +150,7 @@ void	exec_unset(char **cmd_args, t_list **env_list)
 
 	tmp_head = *env_list;
 	if (ft_strchr(cmd_args[1], '=') != 0)
-		ft_printf_fd(2, "unset: %s: invalid parameter name\n", cmd_args[1]);
+		return ;
 	if (give_var_env_list(cmd_args[1], *env_list))
 	{
 		while((*env_list)->next)
