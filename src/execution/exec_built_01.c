@@ -72,24 +72,68 @@ void	exec_echo(char **cmd_args)
 
 void	exec_export(char **cmd_args, t_list **env_list)
 {
-	if (!cmd_args[1])
-		print_export(*env_list);
-}
-/*
-{
-	char	*var_env_list;
-	char	*new_value;
+	char	*env_var;
+	t_list	*tmp_head;
+	char	*var_name;
+	char	*tmp;
 	int		i;
 
+
+	if (!cmd_args[1])
+	{
+		print_export(*env_list);
+		return ;
+	}
+	i = 1;
+	tmp_head = *env_list;
+	var_name = NULL;
+	tmp = NULL;
+	while (cmd_args[i])
+	{
+		tmp_head = *env_list;
+		while(tmp_head)
+		{
+			env_var = ((t_env *)(tmp_head)->content)->var;
+			var_name = strdup_limiter(cmd_args[i], '=');
+			if (!ft_strncmp_env_var(var_name, env_var, var_len(var_name)))
+			{
+				free(var_name);
+				break ;
+			}
+			tmp_head = tmp_head->next;
+			free(var_name);
+		}
+		if (tmp_head)
+		{
+			if (ft_strchr(cmd_args[i], '='))
+			{
+				tmp = ((t_env *)(tmp_head)->content)->var;
+				((t_env *)(tmp_head)->content)->var = ft_strdup(cmd_args[i]);
+				((t_env *)(tmp_head)->content)->exported = 1;
+				free(tmp);
+			}
+			else
+				((t_env *)(tmp_head)->content)->exported = 1;
+		}
+		else
+			add_var(env_list, cmd_args[i], 1);
+		i++;
+	}
+
+}
+
+
+
+/*
 	i = -1;
-	var_env_list = strdup_limiter(cmd_args[1], '=');
-	if (give_var_env_list(var_env_list, *env_list) != NULL)
+	var = strdup_limiter(cmd_args[1], '=');
+	if (give_var_env_list(var, *env_list))
 	{
 		while (cmd_args[1][++i])
 			if (cmd_args[1][i] == '=')
 				break ;
-		ft_printf_fd(1, "%s\n", &cmd_args[1][i]);
-		write_env_list(&cmd_args[1][i], var_env_list, env_list);
+		//ft_printf_fd(1, "%s\n", &cmd_args[1][i]);//  ???
+		write_env_list(&cmd_args[1][i], var, env_list);
 	}
 	else
 	{
@@ -98,9 +142,11 @@ void	exec_export(char **cmd_args, t_list **env_list)
 			//ERROR MALLOC // EXIT WITH MESSAGE ERROR MALLOC
 		ft_lstadd_back(env_list, ft_lstnew(new_value));
 	}
-	free(var_env_list);
-}
+	free(var);
 */
+
+
+
 // void	print_env(t_list *env_list)
 // {
 // 	t_env	*tmp_var;

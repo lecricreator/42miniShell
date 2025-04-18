@@ -86,14 +86,14 @@ static void	concat_var_value(t_env **var, char *new_value)
 		free(tmp);
 }
 
-static void	add_var(t_list **env_list, char *var)
+void	add_var(t_list **env_list, char *var, int exported)
 {
 	t_list	*new_node;
 	t_env	*new_var;
 
 	new_var = (t_env *)malloc(sizeof(t_env));
 	new_var->var = ft_strdup(var);
-	new_var->exported = 0;
+	new_var->exported = exported;
 	new_node = ft_lstnew(new_var);
 	ft_lstadd_back(env_list, new_node);
 }
@@ -153,7 +153,7 @@ char	**create_var(t_data *data, t_cmd *cmd)
 				tmp_var = (t_env *)(tmp_head)->content;
 		}
 		if (!tmp_head)
-			add_var(&data->env_list, cmd->cmd_args[i]);
+			add_var(&data->env_list, cmd->cmd_args[i], 0);
 		free(value);
 		free(var_name);
 		i++;

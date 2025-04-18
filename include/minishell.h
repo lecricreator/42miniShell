@@ -158,5 +158,6 @@ t_data	*recover_data_address(t_data *data);
 int		ft_strncmp_env_var(const char *s1, const char *s2, size_t n);
 int		var_len(char *var);
 char	**create_var(t_data *data, t_cmd *cmd);
+void	add_var(t_list **env_list, char *var, int exported);
 
 #endif

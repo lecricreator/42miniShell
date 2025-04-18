@@ -76,11 +76,20 @@ void	print_export(t_list *env_list)
 	while (env_tab[i])
 	{
 		var_name = strdup_limiter(env_tab[i], '=');
+		if (!ft_strncmp(var_name, "_", ft_strlen(var_name)))
+		{
+			free(var_name);
+			i++;
+			continue ;
+		}
 		if (ft_strchr(env_tab[i], '='))
 			var_value = ft_strdup(env_tab[i] + (var_len(env_tab[i]) + 1));
 		else
 			var_value = ft_strdup("");
-		ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
+		if (ft_strchr(env_tab[i], '='))
+			ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
+		else
+			ft_printf_fd(1, "declare -x %s\n", env_tab[i]);
 		free(var_name);
 		free(var_value);
 		i++;
