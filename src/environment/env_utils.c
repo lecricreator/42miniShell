@@ -59,16 +59,31 @@ int	var_len(char *var)
 	return (i);
 }
 
-static void	add_var_value(t_env **var, char *new_value)
+static void	update_var_value(t_env **var, char *new_value)
 {
 	char	*tmp;
 	char	*var_name;
 
+	tmp = NULL;
+	var_name = NULL;
 	tmp = (*var)->var;
 	var_name = ft_strndup((*var)->var, var_len((*var)->var) + 1);
 	(*var)->var = ft_strjoin(var_name, new_value);
-	free(tmp);
-	free(var_name);
+	if (tmp)
+		free(tmp);
+	if (var_name)
+		free(var_name);
+}
+
+static void	concat_var_value(t_env **var, char *new_value)
+{
+	char	*tmp;
+
+	tmp = NULL;
+		tmp = (*var)->var;
+		(*var)->var = ft_strjoin((*var)->var, new_value);
+	if (tmp)
+		free(tmp);
 }
 
 static void	add_var(t_list **env_list, char *var)
@@ -122,8 +137,16 @@ char	**create_var(t_data *data, t_cmd *cmd)
 		{
 			if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var)))
 			{
-				add_var_value(&tmp_var, value);
+				update_var_value(&tmp_var, value);
 				break ;
+			}
+			else if (var_name[var_len(var_name) - 1] == '+')
+			{
+				if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var) - 1))
+				{
+					concat_var_value(&tmp_var, value);
+					break ;
+				}
 			}
 			tmp_head = tmp_head->next;
 			if (tmp_head)
