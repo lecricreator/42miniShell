@@ -6,37 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/17 18:39:17 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:17:11 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	exec_cd(char *str, t_list **env_list)
-{
-	char	buffer[1024];
-
-	if (str[0] == '~' && str[1] == '\0')
-	{
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
-		chdir(give_var_env_list("HOME", (*env_list)));
-	}
-	else if (str[0] == '-' && str[1] == '\0')
-	{
-		chdir(give_var_env_list("OLDPWD", (*env_list)));
-	}
-	else if (str[0] == '$')
-	{
-		chdir(give_var_env_list(&str[1], (*env_list)));
-	}
-	else
-	{
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
-		chdir(str);
-	}
-	write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
-	return (errno);
-}
 
 int	exec_echo_write(char **cmd_args, int flags, int i)
 {
@@ -95,22 +69,6 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	}
 	free(var_env_list);
 }
-
-// void	print_env(t_list *env_list)
-// {
-// 	t_env	*tmp_var;
-
-// 	tmp_var = (t_env *)env_list->content;
-// 	while (env_list)
-// 	{
-// 		if (tmp_var->exported)
-// 			printf("%s\n", tmp_var->var);
-// 		env_list = env_list->next;
-// 		if (env_list)
-// 		tmp_var = (t_env *)env_list->content;
-// 	}
-// }
-
 
 void	exec_unset(char **cmd_args, t_list **env_list)
 {

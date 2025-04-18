@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:01 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/17 21:27:38 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:50:13 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,18 @@ void	write_env_list(char *value_modify, char *env_value, t_list **env_list)
 	t_list	*head_env;
 	int		size_value;
 
-	head_env = (*env_list);
+	head_env = *env_list;
 	size_value = (int)ft_strlen(env_value);
-	while ((*env_list))
+	while (*env_list)
 	{
-		tmp_content = (*env_list)->content;
+		tmp_content = ((t_env *)(*env_list)->content)->var;
 		if (ft_strncmp_env_var(env_value, tmp_content, size_value) == 0)
 			break ;
-		(*env_list) = (*env_list)->next;
+		*env_list = (*env_list)->next;
 	}
-	(*env_list)->content = ft_strjoin(env_value, value_modify);
+	ft_printf_fd(2, "env : %s || value_modify %s\n", env_value, value_modify);
+	if (*env_list)
+		((t_env *)(*env_list)->content)->var = ft_strjoin(env_value, value_modify);
 	(*env_list) = head_env;
 }
 

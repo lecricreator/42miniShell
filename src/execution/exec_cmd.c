@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_utils.c                                  :+:      :+:    :+:   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 01:48:06 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:27:57 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,43 +22,52 @@ int	cmd_if_absolute_path(t_cmd *cmd)
 		return (1);
 }
 
-int	find_program(t_data *data, t_cmd *cmd)
+int	verif_access(char **path, t_cmd *cmd)
 {
-	int		i;
-	char	**path;
+	int	i;
 
 	i = 0;
-	path = NULL;
-	path = get_path(path, data->env_list);
-	if (ft_strchr(cmd->cmd_args[0], '/'))
-	{
-		if (!cmd_if_absolute_path(cmd))
-		{
-			free(path);
-			return (0);
-		}
-		else
-		{
-			free(path);
-			return (error_handle(data, cmd->cmd_args[0], "directory not found", 0));
-		}
-	}
 	while (path[i])
 	{
 		cmd->command_path = ft_strjoin(path[i], cmd->cmd_args[0]);
 		if (!access(cmd->command_path, X_OK))
 		{
 			free(path);
-			return (0);
+			return (1);
 		}
 		free(cmd->command_path);
 		cmd->command_path = NULL;
 		i++;
 	}
-	free(path);
-	return (error_handle(data,
-		cmd->cmd_args[0], "command not found", 0));
-	
+	return (0);
+}
+
+int	find_program(t_data *data, t_cmd *cmd)
+{
+	char	**path;
+
+	path = NULL;
+	path = get_path(path, data->env_list);
+	if (ft_strchr(cmd->cmd_args[0], '/'))
+	{
+		if (!cmd_if_absolute_path(cmd))
+		{
+			return (free(path), 0);
+		}
+		else
+		{
+			return (free(path), error_handle(data, cmd->cmd_args[0],
+					"directory not found", 0));
+		}
+	}
+	if (path)
+		if (verif_access(path, cmd))
+			return (0);
+	if (!path)
+		return (free(path), error_handle(data,
+				cmd->cmd_args[0], "No such file or directory", 0));
+	return (free(path), error_handle_without_rl(data,
+			cmd->cmd_args[0], "command not found", 0));
 }
 
 int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
@@ -85,7 +94,7 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var)
 {
 	char	**env_tab;
 
-	if(find_program(data, cmd))
+	if (find_program(data, cmd))
 		return ;
 	env_tab = get_env_tab(data->env_list, tmp_var);
 	data->pid = fork();

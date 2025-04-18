@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/11 21:22:30 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 20:58:06 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ typedef struct s_fds
 	int	prev_pipe;
 	int	infile;
 	int	outfile;
-	int std_in;
-	int std_out;
+	int	std_in;
+	int	std_out;
 }	t_fds;
 
 typedef enum e_type
@@ -117,6 +117,8 @@ void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
 int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
+int		error_handle_without_rl(
+			t_data *data, char *cmd, char *msg, int terminate);
 void	free_table(char **table);
 void	free_data(t_data *data);
 void	free_cmd(void *cmd_void);
@@ -136,15 +138,16 @@ int		wait_and_status(t_data *data);
 void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
 void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var);
-void    exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds);
+void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds);
 void	reset_io(t_data *data, t_fds *fds);
 void	change_io(t_data *data, t_redir *redir, t_fds *fds);
 int		exec_pwd(void);
+int		adapt_cd(t_cmd *cmd, t_list **env_list);
 int		exec_cd(char *str, t_list **env_list);
 void	exec_echo(char **cmd_args);
 void	exec_export(char **cmd_args, t_list **env_list);
 void	exec_unset(char **cmd_args, t_list **env_list);
-void	exec_exit();
+void	exec_exit(void);
 int		is_builtin(t_type type);
 int		is_any_cmd(t_type type);
 int		is_redir_op(t_type type);
@@ -152,7 +155,7 @@ int		is_var_declaration(t_type type, int index);
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 char	*strdup_limiter(char *str, char stop);
-void	sig_init();
+void	sig_init(void);
 t_data	*recover_data_address(t_data *data);
 int		ft_strncmp_env_var(const char *s1, const char *s2, size_t n);
 int		var_len(char *var);
