@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:31:14 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/11 17:29:09 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:46:43 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	check_for_expansion(t_data *data, char **input)
 	while ((*input)[i])
 	{
 		if ((*input)[i] == '$')
-		{	
+		{
 			tmp = *input;
 			*input = dollar_expansion(data, *input, &i, data->env_list);
 			free(tmp);
@@ -165,29 +165,29 @@ static int	token_len(char **input, int *i)
 
 static int	get_type(char *token)
 {
-	if (!ft_strncmp(token, "echo", ft_strlen(token)))
+	if (!ft_strncmp(token, "echo", 5))
 		return (BI_ECHO);
-	if (!ft_strncmp(token, "cd", ft_strlen(token)))
+	if (!ft_strncmp(token, "cd", 3))
 		return (BI_CD);
-	if (!ft_strncmp(token, "pwd", ft_strlen(token)))
+	if (!ft_strncmp(token, "pwd", 4))
 		return (BI_PWD);
-	if (!ft_strncmp(token, "export", ft_strlen(token)))
+	if (!ft_strncmp(token, "export", 7))
 		return (BI_EXPORT);
-	if (!ft_strncmp(token, "unset", ft_strlen(token)))
+	if (!ft_strncmp(token, "unset", 6))
 		return (BI_UNSET);
-	if (!ft_strncmp(token, "env", ft_strlen(token)))
+	if (!ft_strncmp(token, "env", 4))
 		return (BI_ENV);
-	if (!ft_strncmp(token, "exit", ft_strlen(token)))
+	if (!ft_strncmp(token, "exit", 5))
 		return (BI_EXIT);
-	if (!ft_strncmp(token, "|", ft_strlen(token)))
+	if (!ft_strncmp(token, "|", 2))
 		return (OP_PIPE);
-	if (!ft_strncmp(token, ">", ft_strlen(token)))
+	if (!ft_strncmp(token, ">", 2))
 		return (OP_REDIR_OUT);
-	if (!ft_strncmp(token, "<", ft_strlen(token)))
+	if (!ft_strncmp(token, "<", 2))
 		return (OP_REDIR_IN);
-	if (!ft_strncmp(token, ">>", ft_strlen(token)))
+	if (!ft_strncmp(token, ">>", 3))
 		return (OP_APPEND);
-	if (!ft_strncmp(token, "<<", ft_strlen(token)))
+	if (!ft_strncmp(token, "<<", 3))
 		return (OP_HEREDOC);
 	if (ft_strchr(token, '='))
 		return (ENV_VAR);
