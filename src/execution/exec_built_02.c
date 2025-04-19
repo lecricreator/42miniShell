@@ -53,18 +53,25 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 {
 	char	buffer[1024];
 	char	*old_pwd;
+	int		exit_code;
 
+	exit_code = 0;
 	old_pwd = ft_strdup(getcwd(buffer, sizeof(buffer)));
 	if (!cmd->cmd_args[1])
-		chdir(give_var_env_list("HOME=", *env_list));
+		exit_code = chdir(give_var_env_list("HOME=", *env_list));
 	else if (cmd->cmd_args[1][0] == '~' && cmd->cmd_args[1][1] == '\0')
-		chdir(give_var_env_list("HOME=", (*env_list)));
+		exit_code = chdir(give_var_env_list("HOME=", (*env_list)));
 	else if (cmd->cmd_args[1][0] == '-' && cmd->cmd_args[1][1] == '\0')
-		chdir(give_var_env_list("OLDPWD=", (*env_list)));
+		exit_code = chdir(give_var_env_list("OLDPWD=", (*env_list)));
 	else
-		chdir(cmd->cmd_args[1]);
-	write_env_list(old_pwd, "OLDPWD=", env_list);
-	write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
+		exit_code = chdir(cmd->cmd_args[1]);
+	if (exit_code == -1)
+		ft_printf_fd(2, "Minishell: cd: %s: No such file or directory\n", cmd->cmd_args[1]);// is this good practice?
+	else
+	{
+		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
+		write_env_list(old_pwd, "OLDPWD=", env_list);
+	}
 	free(old_pwd);
 	return (errno);
 }

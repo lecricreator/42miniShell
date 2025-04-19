@@ -144,7 +144,6 @@ void	reset_io(t_data *data, t_fds *fds);
 void	change_io(t_data *data, t_redir *redir, t_fds *fds);
 int		exec_builtin(t_cmd *cmd, t_list *env_list);
 int		exec_pwd(void);
-int		adapt_cd(t_cmd *cmd, t_list **env_list);
 int		exec_cd(t_cmd *cmd, t_list **env_list);
 void	exec_echo(char **cmd_args);
 void	exec_export(char **cmd_args, t_list **env_list);
