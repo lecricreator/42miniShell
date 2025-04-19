@@ -30,7 +30,7 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 		return (print_env(*env_list), errno);
 	if (cmd->type == BI_EXPORT)
 	{
-		exec_export(cmd->cmd_args, &env_list);
+		exec_export(cmd->cmd_args, env_list);
 		return (errno);
 	}
 	if (cmd->type == BI_UNSET)
