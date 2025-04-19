@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:50:06 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 15:58:04 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:12:52 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	get_env(t_list **env_list, char **env)
 {
@@ -66,9 +65,10 @@ char	**get_env_tab(t_list *env_list, char **tmp_var)
 	if (!tmp_var)
 		env_tab = (char **)malloc(sizeof(char *) * (env_size(env_list) + 1));
 	else
-		env_tab = (char **)malloc(sizeof(char *) * ((env_size(env_list) + count_table(tmp_var) + 1)));
+		env_tab = (char **)malloc(sizeof(char *) * ((env_size(env_list)
+						+ count_table(tmp_var) + 1)));
 	if (!env_tab)
-		error_handle(NULL, "env_tab function", "environment.c:69\nmalloc failed", 1); // change this line
+		error_handle(NULL, "", "environment.c\nmalloc failed", 1); // at change
 	while (tmp_head)
 	{
 		if (tmp_env_var->exported)

@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:15 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 12:01:42 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:07:23 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ void	print_env(t_list *env_list)
 			printf("%s\n", tmp_var->var);
 		env_list = env_list->next;
 		if (env_list)
-		tmp_var = (t_env *)env_list->content;
+			tmp_var = (t_env *)env_list->content;
 	}
 }

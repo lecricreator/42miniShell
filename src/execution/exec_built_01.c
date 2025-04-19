@@ -6,11 +6,34 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/18 21:57:16 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:05:15 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	exec_builtin(t_cmd *cmd, t_list *env_list)
+{
+	if (cmd->type == BI_CD)
+		return (adapt_cd(cmd, &env_list));
+	if (cmd->type == BI_PWD)
+		return (exec_pwd(), errno);
+	if (cmd->type == BI_ECHO)
+		return (exec_echo(cmd->cmd_args), errno);
+	if (cmd->type == BI_EXIT)
+		return (exec_exit(), errno);
+	if (cmd->type == BI_ENV)
+		return (print_env(env_list), errno);
+	if (cmd->type == BI_EXPORT)
+	{
+		if (cmd->nbr_arg == 2)
+			exec_export(cmd->cmd_args, &env_list);
+		return (errno);
+	}
+	if (cmd->type == BI_UNSET)
+		return (exec_unset(cmd->cmd_args, &env_list), errno);
+	return (errno);
+}
 
 int	exec_echo_write(char **cmd_args, int flags, int i)
 {
@@ -36,7 +59,6 @@ void	exec_echo(char **cmd_args)
 
 	i = 0;
 	flags = 0;
-	ft_printf_fd(2, "LU\n");
 	while (cmd_args[++i])
 	{
 		flags = exec_echo_write(cmd_args, flags, i);
@@ -67,7 +89,7 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	{
 		new_value = ft_strdup(cmd_args[1]);
 		if (!new_value)
-			//ERROR MALLOC // EXIT WITH MESSAGE ERROR MALLOC
+			error_handle(NULL, "", "ERROR MALLOC.", 1);//ERROR MALLOC
 		ft_lstadd_back(env_list, ft_lstnew(new_value));
 	}
 	free(var_env_list);
@@ -83,7 +105,7 @@ void	exec_unset(char **cmd_args, t_list **env_list)
 		return ;
 	if (give_var_env_list(cmd_args[1], *env_list))
 	{
-		while((*env_list)->next)
+		while ((*env_list)->next)
 		{
 			if (strncmp(cmd_args[1], ((t_env *)(*env_list)->next->content)->var,
 				ft_strlen(cmd_args[1])) == 0)

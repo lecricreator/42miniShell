@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/18 20:58:06 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 15:50:55 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var);
 void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds);
 void	reset_io(t_data *data, t_fds *fds);
 void	change_io(t_data *data, t_redir *redir, t_fds *fds);
+int		exec_builtin(t_cmd *cmd, t_list *env_list);
 int		exec_pwd(void);
 int		adapt_cd(t_cmd *cmd, t_list **env_list);
 int		exec_cd(char *str, t_list **env_list);
