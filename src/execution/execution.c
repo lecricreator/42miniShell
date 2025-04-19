@@ -30,7 +30,7 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 		return (print_env(*env_list), errno);
 	if (cmd->type == BI_EXPORT)
 	{
-		exec_export(cmd->cmd_args, &env_list);
+		exec_export(cmd->cmd_args, env_list);
 		return (errno);
 	}
 	if (cmd->type == BI_UNSET)
@@ -49,7 +49,7 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 		data->n_fork++;
 		if (!data->pid)
 		{
-			exec_redir(data, cmd->redir, fds);
+	//		exec_redir(data, cmd->redir, fds);
 			exec_pipe(data, cmd, fds);
 			exec_builtin(cmd, &data->env_list);
 			free_data(data);
@@ -58,7 +58,7 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 	}
 	else
 	{
-		exec_redir(data, cmd->redir, fds);
+//		exec_redir(data, cmd->redir, fds);
 		exec_builtin(cmd, &data->env_list);
 	}
 }
@@ -106,6 +106,8 @@ void	testtr(t_data **data, char **tmp_var, t_cmd **tmp_cmd, t_fds *fds)
 				"File: execution.c | Func: execution | Pipe failed", 1);
 	}
 	check_heredoc(*data, (*tmp_cmd)->redir, fds);
+	exec_redir(*data, (*tmp_cmd)->redir, fds);//testing this
+//	exec_pipe(*data, (*tmp_cmd), fds);// testing this
 	if (is_builtin((*tmp_cmd)->type))
 	{
 		(*tmp_cmd)->nbr_arg = count_table((*tmp_cmd)->cmd_args);

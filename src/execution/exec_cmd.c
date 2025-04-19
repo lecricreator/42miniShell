@@ -72,6 +72,7 @@ int	find_program(t_data *data, t_cmd *cmd)
 
 int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 {
+	(void)fds;
 	errno = 0;
 	if (!cmd->cmd_args[0])
 		error_handle(data, "", "permission denied", 1);
@@ -80,7 +81,7 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 		free_data(data);
 		exit(127);
 	}
-	exec_redir(data, cmd->redir, fds);
+	//exec_redir(data, cmd->redir, fds);
 	exec_pipe(data, cmd, fds);
 	if (execve(cmd->command_path, cmd->cmd_args, env_tab) == -1)
 	{

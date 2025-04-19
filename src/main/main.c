@@ -58,7 +58,7 @@ int	main(int ac, char **av, char **env)
 			exec_exit();
 		add_history(data->input);
 		parsing(data);
-		print_token_list(data->token_list);
+//		print_token_list(data->token_list);
 		create_cmd_block(data, data->token_list, &data->cmd_list);
 		execution(data);
 		wait_and_status(data);

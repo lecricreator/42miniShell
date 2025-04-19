@@ -36,7 +36,6 @@ void	exec_echo(char **cmd_args)
 
 	i = 0;
 	flags = 0;
-	ft_printf_fd(2, "LU\n");
 	while (cmd_args[++i])
 	{
 		flags = exec_echo_write(cmd_args, flags, i);
