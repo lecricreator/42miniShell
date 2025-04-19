@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:01 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 19:50:13 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 15:46:30 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*give_var_env_list(char *var_name, t_list *env_list)
 		tmp_content = ((t_env *)(env_list)->content)->var;
 		if (ft_strncmp_env_var(var_name, tmp_content, var_name_len) == 0)
 		{
-			return (&tmp_content[var_name_len + 1]);
+			return (&tmp_content[var_name_len]);
 		}
 		env_list = env_list->next;
 	}
@@ -42,12 +42,15 @@ void	write_env_list(char *value_modify, char *env_value, t_list **env_list)
 	{
 		tmp_content = ((t_env *)(*env_list)->content)->var;
 		if (ft_strncmp_env_var(env_value, tmp_content, size_value) == 0)
+		{
 			break ;
+		}
 		*env_list = (*env_list)->next;
 	}
-	ft_printf_fd(2, "env : %s || value_modify %s\n", env_value, value_modify);
 	if (*env_list)
+	{
 		((t_env *)(*env_list)->content)->var = ft_strjoin(env_value, value_modify);
+	}
 	(*env_list) = head_env;
 }
 

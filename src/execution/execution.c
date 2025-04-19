@@ -6,37 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 21:10:51 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:05:45 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-int	exec_builtin(t_cmd *cmd, t_list **env_list)
-{
-	if (cmd->type == BI_CD)
-	{
-		adapt_cd(cmd, env_list);
-		print_env(*env_list);
-		return (0);
-	}
-	if (cmd->type == BI_PWD)
-		return (exec_pwd(), errno);
-	if (cmd->type == BI_ECHO)
-		return (exec_echo(cmd->cmd_args), errno);
-	if (cmd->type == BI_EXIT)
-		return (exec_exit(), errno);
-	if (cmd->type == BI_ENV)
-		return (print_env(*env_list), errno);
-	if (cmd->type == BI_EXPORT)
-	{
-		exec_export(cmd->cmd_args, env_list);
-		return (errno);
-	}
-	if (cmd->type == BI_UNSET)
-		return (exec_unset(cmd->cmd_args, env_list), errno);
-	return (errno);
-}
 
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 {
@@ -49,18 +23,14 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 		data->n_fork++;
 		if (!data->pid)
 		{
-	//		exec_redir(data, cmd->redir, fds);
 			exec_pipe(data, cmd, fds);
-			exec_builtin(cmd, &data->env_list);
+			exec_builtin(cmd, data->env_list);
 			free_data(data);
 			exit(errno);
 		}
 	}
 	else
-	{
-//		exec_redir(data, cmd->redir, fds);
-		exec_builtin(cmd, &data->env_list);
-	}
+		exec_builtin(cmd, data->env_list);
 }
 
 void	init_fds(t_fds *fds)
@@ -97,7 +67,8 @@ void	check_heredoc(t_data *data, t_list *redir, t_fds *fds)
 	}
 }
 
-void	testtr(t_data **data, char **tmp_var, t_cmd **tmp_cmd, t_fds *fds)
+void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
+		t_fds *fds)
 {
 	if ((*tmp_cmd)->is_pipe)
 	{
@@ -144,7 +115,7 @@ void	execution(t_data *data)
 			tmp_head = tmp_head->next;
 			continue ;
 		}
-		testtr(&data, tmp_var, &tmp_cmd, &fds);
+		find_to_execute(&data, tmp_var, &tmp_cmd, &fds);
 		tmp_head = tmp_head->next;
 	}
 }

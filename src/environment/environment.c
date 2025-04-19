@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:50:06 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 15:58:04 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:59:29 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	get_env(t_list **env_list, char **env)
 {
@@ -51,26 +50,19 @@ static int	env_size(t_list *env_list)
 	return (i);
 }
 
-char	**get_env_tab(t_list *env_list, char **tmp_var)
+char **add_env(char **env_tab, t_list *env_list, char **tmp_var)
 {
 	t_list	*tmp_head;
 	t_env	*tmp_env_var;
-	char	**env_tab;
 	int		i;
 	int		b;
 
 	i = 0;
 	b = 0;
 	tmp_head = env_list;
-	tmp_env_var = (t_env *)tmp_head->content;
-	if (!tmp_var)
-		env_tab = (char **)malloc(sizeof(char *) * (env_size(env_list) + 1));
-	else
-		env_tab = (char **)malloc(sizeof(char *) * ((env_size(env_list) + count_table(tmp_var) + 1)));
-	if (!env_tab)
-		error_handle(NULL, "env_tab function", "environment.c:69\nmalloc failed", 1); // change this line
 	while (tmp_head)
 	{
+		tmp_env_var = (t_env *)tmp_head->content;
 		if (tmp_env_var->exported)
 			env_tab[i++] = ft_strdup(tmp_env_var->var);
 		tmp_head = tmp_head->next;
@@ -84,5 +76,20 @@ char	**get_env_tab(t_list *env_list, char **tmp_var)
 		b++;
 	}
 	env_tab[i] = NULL;
+	return (env_tab);
+}
+
+char	**get_env_tab(t_list *env_list, char **tmp_var)
+{
+	char	**env_tab;
+
+	if (!tmp_var)
+		env_tab = (char **)malloc(sizeof(char *) * (env_size(env_list) + 1));
+	else
+		env_tab = (char **)malloc(sizeof(char *) * ((env_size(env_list)
+						+ count_table(tmp_var) + 1)));
+	if (!env_tab)
+		error_handle(NULL, "", "environment.c\nmalloc failed", 1); // at change
+	env_tab = add_env(env_tab, env_list, tmp_var);
 	return (env_tab);
 }
