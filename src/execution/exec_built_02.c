@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/19 15:58:58 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:00:34 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	adapt_cd(t_cmd *cmd, t_list **env_list)
 int	exec_cd(char *str, t_list **env_list)
 {
 	char	buffer[1024];
+	char	*oldpwd;
 
 	if (str[0] == '~' && str[1] == '\0')
 	{
@@ -62,8 +63,9 @@ int	exec_cd(char *str, t_list **env_list)
 	}
 	else if (str[0] == '-' && str[1] == '\0')
 	{
+		oldpwd = ft_strdup(getcwd(buffer, sizeof(buffer)));
 		chdir(give_var_env_list("OLDPWD=", (*env_list)));
-		write_env_list(getcwd(buffer, sizeof(buffer)), "OLDPWD=", env_list);
+		write_env_list(oldpwd, "OLDPWD=", env_list);
 	}
 	else
 	{

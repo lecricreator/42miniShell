@@ -6,37 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/19 20:05:45 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:57:40 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-int	exec_builtin(t_cmd *cmd, t_list **env_list)
-{
-	if (cmd->type == BI_CD)
-	{
-		adapt_cd(cmd, env_list);
-		print_env(*env_list);
-		return (0);
-	}
-	if (cmd->type == BI_PWD)
-		return (exec_pwd(), errno);
-	if (cmd->type == BI_ECHO)
-		return (exec_echo(cmd->cmd_args), errno);
-	if (cmd->type == BI_EXIT)
-		return (exec_exit(), errno);
-	if (cmd->type == BI_ENV)
-		return (print_env(*env_list), errno);
-	if (cmd->type == BI_EXPORT)
-	{
-		exec_export(cmd->cmd_args, env_list);
-		return (errno);
-	}
-	if (cmd->type == BI_UNSET)
-		return (exec_unset(cmd->cmd_args, env_list), errno);
-	return (errno);
-}
 
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 {
