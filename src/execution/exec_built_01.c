@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/19 21:49:55 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/19 23:02:30 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,14 @@
 int	exec_builtin(t_cmd *cmd, t_list *env_list)
 {
 	if (cmd->type == BI_CD)
-		return (adapt_cd(cmd, env_list));
+	{
+		if (cmd->nbr_arg > 2)
+		{
+			error_handle(NULL, "cd", "too many arguments", 0);
+			return (1);
+		}
+		return (exec_cd(cmd, &env_list));
+	}
 	if (cmd->type == BI_PWD)
 		return (exec_pwd(), errno);
 	if (cmd->type == BI_ECHO)
@@ -26,8 +33,7 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		return (print_env(env_list), errno);
 	if (cmd->type == BI_EXPORT)
 	{
-		if (cmd->nbr_arg == 2)
-			exec_export(cmd->cmd_args, env_list);
+		exec_export(cmd->cmd_args, &env_list);
 		return (errno);
 	}
 	if (cmd->type == BI_UNSET)
