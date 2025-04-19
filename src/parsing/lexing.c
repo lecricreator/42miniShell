@@ -70,7 +70,7 @@ char	*dollar_expansion(t_data *data, char *input, int *start, t_list *env_list)
 	}
 	else
 	{
-		while (input[vars.i] && !ft_isblank(input[vars.i]))
+		while (input[vars.i] && !ft_isblank(input[vars.i]) && input[vars.i] != 34)
 			vars.i++;
 		vars.var = ft_strndup(input + (*start + 1),  vars.i - *start - 1);
 		vars.tmp = vars.var;
@@ -106,10 +106,12 @@ void	check_for_expansion(t_data *data, char **input)
 		}
 		if (is_special_symbol((*input)[i]))
 			i++;
-		while ((*input)[i] == 34)
+		if ((*input)[i] == 39)
+		{
 			i++;
-		while ((*input)[i] == 39)
-			i++;
+			while ((*input)[i] != 39)
+				i++;
+		}
 		if ((*input)[i])
 			i++;
 	}
