@@ -116,6 +116,7 @@ typedef struct s_env
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
+void	print_export(t_list *env_list);
 int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
 int		error_handle_without_rl(
 			t_data *data, char *cmd, char *msg, int terminate);
@@ -161,5 +162,7 @@ t_data	*recover_data_address(t_data *data);
 int		ft_strncmp_env_var(const char *s1, const char *s2, size_t n);
 int		var_len(char *var);
 char	**create_var(t_data *data, t_cmd *cmd);
+void	add_var(t_list **env_list, char *var, int exported);
+int		var_syntax(char *var);
 
 #endif
