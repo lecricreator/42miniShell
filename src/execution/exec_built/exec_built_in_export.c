@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 18:13:54 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:08:59 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	add_var_in_env(char **cmd_args, t_list **env_list, int *i,
 		add_var(env_list, cmd_args[*i], 1);
 }
 
-void	tester(char **cmd_args, t_list **env_list, int *i)
+void	verified_var_exist_in_env(char **cmd_args, t_list **env_list, int *i)
 {
 	t_list	*tmp_head;
 	char	*env_var;
@@ -57,7 +57,6 @@ void	tester(char **cmd_args, t_list **env_list, int *i)
 	add_var_in_env(cmd_args, env_list, i, tmp_head);
 }
 
-
 void	exec_export(char **cmd_args, t_list **env_list)
 {
 	int		i;
@@ -68,12 +67,13 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	while (cmd_args[i])
 	{
 		if (!var_syntax(cmd_args[i]))
-		{// change this error handle to stop the exec & return prompt
+		{
+			// change this error handle to stop the exec & return prompt
 			ft_printf_fd(2, "Minishell: export: `%s': not a valid identifier\n",
 				cmd_args[i]);
 			return ;
 		}
-		tester(cmd_args, env_list, &i);
+		verified_var_exist_in_env(cmd_args, env_list, &i);
 		i++;
 	}
 }

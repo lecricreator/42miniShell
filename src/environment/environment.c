@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:50:06 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/19 19:59:29 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:14:15 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	env_size(t_list *env_list)
 	return (i);
 }
 
-char **add_env(char **env_tab, t_list *env_list, char **tmp_var)
+char	**add_env(char **env_tab, t_list *env_list, char **tmp_var)
 {
 	t_list	*tmp_head;
 	t_env	*tmp_env_var;

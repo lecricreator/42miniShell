@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 18:08:33 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:36:08 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,13 @@ typedef struct s_env
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
+char	**create_var(t_data *data, t_cmd *cmd);
+void	add_var(t_list **env_list, char *var, int exported);
+void	concat_var_value(t_env **var, char *new_value);
+void	update_var_value(t_env **var, char *new_value);
+char	**create_tmp_var(t_cmd *cmd);
+int		var_syntax(char *var);
+int		var_len(char *var);
 void	print_export(t_list *env_list);
 int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
 int		error_handle_without_rl(

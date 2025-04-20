@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:15 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/19 16:07:23 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:44:25 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,24 @@ static void	sort_env_tab(char **env_tab)
 	}
 }
 
+void	write_line_env(int *i, char *var_name, char **env_tab, char *var_value)
+{
+	if (!ft_strncmp(var_name, "_", ft_strlen(var_name)))
+	{
+		free(var_name);
+		i++;
+		return ;
+	}
+	if (ft_strchr(env_tab[*i], '='))
+		var_value = ft_strdup(env_tab[*i] + (var_len(env_tab[*i]) + 1));
+	else
+		var_value = ft_strdup("");
+	if (ft_strchr(env_tab[*i], '='))
+		ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
+	else
+		ft_printf_fd(1, "declare -x %s\n", env_tab[*i]);
+}
+
 void	print_export(t_list *env_list)
 {
 	int		i;
@@ -71,25 +89,13 @@ void	print_export(t_list *env_list)
 	char	*var_value;
 
 	i = 0;
+	var_value = NULL;
 	env_tab = get_env_tab(env_list, NULL);
 	sort_env_tab(env_tab);
 	while (env_tab[i])
 	{
 		var_name = strdup_limiter(env_tab[i], '=');
-		if (!ft_strncmp(var_name, "_", ft_strlen(var_name)))
-		{
-			free(var_name);
-			i++;
-			continue ;
-		}
-		if (ft_strchr(env_tab[i], '='))
-			var_value = ft_strdup(env_tab[i] + (var_len(env_tab[i]) + 1));
-		else
-			var_value = ft_strdup("");
-		if (ft_strchr(env_tab[i], '='))
-			ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
-		else
-			ft_printf_fd(1, "declare -x %s\n", env_tab[i]);
+		write_line_env(&i, var_name, env_tab, var_value);
 		free(var_name);
 		free(var_value);
 		i++;
