@@ -21,6 +21,7 @@ IO_DIR = input_output/
 MAIN_DIR = main/
 ENV_DIR = environment/
 EXEC_DIR = execution/
+EXEC_BUILT_IN_DIR = execution/exec_built/
 PARS_DIR = parsing/
 ERR_DIR = error_and_free/
 SIG_DIR = signal/
@@ -38,15 +39,21 @@ FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 IO_FILES = in_out_manage.c
 MAIN_FILES = main.c utils1.c utils2.c
 ENV_FILES = environment.c env_utils.c env_print_utils.c
-EXEC_FILES = execution.c exec_built_01.c exec_built_02.c exec_cmd.c exec_heredoc.c
+EXEC_FILES = execution.c exec_built_in.c exec_cmd.c exec_heredoc.c
+EXEC_BUILT_FILES = exec_built_in_exit.c exec_built_in_cd.c exec_built_in_pwd.c \
+		exec_built_in_unset.c exec_built_in_export.c exec_built_in_echo.c
 PARS_FILES = parsing.c lexing.c command_block.c
 ERR_FILES = error_handle.c free_data.c free_data_utils.c
 SIG_FILES = signal_init.c
-FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) $(addprefix $(PARS_DIR), $(PARS_FILES)) \
-		$(addprefix $(ERR_DIR), $(ERR_FILES)) $(addprefix $(SIG_DIR), $(SIG_FILES)) \
-		$(addprefix $(ENV_DIR), $(ENV_FILES)) $(addprefix $(MAIN_DIR), $(MAIN_FILES)) \
+FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) \
+		$(addprefix $(PARS_DIR), $(PARS_FILES)) \
+		$(addprefix $(EXEC_BUILT_IN_DIR), $(EXEC_BUILT_FILES)) \
+		$(addprefix $(ERR_DIR), $(ERR_FILES)) \
+		$(addprefix $(SIG_DIR), $(SIG_FILES)) \
+		$(addprefix $(ENV_DIR), $(ENV_FILES)) \
+		$(addprefix $(MAIN_DIR), $(MAIN_FILES)) \
 		$(addprefix $(IO_DIR), $(IO_FILES)) \
-		
+
 INC_FILES = minishell.h
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))

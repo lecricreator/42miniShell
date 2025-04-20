@@ -6,28 +6,12 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 22:29:10 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/20 15:49:03 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-static t_type	check_env_var_type(t_token *next_token)
-{
-	if (!next_token)
-		return (ENV_VAR);
-	if (next_token->type == ENV_VAR)
-		return (ENV_VAR);
-	if (is_redir_op(next_token->type))
-		return (FILENAME);
-	if (is_any_cmd(next_token->type) || next_token->type == UNKNOW)
-		return (TMP_VAR);
-	if (next_token->type == OP_PIPE)
-		return (COMMAND);
-	return (ENV_VAR);
 
-}
-*/
 static t_type	token_zero(t_token *token)//re test this and correct if needed
 {
 	if (token->type <= 6)

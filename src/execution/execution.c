@@ -6,32 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/19 20:57:40 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:42:53 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
-{
-	if (cmd->is_pipe || fds->prev_pipe > 0)
-	{
-		data->pid = fork();
-		if (data->pid == -1)
-			error_handle(data, cmd->cmd_args[0],
-				"execution:75:\nFork failed", 1);
-		data->n_fork++;
-		if (!data->pid)
-		{
-			exec_pipe(data, cmd, fds);
-			exec_builtin(cmd, data->env_list);
-			free_data(data);
-			exit(errno);
-		}
-	}
-	else
-		exec_builtin(cmd, data->env_list);
-}
 
 void	init_fds(t_fds *fds)
 {

@@ -1,0 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_built_in_echo.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
+/*   Updated: 2025/04/20 18:11:15 by lomorale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+int	exec_echo_write(char **cmd_args, int flags, int i)
+{
+	int	n_appears;
+
+	n_appears = 1000;
+	if (flags != n_appears && i != 1)
+		ft_printf_fd(1, " ");
+	if (flags != -1 && cmd_args[i][0] == '-' && cmd_args[i][1] == 'n')
+		flags = n_appears;
+	else if (!cmd_args[i][0] == '\0')
+	{
+		ft_printf_fd(1, "%s", cmd_args[i]);
+		flags--;
+	}
+	return (flags);
+}
+
+void	exec_echo(char **cmd_args)
+{
+	int		i;
+	int		flags;
+
+	i = 0;
+	flags = 0;
+	while (cmd_args[++i])
+	{
+		flags = exec_echo_write(cmd_args, flags, i);
+	}
+	if (flags <= 0)
+		ft_printf_fd(1, "\n");
+}

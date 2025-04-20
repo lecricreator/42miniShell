@@ -1,35 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_built_02.c                                    :+:      :+:    :+:   */
+/*   exec_built_in_cd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/28 19:37:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/19 23:06:13 by lomorale         ###   ########.fr       */
+/*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
+/*   Updated: 2025/04/20 15:44:20 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	exec_pwd(void)
-{
-	char	buffer[1024];
-
-	getcwd(buffer, sizeof(buffer));
-	ft_printf_fd(1, "%s\n", buffer);
-	return (errno);
-}
-
-void	exec_exit(void)
-{
-	t_data	*tmp_data;
-
-	ft_printf_fd(2, "exit\n");
-	tmp_data = recover_data_address(NULL);
-	free_data(tmp_data);
-	exit(errno);
-}
 
 int	exec_cd(t_cmd *cmd, t_list **env_list)
 {
@@ -48,7 +29,8 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	else
 		exit_code = chdir(cmd->cmd_args[1]);
 	if (exit_code == -1)
-		ft_printf_fd(2, "Minishell: cd: %s: No such file or directory\n", cmd->cmd_args[1]);// is this good practice?
+		ft_printf_fd(2, "Minishell: cd: %s: No such file or directory\n",
+			cmd->cmd_args[1]);// is this good practice?
 	else
 	{
 		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
