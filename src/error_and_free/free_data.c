@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:08:12 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 02:08:27 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:12:09 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	free_env(void *var_void)
 	var = (t_env *)var_void;
 	if (var->var)
 		free(var->var);
+	free(var);
 }
 
 void	free_data(t_data *data)

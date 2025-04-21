@@ -6,14 +6,14 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 11:56:44 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:14:37 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_var_in_env(char **cmd_args, t_list **env_list, int i,
-		t_list	**tmp_head)
+void	add_var_in_env(char **cmd_args, int i,
+		t_list	**tmp_head, t_list **env_list)
 {
 	char	*tmp;
 
@@ -36,26 +36,25 @@ void	add_var_in_env(char **cmd_args, t_list **env_list, int i,
 
 void	verified_var_exist_in_env(char **cmd_args, t_list **env_list, int i)
 {
-	t_list	**tmp_head;
+	t_list	*tmp_head;
 	char	*env_var;
 	char	*var_name;
 
 	var_name = NULL;
-	tmp_head = env_list;
-	while (*tmp_head)
+	tmp_head = *env_list;
+	while (tmp_head)
 	{
-		env_var = ((t_env *)(*env_list)->content)->var;
-		ft_printf_fd(2, "%s\n", env_var);
+		env_var = ((t_env *)(tmp_head)->content)->var;
 		var_name = strdup_limiter(cmd_args[i], '=');
 		if (!ft_strncmp_env_var(var_name, env_var, var_len(var_name)))
 		{
 			free(var_name);
 			break ;
 		}
-		*tmp_head = (*tmp_head)->next;
+		tmp_head = (tmp_head)->next;
 		free(var_name);
 	}
-	add_var_in_env(cmd_args, env_list, i, tmp_head);
+	add_var_in_env(cmd_args, i, &tmp_head, env_list);
 }
 
 void	exec_export(char **cmd_args, t_list **env_list)
@@ -75,6 +74,7 @@ void	exec_export(char **cmd_args, t_list **env_list)
 			return ;
 		}
 		verified_var_exist_in_env(cmd_args, env_list, i);
+		//print_env(*env_list);
 		i++;
 	}
 }
