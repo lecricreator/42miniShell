@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:15 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/20 23:44:25 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:18:27 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	write_line_env(int *i, char *var_name, char **env_tab, char *var_value)
 {
 	if (!ft_strncmp(var_name, "_", ft_strlen(var_name)))
 	{
-		free(var_name);
 		i++;
 		return ;
 	}
@@ -79,6 +78,7 @@ void	write_line_env(int *i, char *var_name, char **env_tab, char *var_value)
 		ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
 	else
 		ft_printf_fd(1, "declare -x %s\n", env_tab[*i]);
+	return ;
 }
 
 void	print_export(t_list *env_list)

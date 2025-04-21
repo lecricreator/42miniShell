@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   in_out_manage.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:54:39 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/08 23:55:11 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:24:00 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,11 @@ void	change_io(t_redir *redir, t_fds *fds)
 	{
 		fds->std_out = dup(STDOUT_FILENO);
 		if (redir->type == OP_REDIR_OUT)
-			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);// check shell convention for permissions
+			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
+					0644);// check shell convention for permissions
 		else
-			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
+					0644);
 		if (fds->outfile < 0)
 			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
 		dup2(fds->outfile, STDOUT_FILENO);
@@ -104,7 +106,7 @@ void	change_io(t_redir *redir, t_fds *fds)
 
 void	exec_redir(t_list *redir, t_fds *fds)
 {
-	t_redir *tmp_redir;
+	t_redir	*tmp_redir;
 	t_list	*tmp_head;
 
 	tmp_head = redir;
