@@ -163,7 +163,7 @@ void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
 void	create_cmd_block(t_list *token_list, t_list **cmd_list);
-int		wait_and_status(t_data *data);
+void	wait_and_status(t_data *data);
 void	exec_redir(t_list *redir, t_fds *fds);
 void	exec_pipe(t_cmd *cmd, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var);

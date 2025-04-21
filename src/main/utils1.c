@@ -12,13 +12,12 @@
 
 #include "minishell.h"
 
-int	wait_and_status(t_data *data)
+void	wait_and_status(t_data *data)
 {
 	int	exit_code;
 	int	child_exit;
 
 	exit_code = 0;
-	data->status = 0;
 	while (data->n_fork--)
 	{
 		if (waitpid(data->pid, &data->status, 0) > 0)
@@ -32,8 +31,8 @@ int	wait_and_status(t_data *data)
 			else if (WIFSIGNALED(data->status))
 				exit_code = 127;
 		}
+		data->status = exit_code;
 	}
-	return (exit_code);
 }
 
 void	print_token_list(t_list *token_list)

@@ -20,7 +20,7 @@ const t_errinfo	*get_errinfo(t_error error)
 	errtab[ERR_NOT_FOUND] = (t_errinfo){ERR_NOT_FOUND, 127, "%s: command not found\n"};
 	errtab[ERR_PERMISSION] = (t_errinfo){ERR_PERMISSION, 126, "Minishell: %s: permission denied\n"};
 	errtab[ERR_IS_DIRECTORY] = (t_errinfo){ERR_IS_DIRECTORY, 126, "Minishell: %s: is a directory\n"};
-	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 1, "Minishell: %s: No such file or directory\n"};
+	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 127, "Minishell: %s: No such file or directory\n"};
 	errtab[ERR_MANY_ARGS] = (t_errinfo){ERR_MANY_ARGS, 1, "Minishell: %s:too many arguments\n"};
 	errtab[ERR_INVAL_IDE] = (t_errinfo){ERR_INVAL_IDE, 1, "Minishell: `%s': not a valid identifier\n"};
 	errtab[ERR_UNKNOWN] = (t_errinfo){ERR_UNKNOWN, 1, "%s: %s\n"};
