@@ -203,7 +203,10 @@ t_token *create_token(char *str, int index)
 
 	token = (t_token *)malloc(sizeof(t_token));
 	if (!token)
-		return (NULL);
+	{
+		error_handle(ERR_UNKNOWN, "Minishell:",
+			"lexing.c:206\nMalloc failed", KILL);
+	}
 	token->str = str;
 	token->type = get_type(token->str);
 	token->index = index;
@@ -216,11 +219,10 @@ static void fill_token_list(t_data *data, char *token, int token_index)
 	t_token	*token_node;
 
 	token_node = create_token(token, token_index);
-	if (!token_node)
-		error_handle(data, "token_node", "lexing.c:190\ncreate_token failed", 1);
 	new_node = ft_lstnew(token_node);
 	if (!new_node)
-		error_handle(data, "new_node", "lexing.c:193\nft_lstnew failed", 1);
+		error_handle(ERR_UNKNOWN, "new_node",
+			"lexing.c:224\nft_lstnew failed", KILL);
 	ft_lstadd_back(&data->token_list, new_node);
 }
 
@@ -246,7 +248,10 @@ void	lexing_tokens(t_data *data, char **input)
 			len = token_len(input, &i);
 			token_str = ft_strndup((*input) + (i - len), len);
 			if (!token_str)
-				error_handle(data, "token_str", "lexing.c:216\nft_strndup failed", 1);
+			{
+				error_handle(ERR_UNKNOWN, "Minishell:",
+					"lexing.c:251\nft_strndup failed", KILL);
+			}
 			fill_token_list(data, token_str, token_index);
 		}
 		if ((*input)[i] == '\0')

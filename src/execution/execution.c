@@ -25,7 +25,7 @@ void	init_fds(t_fds *fds)
 	fds->std_out = -1;
 }
 
-void	check_heredoc(t_data *data, t_list *redir, t_fds *fds)
+static void	check_heredoc(t_list *redir, t_fds *fds)
 {
 	t_list	*tmp_head;
 	t_redir	*tmp_redir;
@@ -37,7 +37,7 @@ void	check_heredoc(t_data *data, t_list *redir, t_fds *fds)
 	{
 		if (tmp_redir->type == OP_HEREDOC)
 		{
-			exec_heredoc(data, tmp_redir, fds);
+			exec_heredoc(tmp_redir, fds);
 			break ;
 		}
 		tmp_head = tmp_head->next;
@@ -52,12 +52,11 @@ void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
 	if ((*tmp_cmd)->is_pipe)
 	{
 		if (pipe((*fds).pipefd) == -1)
-			error_handle(*data, (*tmp_cmd)->cmd_args[0],
-				"File: execution.c | Func: execution | Pipe failed", 1);
+			error_handle(ERR_UNKNOWN, (*tmp_cmd)->cmd_args[0],
+				"execution.c:55\nPipe failed", KILL);
 	}
-	check_heredoc(*data, (*tmp_cmd)->redir, fds);
-	exec_redir(*data, (*tmp_cmd)->redir, fds);//testing this
-//	exec_pipe(*data, (*tmp_cmd), fds);// testing this
+	check_heredoc((*tmp_cmd)->redir, fds);
+	exec_redir((*tmp_cmd)->redir, fds);
 	if (is_builtin((*tmp_cmd)->type))
 	{
 		(*tmp_cmd)->nbr_arg = count_table((*tmp_cmd)->cmd_args);
@@ -72,7 +71,7 @@ void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
 		close((*fds).pipefd[0]);
 	}
 	if ((*fds).std_in != -1 || (*fds).std_out != -1)
-		reset_io(*data, fds);
+		reset_io(fds);
 }
 
 void	execution(t_data *data)
@@ -82,6 +81,8 @@ void	execution(t_data *data)
 	t_fds	fds;
 	char	**tmp_var;
 
+	if (!data->cmd_list)
+		return ;
 	init_fds(&fds);
 	tmp_var = NULL;
 	tmp_head = data->cmd_list;

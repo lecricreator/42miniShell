@@ -68,9 +68,7 @@ void	exec_export(char **cmd_args, t_list **env_list)
 	{
 		if (!var_syntax(cmd_args[i]))
 		{
-			// change this error handle to stop the exec & return prompt
-			ft_printf_fd(2, "Minishell: export: `%s': not a valid identifier\n",
-				cmd_args[i]);
+			error_handle(ERR_INVAL_IDE, cmd_args[i], NULL, CONTINUE);
 			return ;
 		}
 		verified_var_exist_in_env(cmd_args, env_list, &i);

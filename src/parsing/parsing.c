@@ -135,8 +135,10 @@ void	parsing(t_data *data)
 		}
 		if (state == BAD_TOKEN)
 		{
-			error_handle(data, tmp_token->str, "syntax error near elemnt", 0);//modify error handle to output the correct error format
-			return ;// handle this to return the program to the prompt
+			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
+			free_list(&data->token_list, free_token);
+			data->token_list = NULL;
+			return ;
 		}
 		last = tmp_token->type;
 		tmp_head = tmp_head->next;

@@ -26,6 +26,8 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <signal.h>
+# define KILL 1
+# define CONTINUE 0
 
 typedef struct s_fds
 {
@@ -62,6 +64,24 @@ typedef enum e_type
 	UNKNOW,
 	NONE
 }t_type;
+
+typedef enum e_error {
+    ERR_SYNTAX,
+    ERR_NOT_FOUND,
+    ERR_PERMISSION,
+    ERR_IS_DIRECTORY,
+    ERR_NO_FILE,
+	ERR_MANY_ARGS,
+	ERR_INVAL_IDE,
+    ERR_UNKNOWN
+}   t_error;
+
+typedef struct s_errinfo
+{
+	t_error    error;
+	int        exit_code;
+	const char *str_format;
+}   t_errinfo;
 
 typedef struct s_token
 {
@@ -124,9 +144,10 @@ char	**create_tmp_var(t_cmd *cmd);
 int		var_syntax(char *var);
 int		var_len(char *var);
 void	print_export(t_list *env_list);
-int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
-int		error_handle_without_rl(
-			t_data *data, char *cmd, char *msg, int terminate);
+int		error_handle(t_error error, char *cmd, char *extra, int terminate);
+//int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
+//int		error_handle_without_rl(
+//			t_data *data, char *cmd, char *msg, int terminate);
 void	free_table(char **table);
 void	free_data(t_data *data);
 void	free_cmd(void *cmd_void);
@@ -141,16 +162,15 @@ void	lexing_tokens(t_data *data, char **input);
 void	print_token_list(t_list *token_list);
 void	reset_input(t_data *data);
 void	execution(t_data *data);
-void	create_cmd_block(t_data *data, t_list *token_list, t_list **cmd_list);
+void	create_cmd_block(t_list *token_list, t_list **cmd_list);
 int		wait_and_status(t_data *data);
-void	exec_redir(t_data *data, t_list *redir, t_fds *fds);
-void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds);
+void	exec_redir(t_list *redir, t_fds *fds);
+void	exec_pipe(t_cmd *cmd, t_fds *fds);
 void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var);
-void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds);
-void	reset_io(t_data *data, t_fds *fds);
-void	change_io(t_data *data, t_redir *redir, t_fds *fds);
+void	exec_heredoc(t_redir *heredoc, t_fds *fds);
+void	reset_io(t_fds *fds);
+void	change_io(t_redir *redir, t_fds *fds);
 int		exec_builtin(t_cmd *cmd, t_list *env_list);
-void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds);
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds);
 int		exec_pwd(void);
 int		exec_cd(t_cmd *cmd, t_list **env_list);

@@ -89,7 +89,8 @@ char	**get_env_tab(t_list *env_list, char **tmp_var)
 		env_tab = (char **)malloc(sizeof(char *) * ((env_size(env_list)
 						+ count_table(tmp_var) + 1)));
 	if (!env_tab)
-		error_handle(NULL, "", "environment.c\nmalloc failed", 1); // at change
+		error_handle(ERR_UNKNOWN, "Minishell:",
+			"environment.c:92\nmalloc failed", KILL);
 	env_tab = add_env(env_tab, env_list, tmp_var);
 	return (env_tab);
 }

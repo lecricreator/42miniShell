@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds)
+void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 {
 	char	*delimiter;
 	char	*line;
@@ -21,7 +21,8 @@ void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds)
 	delimiter = heredoc->filename;
 	line = NULL;
 	if (pipe(fds->herepipe) == -1)
-		error_handle(data, heredoc->filename, "exec_heredoc\npipe failed", 1);
+		error_handle(ERR_UNKNOWN, heredoc->filename,
+			"exec_heredoc.c:24\npipe failed", KILL);
 	while (1)
 	{
 		line = readline("> ");
@@ -33,7 +34,7 @@ void	exec_heredoc(t_data *data, t_redir *heredoc, t_fds *fds)
 	}
 	dup2(fds->herepipe[0], STDIN_FILENO);
 	if (!fds->herepipe[0])
-		error_handle(data, "herepipe[0]", "exec_heredoc:20\ndup2 failed", 1);
+		error_handle(ERR_UNKNOWN, "herepipe[0]:", "exec_heredoc:37\ndup2 failed", KILL);
 	close(fds->herepipe[0]);
 	close(fds->herepipe[1]);
 }

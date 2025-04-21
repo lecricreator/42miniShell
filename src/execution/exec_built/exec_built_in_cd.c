@@ -29,8 +29,7 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	else
 		exit_code = chdir(cmd->cmd_args[1]);
 	if (exit_code == -1)
-		ft_printf_fd(2, "Minishell: cd: %s: No such file or directory\n",
-			cmd->cmd_args[1]);// is this good practice?
+		error_handle(ERR_NO_FILE, cmd->cmd_args[1], NULL, CONTINUE);
 	else
 	{
 		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);

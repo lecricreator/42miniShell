@@ -56,18 +56,18 @@ int	find_program(t_data *data, t_cmd *cmd)
 		}
 		else
 		{
-			return (free(path), error_handle(data, cmd->cmd_args[0],
-					"directory not found", 0));
+			return (free(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0],
+				NULL, CONTINUE));
 		}
 	}
 	if (path)
 		if (verif_access(path, cmd))
 			return (0);
 	if (!path)
-		return (free(path), error_handle(data,
-				cmd->cmd_args[0], "No such file or directory", 0));
-	return (free(path), error_handle_without_rl(data,
-			cmd->cmd_args[0], "command not found", 0));
+		return (free(path), error_handle(ERR_NO_FILE,
+				cmd->cmd_args[0], NULL, CONTINUE));
+	return (free(path), error_handle(ERR_NOT_FOUND,
+			cmd->cmd_args[0], NULL, CONTINUE));
 }
 
 int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
@@ -75,20 +75,20 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 	(void)fds;
 	errno = 0;
 	if (!cmd->cmd_args[0])
-		error_handle(data, "", "permission denied", 1);
+		error_handle(ERR_PERMISSION, "", NULL, KILL);
 	else if (!cmd->command_path)
 	{
 		free_data(data);
 		exit(127);
 	}
-	//exec_redir(data, cmd->redir, fds);
-	exec_pipe(data, cmd, fds);
+	exec_pipe(cmd, fds);
 	if (execve(cmd->command_path, cmd->cmd_args, env_tab) == -1)
 	{
 		free_table(env_tab);
-		error_handle(data, cmd->cmd_args[0], strerror(errno), 1);
+		return (error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
+			strerror(errno), KILL));
 	}
-	return (0);
+	return (errno);
 }
 
 void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var)
@@ -100,7 +100,8 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var)
 	env_tab = get_env_tab(data->env_list, tmp_var);
 	data->pid = fork();
 	if (data->pid == -1)
-		error_handle(data, "", "Error:\nFork failed", 1);
+		error_handle(ERR_UNKNOWN, "Minishell :",
+			"exec_cmd:103\nFork failed", KILL);
 	data->n_fork++;
 	if (!data->pid)
 		handle_procesess(data, cmd, fds, env_tab);

@@ -12,13 +12,14 @@
 
 #include "minishell.h"
 
-void	reset_io(t_data *data, t_fds *fds)
+void	reset_io(t_fds *fds)
 {
 	if (fds->outfile != -1 || fds->std_out != -1)
 	{
 		dup2(fds->std_out, STDOUT_FILENO);
 		if (fds->std_out < 0)
-			error_handle(data, "std out", "execution.c:108:\ndup2 failed", 1);
+			error_handle(ERR_UNKNOWN, "std out",
+				"in_out_manage.c:21\ndup2 failed", KILL);
 		if (fds->std_out > -1)
 			close(fds->std_out);
 		if (fds->outfile > -1)
@@ -30,7 +31,8 @@ void	reset_io(t_data *data, t_fds *fds)
 	{
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)
-			error_handle(data, "std in", "execution.c:116:\ndup2 failed", 1);
+			error_handle(ERR_UNKNOWN, "std in",
+				"in_out_management.c:\ndup2 failed", KILL);
 		if (fds->std_in > -1)
 			close(fds->std_in);
 		if (fds->infile > -1)
@@ -40,7 +42,7 @@ void	reset_io(t_data *data, t_fds *fds)
 	}
 }
 
-void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds)
+void	exec_pipe(t_cmd *cmd, t_fds *fds)
 {
 	if (cmd->is_pipe)
 	{
@@ -51,18 +53,20 @@ void	exec_pipe(t_data *data, t_cmd *cmd, t_fds *fds)
 		}
 		close(fds->pipefd[0]);
 		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
-			error_handle(data, cmd->cmd_args[0], "in_out_manage.c:46:\ndup2 failed", 1);
+			error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
+				"in_out_manage.c:56:\ndup2 failed", KILL);
 		close(fds->pipefd[1]);
 	}
 	if (fds->prev_pipe > 0)
 	{
 		if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
-			error_handle(data, cmd->cmd_args[0], "in_out_manage.c:52:\ndup2 failed", 1);
+			error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
+				"in_out_manage.c:63:\ndup2 failed", KILL);
 		close(fds->prev_pipe);
 	}
 }
 
-void	change_io(t_data *data, t_redir *redir, t_fds *fds)
+void	change_io(t_redir *redir, t_fds *fds)
 {
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
 	{
@@ -72,10 +76,10 @@ void	change_io(t_data *data, t_redir *redir, t_fds *fds)
 		else
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fds->outfile < 0)
-			error_handle(data, redir->filename, strerror(errno), 0);
+			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
 		dup2(fds->outfile, STDOUT_FILENO);
 		if (fds->outfile < 0)
-			error_handle(data, redir->filename, strerror(errno), 0);
+			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
 	}
 	if (redir->type == OP_REDIR_IN)
 	{
@@ -85,20 +89,20 @@ void	change_io(t_data *data, t_redir *redir, t_fds *fds)
 		fds->infile = open(redir->filename, O_RDONLY);
 		if (fds->infile < 0)
 		{
-			error_handle(data, redir->filename, strerror(errno), 0);
+			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
 			return ;
 		}
 		dup2(fds->infile, STDIN_FILENO);
 		if (fds->infile < 0)
 		{
-			error_handle(data, redir->filename, strerror(errno), 0);
+			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
 			return ;
 		}
 		close(fds->infile);
 	}
 }
 
-void	exec_redir(t_data *data, t_list *redir, t_fds *fds)
+void	exec_redir(t_list *redir, t_fds *fds)
 {
 	t_redir *tmp_redir;
 	t_list	*tmp_head;
@@ -108,7 +112,7 @@ void	exec_redir(t_data *data, t_list *redir, t_fds *fds)
 		tmp_redir = (t_redir *)tmp_head->content;
 	while (tmp_head)
 	{
-		change_io(data, tmp_redir, fds);
+		change_io(tmp_redir, fds);
 		tmp_head = tmp_head->next;
 		if (tmp_head)
 			tmp_redir = (t_redir *)tmp_head->content;
