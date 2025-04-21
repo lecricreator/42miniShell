@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 15:44:20 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:25:58 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	else
 		exit_code = chdir(cmd->cmd_args[1]);
 	if (exit_code == -1)
-		error_handle(ERR_NO_FILE, cmd->cmd_args[1], NULL, CONTINUE);
+		exit_code = error_handle(ERR_NO_FILE, cmd->cmd_args[1], NULL, CONTINUE);
 	else
 	{
 		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
 		write_env_list(old_pwd, "OLDPWD=", env_list);
 	}
 	free(old_pwd);
-	return (errno);
+	return (exit_code);
 }
