@@ -38,9 +38,17 @@ static t_type	token_zero(t_token *token)//re test this and correct if needed
 static t_type	next_token(t_token *token, t_type state, t_type last)
 {
 	if (token->type >= 8 && token->type <= 10)
+	{
+		if (state == FILENAME || state == DELIMITER)
+			return (BAD_TOKEN);
 		return (FILENAME);
+	}
 	if (token->type == OP_HEREDOC)
+	{
+		if (state == FILENAME || state == DELIMITER)
+			return (BAD_TOKEN);
 		return (DELIMITER);
+	}
 	if (token->type == OP_PIPE)
 		return (COMMAND);
 	if (state == ARGUMENT)
