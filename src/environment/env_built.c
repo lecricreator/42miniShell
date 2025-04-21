@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 22:09:48 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 23:07:52 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:09:14 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,34 @@
 
 char	*give_var_env_list(char *var_name, t_list *env_list)
 {
-	char	*tmp_content;
-	int		var_name_len;
-
-	var_name_len = (int)ft_strlen(var_name);
+	char	*env_var;
 	while (env_list)
 	{
-		tmp_content = ((t_env *)(env_list)->content)->var;
-		if (ft_strncmp_env_var(var_name, tmp_content, var_name_len) == 0)
-		{
-			return (&tmp_content[var_name_len]);
-		}
+		env_var = ((t_env *)(env_list)->content)->var;
+		if (!ft_strncmp_env_var(var_name, env_var, var_len(var_name)))
+			return (&env_var[var_len(env_var) + 1]);
 		env_list = env_list->next;
 	}
 	return (NULL);
 }
 
-void	write_env_list(char *value_modify, char *env_value, t_list **env_list)
+void	write_env_list(char *new_value, char *var_name, t_list **env_list)
 {
-	char	*tmp_content;
+	char	*env_var;
 	t_list	*head_env;
-	int		size_value;
 
 	head_env = *env_list;
-	size_value = (int)ft_strlen(env_value);
 	while (*env_list)
 	{
-		tmp_content = ((t_env *)(*env_list)->content)->var;
-		if (ft_strncmp_env_var(env_value, tmp_content, size_value) == 0)
-		{
-			break ;
-		}
+		env_var = ((t_env *)(*env_list)->content)->var;
+		if (!ft_strncmp_exact(env_var, var_name, var_len(var_name)))
+		break ;
 		*env_list = (*env_list)->next;
 	}
 	if (*env_list)
 	{
-		((t_env *)(*env_list)->content)->var = ft_strjoin(env_value,
-				value_modify);
+		((t_env *)(*env_list)->content)->var = ft_strjoin(var_name,
+				new_value);
 	}
 	(*env_list) = head_env;
 }

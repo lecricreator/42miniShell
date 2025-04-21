@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 23:36:08 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:12:20 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 char	*strdup_limiter(char *str, char stop);
 void	sig_init(void);
 t_data	*recover_data_address(t_data *data);
-int		ft_strncmp_env_var(const char *s1, const char *s2, size_t n);
+int		ft_strncmp_env_var(const char *s1, const char *s2, int n);
 int		var_len(char *var);
 char	**create_var(t_data *data, t_cmd *cmd);
 void	add_var(t_list **env_list, char *var, int exported);

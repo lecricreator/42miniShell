@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 23:01:31 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 11:06:47 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:53:02 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ void	add_var(t_list **env_list, char *var, int exported)
 
 	new_var = (t_env *)malloc(sizeof(t_env));
 	new_var->var = ft_strdup(var);
+	if (!new_var->var)
+		error_handle(NULL, "", "ERROR MALLOC : new_var->var(env_generator.c)", 1);
 	new_var->exported = exported;
 	new_node = ft_lstnew(new_var);
+	if (!new_node)
+		error_handle(NULL, "", "ERROR MALLOC : new_node(env_generator.c)", 1);
 	ft_lstadd_back(env_list, new_node);
 }
 
@@ -42,30 +46,33 @@ char	**create_tmp_var(t_cmd *cmd)
 	return (tmp_vars);
 }
 
-void	truc(t_list **tmp_head, t_env **tmp_var, char *var_name, char *value)
+static void	check_for_update(t_list **tmp_head, t_env **tmp_var, char *var_name, char *value)
 {
-	if (!ft_strncmp_exact((*tmp_var)->var, var_name, var_len((*tmp_var)->var)))
+	while (*tmp_head)
 	{
-		update_var_value(tmp_var, value);
-		return ;
-	}
-	else if (var_name[var_len(var_name) - 1] == '+')
-	{
-		if (!ft_strncmp_exact((*tmp_var)->var, var_name,
-				var_len((*tmp_var)->var) - 1))
+		if (!ft_strncmp_exact((*tmp_var)->var, var_name, var_len((*tmp_var)->var)))
 		{
-			concat_var_value(tmp_var, value);
+			update_var_value(tmp_var, value);
 			return ;
 		}
+		else if (var_name[var_len(var_name) - 1] == '+')
+		{
+			if (!ft_strncmp_exact((*tmp_var)->var, var_name,
+					var_len((*tmp_var)->var) - 1))
+			{
+				concat_var_value(tmp_var, value);
+				return ;
+			}
+		}
+		*tmp_head = (*tmp_head)->next;
+		if (*tmp_head)
+			(*tmp_var) = (t_env *)(*tmp_head)->content;
 	}
-	*tmp_head = (*tmp_head)->next;
-	if (*tmp_head)
-		(*tmp_var) = (t_env *)(*tmp_head)->content;
 }
 
-char	**create_var(t_data *data, t_cmd *cmd)/*recheck this function*/
+char	**create_var(t_data *data, t_cmd *cmd)
 {
-	t_list	*tmp_head;
+	t_list	*tmp_head; /*recheck this function*/
 	t_env	*tmp_var;
 	char	*var_name;
 	char	*value;
@@ -80,8 +87,7 @@ char	**create_var(t_data *data, t_cmd *cmd)/*recheck this function*/
 		value = ft_strdup(cmd->cmd_args[i] + (var_len(cmd->cmd_args[i]) + 1));
 		tmp_head = data->env_list;
 		tmp_var = (t_env *)(tmp_head)->content;
-		while (tmp_head)
-			truc(&tmp_head, &tmp_var, var_name, value);
+		check_for_update(&tmp_head, &tmp_var, var_name, value);
 		if (!tmp_head)
 			add_var(&data->env_list, cmd->cmd_args[i], 0);
 		free(value);
