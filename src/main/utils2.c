@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 19:30:38 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:09:11 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,19 @@ int	count_table(char **table)
  *
  * @return 0 true // supp false
  */
-int	ft_strncmp_env_var(const char *var_name, const char *var_env, size_t var_name_len)
+int	ft_strncmp_env_var(const char *var_name, const char *var_env, int var_name_len)
 {
-	size_t	i;
-	size_t	var_env_len;
+	int	i;
+	int	var_env_len;
 
 	i = 0;
-	var_env_len = (size_t)var_len((char *)var_env);
+	var_env_len = var_len((char *)var_env);
 	if (var_env_len != var_name_len)
 		return (1);
-	while ((var_name[i] && var_env[i]))
+	while (i < var_env_len)
 	{
 		if (var_name[i] != var_env[i])
-		{
 			return (((unsigned char *)var_name)[i] - ((unsigned char *)var_env)[i]);
-		}
 		i++;
 	}
 	return (0);

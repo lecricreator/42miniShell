@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 22:09:48 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 20:28:41 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:09:14 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*give_var_env_list(char *var_name, t_list *env_list)
 	while (env_list)
 	{
 		env_var = ((t_env *)(env_list)->content)->var;
-		if (!ft_strncmp_exact(env_var, var_name, var_len(var_name)))
+		if (!ft_strncmp_env_var(var_name, env_var, var_len(var_name)))
 			return (&env_var[var_len(env_var) + 1]);
 		env_list = env_list->next;
 	}
