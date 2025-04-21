@@ -32,7 +32,7 @@ int	verif_access(char **path, t_cmd *cmd)
 		cmd->command_path = ft_strjoin(path[i], cmd->cmd_args[0]);
 		if (!access(cmd->command_path, X_OK))
 		{
-			free(path);
+			free_table(path);
 			return (1);
 		}
 		free(cmd->command_path);
@@ -52,11 +52,11 @@ int	find_program(t_data *data, t_cmd *cmd)
 	{
 		if (!cmd_if_absolute_path(cmd))
 		{
-			return (free(path), 0);
+			return (free_table(path), 0);
 		}
 		else
 		{
-			return (free(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0],
+			return (free_table(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0],
 				NULL, CONTINUE));
 		}
 	}
@@ -64,9 +64,9 @@ int	find_program(t_data *data, t_cmd *cmd)
 		if (verif_access(path, cmd))
 			return (0);
 	if (!path)
-		return (free(path), error_handle(ERR_NO_FILE,
+		return (free_table(path), error_handle(ERR_NO_FILE,
 				cmd->cmd_args[0], NULL, CONTINUE));
-	return (free(path), error_handle(ERR_NOT_FOUND,
+	return (free_table(path), error_handle(ERR_NOT_FOUND,
 			cmd->cmd_args[0], NULL, CONTINUE));
 }
 
