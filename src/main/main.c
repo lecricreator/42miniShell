@@ -48,7 +48,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);
-	sig_init();
+//	sig_init();
 //	print_env(data->env_list);
 	while (1)
 	{

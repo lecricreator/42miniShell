@@ -153,9 +153,12 @@ void	parsing(t_data *data)
 		last = tmp_token->type;
 		tmp_head = tmp_head->next;
 	}
-	if (state == FILENAME || state == DELIMITER)
+	if ((state == FILENAME || state == DELIMITER))
 	{
-		error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
+		if (!tmp_token->index)
+			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
+		else
+			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
 		free_list(&data->token_list, free_token);
 		data->token_list = NULL;
 	}

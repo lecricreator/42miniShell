@@ -41,7 +41,6 @@ void	test(int sigtype)
 		data = recover_data_address(NULL);
 		if (data->pid)
 		{
-			kill(data->pid, SIGINT);
 			ft_printf_fd(1, "^C\n");
 		}
 		else

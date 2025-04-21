@@ -70,6 +70,11 @@ void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
 		(*fds).prev_pipe = dup((*fds).pipefd[0]);
 		close((*fds).pipefd[0]);
 	}
+	else
+	{
+		if ((*fds).prev_pipe != -1)
+			close((*fds).prev_pipe);
+	}
 	if ((*fds).std_in != -1 || (*fds).std_out != -1)
 		reset_io(fds);
 }
