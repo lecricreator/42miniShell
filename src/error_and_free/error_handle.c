@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 20:20:20 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:10:11 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ const t_errinfo	*get_errinfo(t_error error)
 {
 	static t_errinfo	errtab[ERR_UNKNOWN + 1];
 
-	errtab[ERR_SYNTAX] = (t_errinfo){ERR_SYNTAX, 2, "Minishell: syntax error near `%s'\n"};
+	errtab[ERR_SYNTAX] = (t_errinfo){ERR_SYNTAX, 2, "Minishell: syntax error near unexpected token `%s'\n"};
 	errtab[ERR_NOT_FOUND] = (t_errinfo){ERR_NOT_FOUND, 127, "%s: command not found\n"};
 	errtab[ERR_PERMISSION] = (t_errinfo){ERR_PERMISSION, 126, "Minishell: %s: permission denied\n"};
 	errtab[ERR_IS_DIRECTORY] = (t_errinfo){ERR_IS_DIRECTORY, 126, "Minishell: %s: is a directory\n"};

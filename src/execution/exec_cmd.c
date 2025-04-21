@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 16:27:57 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:51:48 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	find_program(t_data *data, t_cmd *cmd)
 
 int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 {
-	(void)fds;
 	errno = 0;
 	if (!cmd->cmd_args[0])
 		error_handle(ERR_PERMISSION, "", NULL, KILL);

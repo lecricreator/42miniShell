@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_data_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:08:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/04 02:09:26 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:07:12 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void	reset_input(t_data *data)
 		free_list(&data->token_list, free_token);
 	if (data->cmd_list)
 		free_list(&data->cmd_list, free_cmd);
-	
+
 }

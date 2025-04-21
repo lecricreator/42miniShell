@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 23:01:31 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 19:53:02 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:13:44 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	add_var(t_list **env_list, char *var, int exported)
 	new_var = (t_env *)malloc(sizeof(t_env));
 	new_var->var = ft_strdup(var);
 	if (!new_var->var)
-		error_handle(NULL, "", "ERROR MALLOC : new_var->var(env_generator.c)", 1);
+		error_handle(ERR_UNKNOWN, "Minishell:",
+			"exec_cmd.c:23\nft_strdup failed", KILL);
 	new_var->exported = exported;
 	new_node = ft_lstnew(new_var);
 	if (!new_node)
-		error_handle(NULL, "", "ERROR MALLOC : new_node(env_generator.c)", 1);
+		error_handle(ERR_UNKNOWN, "Minishell:",
+			"exec_cmd.c:27\nft_lstnew failed", KILL);
 	ft_lstadd_back(env_list, new_node);
 }
 
