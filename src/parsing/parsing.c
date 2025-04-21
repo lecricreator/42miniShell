@@ -120,8 +120,9 @@ void	parsing(t_data *data)
 	state = COMMAND;
 	last = COMMAND;
 	tmp_head = data->token_list;
-	if (tmp_head)
-		tmp_token = (t_token *)tmp_head->content;
+	if (!tmp_head)
+		return ;
+	tmp_token = (t_token *)tmp_head->content;
 	if (is_bad_token(tmp_token->type, tmp_token, &data->token_list))
 		return ;
 	while (tmp_head && tmp_token->type == ENV_VAR)
