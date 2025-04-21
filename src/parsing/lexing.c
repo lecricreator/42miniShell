@@ -16,7 +16,7 @@ static int	is_special_symbol(char c)
 {
 	char	*symbol_set;
 
-	symbol_set = "|<>";
+	symbol_set = "|<>&;(){}";
 	while (*symbol_set)
 	{
 		if (*symbol_set == c)
@@ -26,11 +26,9 @@ static int	is_special_symbol(char c)
 	return (0);
 }
 
-static int	is_double_arrow(const char *input, int *i)
+static int	is_double_symbol(const char *input, int *i)
 {
-	if (input[*i] == '>' && input[*i + 1] == '>')
-		return (1);
-	else if (input[*i] == '<' && input[*i + 1] == '<')
+	if (input[*i] == input[*i + 1])
 		return (1);
 	return (0);
 }
@@ -142,7 +140,7 @@ static int	token_len(char **input, int *i)
 	}
 	else if (is_special_symbol(input[0][*i]))
 	{
-		if (is_double_arrow(*input, i))
+		if (is_double_symbol(*input, i))
 		{
 			(*i) += 2;
 			len = 2;
@@ -164,6 +162,34 @@ static int	token_len(char **input, int *i)
 	return (len);
 }
 
+static int	bad_type(char *token)
+{
+	if (!ft_strncmp(token, "||", ft_strlen("||") + 1))
+		return (1);
+	if (!ft_strncmp(token, "&&", ft_strlen("&&") + 1))
+		return (1);
+	if (!ft_strncmp(token, "&", ft_strlen("&") + 1))
+		return (1);
+	if (!ft_strncmp(token, ";;", ft_strlen(";;") + 1))
+		return (1);
+	if (!ft_strncmp(token, ";", ft_strlen(";") + 1))
+		return (1);
+	if (!ft_strncmp(token, "{{", ft_strlen("{{") + 1))
+		return (1);
+	if (!ft_strncmp(token, "((", ft_strlen("((") + 1))
+		return (1);
+	if (!ft_strncmp(token, "}}", ft_strlen("}}") + 1))
+		return (1);
+	if (!ft_strncmp(token, "(", ft_strlen("(") + 1))
+		return (1);
+	if (!ft_strncmp(token, ")", ft_strlen(")") + 1))
+		return (1);
+	if (!ft_strncmp(token, "\"", ft_strlen("\"") + 1))
+		return (1);
+	if (!ft_strncmp(token, "\'", ft_strlen("\'") + 1))
+		return (1);
+	return (0);
+}
 
 static int	get_type(char *token)
 {
@@ -191,6 +217,8 @@ static int	get_type(char *token)
 		return (OP_APPEND);
 	if (!ft_strncmp(token, "<<", 3))
 		return (OP_HEREDOC);
+	if (bad_type(token))
+		return (BAD_TOKEN);
 	if (ft_strchr(token, '='))
 		if (var_syntax(token))
 			return (ENV_VAR);

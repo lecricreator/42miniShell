@@ -94,6 +94,18 @@ void	make_var_temp(t_list *token_list)
 	}
 }
 
+static int	is_bad_token(t_type type, t_token *token, t_list **token_list)
+{
+	if (type == BAD_TOKEN)
+	{
+		error_handle(ERR_SYNTAX, token->str, NULL, CONTINUE);
+		free_list(token_list, free_token);
+		token_list = NULL;
+		return (1);
+	}
+	return (0);
+}
+
 void	parsing(t_data *data)
 {
 	t_token	*tmp_token;
@@ -110,6 +122,8 @@ void	parsing(t_data *data)
 	tmp_head = data->token_list;
 	if (tmp_head)
 		tmp_token = (t_token *)tmp_head->content;
+	if (is_bad_token(tmp_token->type, tmp_token, &data->token_list))
+		return ;
 	while (tmp_head && tmp_token->type == ENV_VAR)
 	{
 		tmp_token->index = 0;
@@ -133,14 +147,16 @@ void	parsing(t_data *data)
 			tmp_token->index -= i;
 			state = next_token(tmp_token, state, last);
 		}
-		if (state == BAD_TOKEN)
-		{
-			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
-			free_list(&data->token_list, free_token);
-			data->token_list = NULL;
+		if (is_bad_token(state, tmp_token, &data->token_list))
 			return ;
-		}
 		last = tmp_token->type;
 		tmp_head = tmp_head->next;
 	}
+	if (state == FILENAME || state == DELIMITER)
+	{
+		error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
+		free_list(&data->token_list, free_token);
+		data->token_list = NULL;
+	}
+
 }
