@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 19:14:37 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:36:26 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,22 @@ void	verified_var_exist_in_env(char **cmd_args, t_list **env_list, int i)
 	add_var_in_env(cmd_args, i, &tmp_head, env_list);
 }
 
-void	exec_export(char **cmd_args, t_list **env_list)
+int	exec_export(char **cmd_args, t_list **env_list)
 {
 	int		i;
 
 	if (!cmd_args[1])
-		return (print_export(*env_list));
+		return (print_export(*env_list), 0);
 	i = 1;
 	while (cmd_args[i])
 	{
 		if (!var_syntax(cmd_args[i]))
 		{
 			error_handle(ERR_INVAL_IDE, cmd_args[i], NULL, CONTINUE);
-			return ;
+			return (0);
 		}
 		verified_var_exist_in_env(cmd_args, env_list, i);
-		//print_env(*env_list);
 		i++;
 	}
+	return (0);
 }

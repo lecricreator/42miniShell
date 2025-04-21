@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 21:12:20 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:34:52 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,6 @@ int		var_syntax(char *var);
 int		var_len(char *var);
 void	print_export(t_list *env_list);
 int		error_handle(t_error error, char *cmd, char *extra, int terminate);
-//int		error_handle(t_data *data, char *cmd, char *msg, int terminate);
-//int		error_handle_without_rl(
-//			t_data *data, char *cmd, char *msg, int terminate);
 void	free_table(char **table);
 void	free_data(t_data *data);
 void	free_cmd(void *cmd_void);
@@ -174,9 +171,9 @@ int		exec_builtin(t_cmd *cmd, t_list *env_list);
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds);
 int		exec_pwd(void);
 int		exec_cd(t_cmd *cmd, t_list **env_list);
-void	exec_echo(char **cmd_args);
-void	exec_export(char **cmd_args, t_list **env_list);
-void	exec_unset(char **cmd_args, t_list **env_list);
+int		exec_echo(char **cmd_args);
+int		exec_export(char **cmd_args, t_list **env_list);
+int		exec_unset(char **cmd_args, t_list **env_list);
 void	exec_exit(void);
 int		is_builtin(t_type type);
 int		is_any_cmd(t_type type);

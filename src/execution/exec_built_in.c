@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 23:10:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 17:43:24 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:38:22 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,18 @@ int	exec_builtin(t_cmd *cmd, t_list *env_list)
 		return (exec_cd(cmd, &env_list));
 	}
 	if (cmd->type == BI_PWD)
-		return (exec_pwd(), errno);
+		return (exec_pwd());
 	if (cmd->type == BI_ECHO)
-		return (exec_echo(cmd->cmd_args), errno);
+		return (exec_echo(cmd->cmd_args));
 	if (cmd->type == BI_EXIT)
-		return (exec_exit(), errno);
+		return (exec_exit(), 0);
 	if (cmd->type == BI_ENV)
-		return (print_env(env_list), errno);
+		return (print_env(env_list), 0);
 	if (cmd->type == BI_EXPORT)
-	{
-		exec_export(cmd->cmd_args, &env_list);
-		return (errno);
-	}
+		return (exec_export(cmd->cmd_args, &env_list));
 	if (cmd->type == BI_UNSET)
-		return (exec_unset(cmd->cmd_args, &env_list), errno);
-	return (errno);
+		return (exec_unset(cmd->cmd_args, &env_list));
+	return (0);
 }
 
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
@@ -56,5 +53,5 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 		}
 	}
 	else
-		exec_builtin(cmd, data->env_list);
+		data->status = exec_builtin(cmd, data->env_list);
 }

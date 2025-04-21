@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 18:11:15 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:26:33 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	exec_echo_write(char **cmd_args, int flags, int i)
 	return (flags);
 }
 
-void	exec_echo(char **cmd_args)
+int	exec_echo(char **cmd_args)
 {
 	int		i;
 	int		flags;
@@ -42,4 +42,5 @@ void	exec_echo(char **cmd_args)
 	}
 	if (flags <= 0)
 		ft_printf_fd(1, "\n");
+	return (0);
 }
