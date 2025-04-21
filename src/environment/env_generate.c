@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 23:01:31 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 23:45:57 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:06:47 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,30 +42,28 @@ char	**create_tmp_var(t_cmd *cmd)
 	return (tmp_vars);
 }
 
-void	truc(t_list *tmp_head, t_env*tmp_var, char *var_name, char *value)
+void	truc(t_list **tmp_head, t_env **tmp_var, char *var_name, char *value)
 {
-	if (!ft_strncmp_exact(tmp_var->var, var_name, var_len(tmp_var->var)))
+	if (!ft_strncmp_exact((*tmp_var)->var, var_name, var_len((*tmp_var)->var)))
 	{
-		update_var_value(&tmp_var, value);
+		update_var_value(tmp_var, value);
 		return ;
 	}
 	else if (var_name[var_len(var_name) - 1] == '+')
 	{
-		ft_printf_fd(2, "test :%s\n", var_name);
-		if (!ft_strncmp_exact(tmp_var->var, var_name,
-				var_len(tmp_var->var) - 1))
+		if (!ft_strncmp_exact((*tmp_var)->var, var_name,
+				var_len((*tmp_var)->var) - 1))
 		{
-			concat_var_value(&tmp_var, value);
+			concat_var_value(tmp_var, value);
 			return ;
 		}
 	}
-	tmp_head = tmp_head->next;
-	if (tmp_head)
-		tmp_var = (t_env *)(tmp_head)->content;
+	*tmp_head = (*tmp_head)->next;
+	if (*tmp_head)
+		(*tmp_var) = (t_env *)(*tmp_head)->content;
 }
 
-/*recheck this function*/
-char	**create_var(t_data *data, t_cmd *cmd)
+char	**create_var(t_data *data, t_cmd *cmd)/*recheck this function*/
 {
 	t_list	*tmp_head;
 	t_env	*tmp_var;
@@ -83,7 +81,7 @@ char	**create_var(t_data *data, t_cmd *cmd)
 		tmp_head = data->env_list;
 		tmp_var = (t_env *)(tmp_head)->content;
 		while (tmp_head)
-			truc(tmp_head, tmp_var, var_name, value);
+			truc(&tmp_head, &tmp_var, var_name, value);
 		if (!tmp_head)
 			add_var(&data->env_list, cmd->cmd_args[i], 0);
 		free(value);
