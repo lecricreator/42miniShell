@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:34:52 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:45:10 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,12 +182,14 @@ int		is_var_declaration(t_type type, int index);
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 char	*strdup_limiter(char *str, char stop);
-void	sig_init(void);
+// void	sig_init(struct sigaction *sa);
+void	disable_echoctl(void);
 t_data	*recover_data_address(t_data *data);
 int		ft_strncmp_env_var(const char *s1, const char *s2, int n);
 int		var_len(char *var);
 char	**create_var(t_data *data, t_cmd *cmd);
 void	add_var(t_list **env_list, char *var, int exported);
 int		var_syntax(char *var);
+void	sig_handle(int sigtype, siginfo_t *info, void *uncont);
 
 #endif

@@ -6,12 +6,12 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 10:52:33 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 02:12:57 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:27:31 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 void disable_echoctl(void)
 {
 	struct termios term;
@@ -31,33 +31,35 @@ void disable_echoctl(void)
 		return;
 	}
 }
-
-void	test(int sigtype)
+*/
+void	sig_handle(int sigtype, siginfo_t *info, void *uncont)
 {
+	(void)info;
+	(void)uncont;
+	t_data *data;
 
+	data = recover_data_address(NULL);
 	if (sigtype == SIGINT)
 	{
-			ft_printf_fd(1, "\n^C\n");
-			rl_replace_line("", 0);
+		if(data->pid)
+		{
+			write(1, "\n", 1);
 			rl_on_new_line();
+			rl_replace_line("", 0);
+			data->pid = 0;
+		}
+		else
+		{
+			write(1, "\n", 1);
+			rl_on_new_line();
+			rl_replace_line("", 0);
 			rl_redisplay();
+		}
 	}
-	else if (sigtype == SIGQUIT)
-	{
-		rl_replace_line(rl_line_buffer, 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-void	sig_init(void)
-{
-	struct sigaction sa;
-
-	disable_echoctl();
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = &test;
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	// else if (sigtype == SIGQUIT)
+	// {
+	// 	// rl_replace_line(rl_line_buffer, 0);
+	// 	// rl_on_new_line();
+	// 	// rl_redisplay();
+	// }
 }

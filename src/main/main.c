@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 02:12:19 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:33:51 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,33 @@ void	init_data(t_data *data, char **env)
 	recover_data_address(data);
 }
 
+// void	sig_init(struct sigaction *sa)
+// {
+// }
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	*data;
+	struct sigaction	sa;
+	sigset_t			set;
 
 	(void)ac;
 	(void)av;
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);
-//	sig_init();
-//	print_env(data->env_list);
+	sigemptyset(&set);
+	sigaddset(&set, SIGINT);
+
+	sa.sa_flags = SA_SIGINFO | SA_RESTART;
+	sa.sa_mask = set;
+	sa.sa_sigaction = &sig_handle;
 	while (1)
 	{
 		reset_input(data);
+		sigaction(SIGINT, &sa, NULL);
+	//	sigaction(SIGQUIT, &sa, NULL);
+		if(data->pid)
+			signal(SIGQUIT, SIG_IGN);
 		data->input = readline("Minishell $ ");
 		if (!data->input)
 			exec_exit();
