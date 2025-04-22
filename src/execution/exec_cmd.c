@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/21 22:44:48 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 02:12:06 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	verif_access(char **path, t_cmd *cmd)
 		cmd->command_path = ft_strjoin(path[i], cmd->cmd_args[0]);
 		if (!access(cmd->command_path, X_OK))
 		{
-			free(path);
+			free_table(path);
 			return (1);
 		}
 		free(cmd->command_path);
@@ -52,21 +52,21 @@ int	find_program(t_data *data, t_cmd *cmd)
 	{
 		if (!cmd_if_absolute_path(cmd))
 		{
-			return (free(path), 0);
+			return (free_table(path), 0);
 		}
 		else
 		{
-			return (free(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0],
-					NULL, CONTINUE));
+			return (free_table(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0],
+				NULL, CONTINUE));
 		}
 	}
 	if (path)
 		if (verif_access(path, cmd))
 			return (0);
 	if (!path)
-		return (free(path), error_handle(ERR_NO_FILE,
+		return (free_table(path), error_handle(ERR_NO_FILE,
 				cmd->cmd_args[0], NULL, CONTINUE));
-	return (free(path), error_handle(ERR_NOT_FOUND,
+	return (free_table(path), error_handle(ERR_NOT_FOUND,
 			cmd->cmd_args[0], NULL, CONTINUE));
 }
 

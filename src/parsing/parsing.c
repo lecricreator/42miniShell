@@ -38,9 +38,17 @@ static t_type	token_zero(t_token *token)//re test this and correct if needed
 static t_type	next_token(t_token *token, t_type state, t_type last)
 {
 	if (token->type >= 8 && token->type <= 10)
+	{
+		if (state == FILENAME || state == DELIMITER)
+			return (BAD_TOKEN);
 		return (FILENAME);
+	}
 	if (token->type == OP_HEREDOC)
+	{
+		if (state == FILENAME || state == DELIMITER)
+			return (BAD_TOKEN);
 		return (DELIMITER);
+	}
 	if (token->type == OP_PIPE)
 		return (COMMAND);
 	if (state == ARGUMENT)
@@ -120,8 +128,9 @@ void	parsing(t_data *data)
 	state = COMMAND;
 	last = COMMAND;
 	tmp_head = data->token_list;
-	if (tmp_head)
-		tmp_token = (t_token *)tmp_head->content;
+	if (!tmp_head)
+		return ;
+	tmp_token = (t_token *)tmp_head->content;
 	if (is_bad_token(tmp_token->type, tmp_token, &data->token_list))
 		return ;
 	while (tmp_head && tmp_token->type == ENV_VAR)
@@ -152,9 +161,12 @@ void	parsing(t_data *data)
 		last = tmp_token->type;
 		tmp_head = tmp_head->next;
 	}
-	if (state == FILENAME || state == DELIMITER)
+	if ((state == FILENAME || state == DELIMITER))
 	{
-		error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
+		if (!tmp_token->index)
+			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
+		else
+			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
 		free_list(&data->token_list, free_token);
 		data->token_list = NULL;
 	}

@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 00:19:27 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 02:12:19 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);
-	sig_init();
+//	sig_init();
+//	print_env(data->env_list);
 	while (1)
 	{
 		reset_input(data);

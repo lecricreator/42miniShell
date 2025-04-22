@@ -188,6 +188,10 @@ static int	bad_type(char *token)
 		return (1);
 	if (!ft_strncmp(token, "\'", ft_strlen("\'") + 1))
 		return (1);
+	if (!ft_strncmp(token, "!", ft_strlen("!") + 1))
+		return (1);
+	if (!ft_strncmp(token, ":", ft_strlen(":") + 1))
+		return (1);
 	return (0);
 }
 
