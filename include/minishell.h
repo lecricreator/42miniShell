@@ -26,6 +26,7 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <sys/stat.h>
 # define KILL 1
 # define CONTINUE 0
 

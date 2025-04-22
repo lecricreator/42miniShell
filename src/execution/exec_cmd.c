@@ -45,11 +45,15 @@ int	verif_access(char **path, t_cmd *cmd)
 int	find_program(t_data *data, t_cmd *cmd)
 {
 	char	**path;
+	struct stat st;
 
 	path = NULL;
 	path = get_path(path, data->env_list);
 	if (ft_strchr(cmd->cmd_args[0], '/'))
 	{
+		if (stat(cmd->cmd_args[0], &st) == 0 && S_ISDIR(st.st_mode))
+			return (free_table(path), error_handle(ERR_IS_DIRECTORY, cmd->cmd_args[0],
+				NULL, CONTINUE));
 		if (!cmd_if_absolute_path(cmd))
 		{
 			return (free_table(path), 0);
