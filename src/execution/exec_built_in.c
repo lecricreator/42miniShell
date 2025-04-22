@@ -55,5 +55,4 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 	}
 	else
 		data->status = exec_builtin(cmd, data->env_list);
-
 }

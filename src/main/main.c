@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main.c                                              :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 15:52:04 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:57:01 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	sig_init(struct sigaction *sa, sigset_t *set)
 
 int	main(int ac, char **av, char **env)
 {
-	t_data							*data;
+	t_data				*data;
 	struct sigaction	sa;
 	sigset_t			set;
 

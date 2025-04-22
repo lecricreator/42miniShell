@@ -14,7 +14,7 @@
 
 t_type	token_zero(t_token *token)
 {
-	if (token->type <= 6) //re test this and correct if needed
+	if (token->type <= 6)
 		return (ARGUMENT);
 	else if (token->type >= 8 && token->type <= 10)
 		return (FILENAME);

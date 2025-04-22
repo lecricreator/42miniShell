@@ -95,7 +95,7 @@ void	change_io(t_redir *redir, t_fds *fds)
 		fds->std_out = dup(STDOUT_FILENO);
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);// check shell convention for permissions
+					0644);
 		else
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
 					0644);

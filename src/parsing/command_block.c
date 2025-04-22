@@ -19,7 +19,7 @@ static void	fill_redir(t_list **redir, t_list **token_list)
 	t_redir	*redir_node;
 
 	tmp_token = (t_token *)(*token_list)->content;
-	while (*token_list && is_redir_op(tmp_token->type)) //correct range of type?
+	while (*token_list && is_redir_op(tmp_token->type))
 	{
 		redir_node = (t_redir *)malloc(sizeof(t_redir));
 		if (!redir_node)

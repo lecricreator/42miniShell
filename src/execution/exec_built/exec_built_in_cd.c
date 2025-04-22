@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_built_in_cd.c                                 :+:      :+:    :+:   */
+/*   exec_built_in_cd.c                                  :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:25:58 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:51:30 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	else if (cmd->cmd_args[1][0] == '~' && cmd->cmd_args[1][1] == '\0')
 		exit_code = chdir(give_var_env_list("HOME=", (*env_list)));
 	else if (cmd->cmd_args[1][0] == '-' && cmd->cmd_args[1][1] == '\0')
+	{
+		ft_printf_fd(1, "%s\n", give_var_env_list("OLDPWD=", (*env_list)));
 		exit_code = chdir(give_var_env_list("OLDPWD=", (*env_list)));
+	}
 	else
 		exit_code = chdir(cmd->cmd_args[1]);
 	if (exit_code == -1)
@@ -35,6 +38,5 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
 		write_env_list(old_pwd, "OLDPWD=", env_list);
 	}
-	free(old_pwd);
-	return (exit_code);
+	return (free(old_pwd), exit_code);
 }

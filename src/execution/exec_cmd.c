@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   exec_cmd.c                                          :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 15:14:52 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:29:33 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,21 @@ int	verif_access(char **path, t_cmd *cmd)
 
 int	find_program(t_data *data, t_cmd *cmd)
 {
-	char	**path;
-	struct stat st;
+	char		**path;
+	struct stat	st;
 
 	path = NULL;
 	path = get_path(path, data->env_list);
 	if (ft_strchr(cmd->cmd_args[0], '/'))
 	{
 		if (stat(cmd->cmd_args[0], &st) == 0 && S_ISDIR(st.st_mode))
-			return (free_table(path), error_handle(ERR_IS_DIRECTORY, cmd->cmd_args[0],
-				NULL, CONTINUE));
+			return (free_table(path), error_handle(ERR_IS_DIRECTORY,
+					cmd->cmd_args[0], NULL, CONTINUE));
 		if (!cmd_if_absolute_path(cmd))
-		{
 			return (free_table(path), 0);
-		}
 		else
-		{
-			return (free_table(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0]
-					, NULL, CONTINUE));
-		}
+			return (free_table(path), error_handle(ERR_NO_FILE,
+					cmd->cmd_args[0], NULL, CONTINUE));
 	}
 	if (path)
 		if (verif_access(path, cmd))

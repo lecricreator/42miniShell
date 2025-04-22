@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils1.c                                           :+:      :+:    :+:   */
+/*   utils1.c                                            :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 15:13:58 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:57:31 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	wait_and_status(t_data *data)
 {
 	int	exit_code;
 	int	child_exit;
-	int sig;
+	int	sig;
 
 	exit_code = 0;
 	while (data->n_fork--)

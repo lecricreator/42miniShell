@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_generate.c                                     :+:      :+:    :+:   */
+/*   env_generate.c                                      :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 23:01:31 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:59:04 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:55:26 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	check_for_update(t_list **tmp_head, t_env **tmp_var, char *var_name,
 	}
 }
 
-char	**create_var(t_data *data, t_cmd *cmd)/*recheck this function*/
+char	**create_var(t_data *data, t_cmd *cmd)
 {
 	t_list	*tmp_head;
 	t_env	*tmp_var;

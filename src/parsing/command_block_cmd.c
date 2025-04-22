@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_block_cmd.c                                :+:      :+:    :+:   */
+/*   command_block_cmd.c                                 :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:49:16 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 12:03:04 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:54:45 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	**get_cmd_tab(t_list **token_list)
 	char	**cmd_tab;
 	int		i;
 
-	i = 0;//implement alternative version for cmd_tab_len
+	i = 0;
 	cmd_tab = ft_calloc(sizeof(char *), cmd_tab_len(*token_list) + 1);
 	if (!cmd_tab)
 		error_handle(ERR_UNKNOWN, "cmd_tab",
