@@ -12,30 +12,60 @@
 
 #include "minishell.h"
 
+static void	here_loop(t_data *data, char *line, char *delimiter, t_fds *fds)
+{
+	int	exit_code;
+
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_DFL);
+	close(fds->herepipe[0]);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+		{
+			ft_printf_fd(2, "minishell: warning: here-document delimited ");
+			ft_printf_fd(2, "by end-of-file (wanted `%s')\n", delimiter);
+			break ;
+		}
+		if (!ft_strncmp(line, delimiter, ft_strlen(line) + 1))
+			break ;
+		ft_printf_fd(fds->herepipe[1], "%s\n", line);
+		free(line);
+		line = NULL;
+	}
+	if (!line)
+		free(line);
+	exit_code = data->status;
+	free_data(data);
+	exit(exit_code);
+}
+
 void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 {
+	t_data	*data;
 	char	*delimiter;
 	char	*line;
 
+	data = recover_data_address(NULL);
 	fds->std_in = dup(STDIN_FILENO);
 	delimiter = heredoc->filename;
 	line = NULL;
 	if (pipe(fds->herepipe) == -1)
 		error_handle(ERR_UNKNOWN, heredoc->filename,
 			"exec_heredoc.c:24\npipe failed", KILL);
-	while (1)
-	{
-		line = readline("> ");
-		if (!ft_strncmp(line, delimiter, ft_strlen(line)))
-			break ;
-		ft_printf_fd(fds->herepipe[1], "%s\n", line);
-		free(line);
-		line = NULL;
-	}
+	data->pid = fork();
+	if (data->pid == -1)
+		error_handle(ERR_UNKNOWN, "Minishell :",
+			"exec_cmd:103\nFork failed", KILL);
+	data->n_fork++;
+	if (!data->pid)
+		here_loop(data, line, delimiter, fds);
+	waitpid(data->pid, &data->status, 0);
+	close(fds->herepipe[1]);
 	dup2(fds->herepipe[0], STDIN_FILENO);
 	if (!fds->herepipe[0])
 		error_handle(ERR_UNKNOWN, "herepipe[0]:",
 			"exec_heredoc:37\ndup2 failed", KILL);
 	close(fds->herepipe[0]);
-	close(fds->herepipe[1]);
 }
