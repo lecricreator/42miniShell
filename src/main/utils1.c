@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 00:20:45 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:13:58 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	wait_and_status(t_data *data)
 	exit_code = 0;
 	while (data->n_fork--)
 	{
-		if (waitpid(-1 , &data->status, 0) > 0)
+		if (waitpid(-1, &data->status, 0) > 0)
 		{
 			if (WIFEXITED(data->status))
 			{

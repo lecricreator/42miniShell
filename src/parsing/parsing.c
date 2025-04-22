@@ -6,85 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 01:54:41 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:03:44 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_type	token_zero(t_token *token)//re test this and correct if needed
-{
-	if (token->type <= 6)
-		return (ARGUMENT);
-	else if (token->type >= 8 && token->type <= 10)
-		return (FILENAME);
-	else if (token->type == OP_HEREDOC)
-		return (DELIMITER);
-	else if (token->type == OP_PIPE)
-		return (BAD_TOKEN);
-	else if (token->type == UNKNOW)
-	{
-		token->type = COMMAND;
-		return (ARGUMENT);
-	}
-	else if (token->type == ENV_VAR)
-	{
-		token->type = COMMAND;
-		return (ARGUMENT);
-	}
-	return (BAD_TOKEN);
-}
-
-static t_type	next_token(t_token *token, t_type state, t_type last)
-{
-	if (token->type >= 8 && token->type <= 10)
-	{
-		if (state == FILENAME || state == DELIMITER)
-			return (BAD_TOKEN);
-		return (FILENAME);
-	}
-	if (token->type == OP_HEREDOC)
-	{
-		if (state == FILENAME || state == DELIMITER)
-			return (BAD_TOKEN);
-		return (DELIMITER);
-	}
-	if (token->type == OP_PIPE)
-		return (COMMAND);
-	if (state == ARGUMENT)
-	{
-		token->type = ARGUMENT;
-		return (ARGUMENT);
-	}
-	if (state == COMMAND)
-	{
-		if (token->type > 6)
-			token->type = COMMAND;
-		return (ARGUMENT);
-	}
-	if (state == FILENAME && (last == OP_REDIR_OUT || last == OP_APPEND))
-	{
-		token->type = FILENAME;
-		return (ARGUMENT);
-	}
-	if (state == FILENAME && last == OP_REDIR_IN)
-	{
-		token->type = FILENAME;
-		return (COMMAND);
-	}
-	if (state == DELIMITER)
-	{
-		token->type = DELIMITER;
-		return (COMMAND);
-	}
-	if (token->type == ENV_VAR)
-	{
-		token->type = state;
-		return (state);
-	}
-	else
-		return (BAD_TOKEN);
-}
 
 void	make_var_temp(t_list *token_list)
 {
@@ -114,61 +40,67 @@ static int	is_bad_token(t_type type, t_token *token, t_list **token_list)
 	return (0);
 }
 
-void	parsing(t_data *data)
+void	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
+		int *i)
 {
-	t_token	*tmp_token;
-	t_list	*tmp_head;
-	t_type	state;
-	t_type	last;
-	int		i;
+	*i = 0;
+	*tmp_head = (*data)->token_list;
+	if (!*tmp_head)
+		return ;
+	*tmp_token = (t_token *)(*tmp_head)->content;
+	if (is_bad_token((*tmp_token)->type, *tmp_token, &(*data)->token_list))
+		return ;
+	while (*tmp_head && (*tmp_token)->type == ENV_VAR)
+	{
+		(*tmp_token)->index = 0;
+		(*i)++;
+		(*tmp_head) = (*tmp_head)->next;
+		if ((*tmp_head))
+			*tmp_token = (t_token *)(*tmp_head)->content;
+	}
+	if (*tmp_head)
+	{
+		(*tmp_token)->index -= (*i);
+		make_var_temp((*data)->token_list);
+	}
+}
 
-	lexing_tokens(data, &data->input);
-//	print_token_list(data->token_list);
-	i = 0;
-	state = COMMAND;
-	last = COMMAND;
-	tmp_head = data->token_list;
-	if (!tmp_head)
-		return ;
-	tmp_token = (t_token *)tmp_head->content;
-	if (is_bad_token(tmp_token->type, tmp_token, &data->token_list))
-		return ;
-	while (tmp_head && tmp_token->type == ENV_VAR)
-	{
-		tmp_token->index = 0;
-		i++;
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_token = (t_token *)tmp_head->content;
-	}
-	if (tmp_head)
-	{
-		tmp_token->index -= i;
-		make_var_temp(data->token_list);
-	}
-	while (tmp_head)
-	{
-		tmp_token = (t_token *)tmp_head->content;
-		if (tmp_token->index == 0)
-			state = token_zero(tmp_token);
-		else
-		{
-			tmp_token->index -= i;
-			state = next_token(tmp_token, state, last);
-		}
-		if (is_bad_token(state, tmp_token, &data->token_list))
-			return ;
-		last = tmp_token->type;
-		tmp_head = tmp_head->next;
-	}
-	if ((state == FILENAME || state == DELIMITER))
+void	verify_state(t_type *state, t_token *tmp_token, t_data **data)
+{
+	if ((*state == FILENAME || *state == DELIMITER))
 	{
 		if (!tmp_token->index)
 			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
 		else
 			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
-		free_list(&data->token_list, free_token);
-		data->token_list = NULL;
+		free_list(&(*data)->token_list, free_token);
+		(*data)->token_list = NULL;
 	}
+}
 
+void	parsing(t_data *data)
+{
+	t_pars	pars;
+	int		i;
+
+	lexing_tokens(data, &data->input);
+	pars.state = COMMAND;
+	pars.last = COMMAND;
+	parsing_start(&data, &pars.tmp_head, &pars.tmp_token, &i);
+	while (pars.tmp_head)
+	{
+		pars.tmp_token = (t_token *)pars.tmp_head->content;
+		if (pars.tmp_token->index == 0)
+			pars.state = token_zero(pars.tmp_token);
+		else
+		{
+			pars.tmp_token->index -= i;
+			pars.state = next_token(pars.tmp_token, pars.state, pars.last);
+		}
+		if (is_bad_token(pars.state, pars.tmp_token, &data->token_list))
+			return ;
+		pars.last = pars.tmp_token->type;
+		pars.tmp_head = pars.tmp_head->next;
+	}
+	verify_state(&pars.state, pars.tmp_token, &data);
 }

@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 02:12:06 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:14:52 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int	find_program(t_data *data, t_cmd *cmd)
 		}
 		else
 		{
-			return (free_table(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0],
-				NULL, CONTINUE));
+			return (free_table(path), error_handle(ERR_NO_FILE, cmd->cmd_args[0]
+					, NULL, CONTINUE));
 		}
 	}
 	if (path)

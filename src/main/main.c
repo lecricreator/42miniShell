@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 11:33:51 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:52:04 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,18 @@ void	init_data(t_data *data, char **env)
 	recover_data_address(data);
 }
 
+void	sig_init(struct sigaction *sa, sigset_t *set)
+{
+	sigemptyset(set);
+	sigaddset(set, SIGINT);
+	sa->sa_flags = SA_SIGINFO | SA_RESTART;
+	sa->sa_mask = *set;
+	sa->sa_sigaction = &sig_handle;
+}
+
 int	main(int ac, char **av, char **env)
 {
-	t_data				*data;
+	t_data							*data;
 	struct sigaction	sa;
 	sigset_t			set;
 
@@ -50,11 +59,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);
-	sigemptyset(&set);
-	sigaddset(&set, SIGINT);
-	sa.sa_flags = SA_SIGINFO | SA_RESTART;
-	sa.sa_mask = set;
-	sa.sa_sigaction = &sig_handle;
+	sig_init(&sa, &set);
 	while (1)
 	{
 		reset_input(data);
