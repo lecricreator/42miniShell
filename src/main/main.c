@@ -40,13 +40,9 @@ void	init_data(t_data *data, char **env)
 	recover_data_address(data);
 }
 
-// void	sig_init(struct sigaction *sa)
-// {
-// }
-
 int	main(int ac, char **av, char **env)
 {
-	t_data	*data;
+	t_data				*data;
 	struct sigaction	sa;
 	sigset_t			set;
 
@@ -56,7 +52,6 @@ int	main(int ac, char **av, char **env)
 	init_data(data, env);
 	sigemptyset(&set);
 	sigaddset(&set, SIGINT);
-
 	sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	sa.sa_mask = set;
 	sa.sa_sigaction = &sig_handle;
