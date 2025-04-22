@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 15:12:39 by lomorale         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   minishell.h										:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: lomorale <lomorale@student.42.fr>		  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/03/19 10:02:03 by lomorale		  #+#	#+#			 */
+/*   Updated: 2025/04/22 15:32:10 by lomorale		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -66,22 +66,22 @@ typedef enum e_type
 }t_type;
 
 typedef enum e_error {
-    ERR_SYNTAX,
-    ERR_NOT_FOUND,
-    ERR_PERMISSION,
-    ERR_IS_DIRECTORY,
-    ERR_NO_FILE,
+	ERR_SYNTAX,
+	ERR_NOT_FOUND,
+	ERR_PERMISSION,
+	ERR_IS_DIRECTORY,
+	ERR_NO_FILE,
 	ERR_MANY_ARGS,
 	ERR_INVAL_IDE,
-    ERR_UNKNOWN
-}   t_error;
+	ERR_UNKNOWN
+}t_error;
 
 typedef struct s_errinfo
 {
-	t_error    error;
-	int        exit_code;
-	const char *str_format;
-}   t_errinfo;
+	t_error		error;
+	int			exit_code;
+	const char	*str_format;
+}t_errinfo;
 
 typedef struct s_token
 {
@@ -141,7 +141,6 @@ typedef struct s_pars
 	t_type	last;
 }t_pars;
 
-
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
@@ -191,7 +190,7 @@ int		is_var_declaration(t_type type, int index);
 char	*give_var_env_list(char *value, t_list *env_list);
 void	write_env_list(char *value_modify, char *env_value, t_list **env_list);
 char	*strdup_limiter(char *str, char stop);
-// void	sig_init(struct sigaction *sa);
+void	sig_init(struct sigaction *sa, sigset_t *set);
 void	disable_echoctl(void);
 t_data	*recover_data_address(t_data *data);
 int		ft_strncmp_env_var(const char *s1, const char *s2, int n);
@@ -200,7 +199,6 @@ char	**create_var(t_data *data, t_cmd *cmd);
 void	add_var(t_list **env_list, char *var, int exported);
 int		var_syntax(char *var);
 void	sig_handle(int sigtype, siginfo_t *info, void *uncont);
-
 char	**get_cmd_tab(t_list **token_list);
 int		cmd_tab_len(t_list *token_list);
 void	create_cmd_block(t_list *token_list, t_list **cmd_list);
@@ -210,24 +208,25 @@ int		var_tab_size(t_list *token_list);
 void	init_redir(t_redir *redir);
 void	init_cmd(t_cmd *cmd);
 void	fill_filename(t_list **token_list, t_token **tmp_token,
-	t_redir	**redir_node);
+			t_redir	**redir_node);
 t_cmd	*cmd_if_var(t_cmd **cmd, t_list **token_list);
 int		cmd_has_pipe(t_list *token_list);
 void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head,
-t_token	**tmp_token, t_cmd **cmd);
+			t_token	**tmp_token, t_cmd **cmd);
 t_type	token_zero(t_token *token);
 t_type	next_token(t_token *token, t_type state, t_type last);
 int		is_special_symbol(char c);
 int		is_double_symbol(const char *input, int *i);
 void	init_exp(t_expansion *exp, int start);
 char	*dollar_expansion(t_data *data, char *input, int *start,
-	t_list *env_list);
+			t_list *env_list);
 void	free_vars(t_expansion *vars);
 int		bad_type(char *token);
 int		get_type(char *token);
-int	token_len(char **input, int *i);
+int		token_len(char **input, int *i);
 void	lexing_tokens_next(t_data **data, char **input, int token_index,
-	int len);
+			int len);
 void	fill_token_list(t_data *data, char *token, int token_index);
+t_token	*create_token(char *str, int index);
 
 #endif
