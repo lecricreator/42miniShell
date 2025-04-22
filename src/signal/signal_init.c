@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 10:52:33 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/18 22:02:57 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 00:29:22 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,13 @@ void disable_echoctl(void)
 
 void	test(int sigtype)
 {
-	t_data *data;
 
 	if (sigtype == SIGINT)
 	{
-		data = recover_data_address(NULL);
-		if (data->pid)
-		{
-			kill(data->pid, SIGINT);
-			ft_printf_fd(1, "^C\n");
-		}
-		else
-		{
 			ft_printf_fd(1, "\n^C\n");
 			rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();
-		}
 	}
 	else if (sigtype == SIGQUIT)
 	{

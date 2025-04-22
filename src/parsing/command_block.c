@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:02:16 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/18 19:41:59 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 02:08:01 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,26 @@ void	init_redir(t_redir *redir)
 {
 	redir->filename = NULL;
 	redir->type = NONE;
+}
+
+void	fill_filename(t_list **token_list, t_token **tmp_token,
+		t_redir	**redir_node)
+{
+	if (*token_list)
+	{
+		*tmp_token = (t_token *)(*token_list)->content;
+		if ((*tmp_token)->type == FILENAME || (*tmp_token)->type == DELIMITER)
+			(*redir_node)->filename = ft_strdup((*tmp_token)->str);
+		else
+		{
+			free_redir(*redir_node);
+			error_handle(ERR_UNKNOWN, (*tmp_token)->str,
+				"command_block.c:45\nBad token type to redir", KILL);
+		}
+	}
+	else
+		error_handle(ERR_UNKNOWN, (*tmp_token)->str,
+			"command_block.c:50\nNo file or delimiter to redir", KILL);
 }
 
 static void	fill_redir(t_list **redir, t_list **token_list)
@@ -34,21 +54,7 @@ static void	fill_redir(t_list **redir, t_list **token_list)
 		init_redir(redir_node);
 		redir_node->type = tmp_token->type;
 		*token_list = (*token_list)->next;
-		if (*token_list)
-		{
-			tmp_token = (t_token *)(*token_list)->content;
-			if (tmp_token->type == FILENAME || tmp_token->type == DELIMITER)
-				redir_node->filename = ft_strdup(tmp_token->str);
-			else
-			{
-				free_redir(redir_node);
-				error_handle(ERR_UNKNOWN, tmp_token->str,
-					"command_block.c:45\nBad token type to redir", KILL);
-			}
-		}
-		else
-			error_handle(ERR_UNKNOWN, tmp_token->str,
-				"command_block.c:50\nNo file or delimiter to redir", KILL);
+		fill_filename(token_list, &tmp_token, &redir_node);
 		new_node = ft_lstnew(redir_node);
 		ft_lstadd_back(redir, new_node);
 		*token_list = (*token_list)->next;
@@ -176,6 +182,33 @@ t_cmd	*cmd_if_var(t_cmd **cmd, t_list **token_list)
 	return (*cmd);
 }
 
+void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head, t_token **tmp_token,
+		t_cmd **cmd)
+{
+	while (*tmp_head && (*tmp_token)->type != OP_PIPE)
+	{
+		if (is_redir_op((*tmp_token)->type))
+			fill_redir(&(*cmd)->redir, tmp_head);
+		if (*tmp_head)
+			*tmp_head = (*tmp_head)->next;
+		if (*tmp_head)
+			(*tmp_token) = ((t_token *)(*tmp_head)->content);
+	}
+	(*tmp_token) = ((t_token *)(*token_list)->content);
+	while (*token_list && (*tmp_token)->type != OP_PIPE)
+	{
+		if (is_any_cmd((*tmp_token)->type))
+		{
+			(*cmd)->type = (*tmp_token)->type;
+			(*cmd)->cmd_args = get_cmd_tab(token_list);
+			break ;
+		}
+		*token_list = (*token_list)->next;
+		if (*token_list)
+			(*tmp_token) = ((t_token *)(*token_list)->content);
+	}
+}
+
 t_cmd	*create_cmd(t_list **token_list)
 {
 	t_cmd	*cmd;
@@ -192,28 +225,7 @@ t_cmd	*create_cmd(t_list **token_list)
 	if (is_var_declaration(tmp_token->type, tmp_token->index))
 		return (cmd_if_var(&cmd, token_list));
 	cmd->is_pipe = cmd_has_pipe(*token_list);
-	while (tmp_head && tmp_token->type != OP_PIPE)
-	{
-		if (is_redir_op(tmp_token->type))
-			fill_redir(&cmd->redir, &tmp_head);
-		if (tmp_head)
-			tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_token = ((t_token *)(tmp_head)->content);
-	}
-	tmp_token = ((t_token *)(*token_list)->content);
-	while (*token_list && tmp_token->type != OP_PIPE)
-	{
-		if (is_any_cmd(tmp_token->type))
-		{
-			cmd->type = tmp_token->type;
-			cmd->cmd_args = get_cmd_tab(token_list);
-			break ;
-		}
-		*token_list = (*token_list)->next;
-		if (*token_list)
-			tmp_token = ((t_token *)(*token_list)->content);
-	}
+	fill_arg_and_redir(token_list, &tmp_head, &tmp_token, &cmd);
 	return (cmd);
 }
 

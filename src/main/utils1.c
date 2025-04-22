@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/18 16:25:49 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 00:20:45 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	print_token_list(t_list *token_list)
 	}
 }
 
-
 static void	complete_path(char **path)
 {
 	int		i;
@@ -86,22 +85,6 @@ char	**get_path(char **path, t_list *env)
 int	is_builtin(t_type type)
 {
 	if (type <= 6)
-		return (1);
-	else
-		return (0);
-}
-
-int	is_any_cmd(t_type type)
-{
-	if (is_builtin(type) || type == COMMAND)
-		return (1);
-	else
-		return (0);
-}
-
-int	is_redir_op(t_type type)
-{
-	if (type >= 8 && type <= 11)
 		return (1);
 	else
 		return (0);

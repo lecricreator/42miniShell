@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 23:01:31 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:13:44 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:59:04 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,21 @@ char	**create_tmp_var(t_cmd *cmd)
 	return (tmp_vars);
 }
 
-static void	check_for_update(t_list **tmp_head, t_env **tmp_var, char *var_name, char *value)
+static void	check_for_update(t_list **tmp_head, t_env **tmp_var, char *var_name,
+		char *value)
 {
 	while (*tmp_head)
 	{
-		if (!ft_strncmp_exact((*tmp_var)->var, var_name, var_len((*tmp_var)->var)))
+		if (!ft_strncmp_exact((*tmp_var)->var, var_name,
+				var_len((*tmp_var)->var)))
 		{
 			update_var_value(tmp_var, value);
 			return ;
 		}
 		else if (var_name[var_len(var_name) - 1] == '+')
 		{
-			if (!ft_strncmp_exact((*tmp_var)->var, var_name,
-					var_len((*tmp_var)->var) - 1))
+			if (!ft_strncmp_env_var(var_name, (*tmp_var)->var,
+					var_len(var_name) - 1))
 			{
 				concat_var_value(tmp_var, value);
 				return ;
@@ -72,9 +74,9 @@ static void	check_for_update(t_list **tmp_head, t_env **tmp_var, char *var_name,
 	}
 }
 
-char	**create_var(t_data *data, t_cmd *cmd)
+char	**create_var(t_data *data, t_cmd *cmd)/*recheck this function*/
 {
-	t_list	*tmp_head; /*recheck this function*/
+	t_list	*tmp_head;
 	t_env	*tmp_var;
 	char	*var_name;
 	char	*value;

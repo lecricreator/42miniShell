@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 22:09:48 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 21:09:14 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:46:14 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*give_var_env_list(char *var_name, t_list *env_list)
 {
 	char	*env_var;
+
 	while (env_list)
 	{
 		env_var = ((t_env *)(env_list)->content)->var;
@@ -35,7 +36,7 @@ void	write_env_list(char *new_value, char *var_name, t_list **env_list)
 	{
 		env_var = ((t_env *)(*env_list)->content)->var;
 		if (!ft_strncmp_exact(env_var, var_name, var_len(var_name)))
-		break ;
+			break ;
 		*env_list = (*env_list)->next;
 	}
 	if (*env_list)

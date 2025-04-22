@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:54:39 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/21 11:24:00 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 00:14:34 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void	reset_io(t_fds *fds)
 	{
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)
-			error_handle(ERR_UNKNOWN, "std in",
-				"in_out_management.c:\ndup2 failed", KILL);
+			error_handle(ERR_UNKNOWN, "std in", "in_out_management.c:\n", KILL);
 		if (fds->std_in > -1)
 			close(fds->std_in);
 		if (fds->infile > -1)
@@ -66,23 +65,8 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 	}
 }
 
-void	change_io(t_redir *redir, t_fds *fds)
+void	change_redir_in(t_redir *redir, t_fds *fds)
 {
-	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
-	{
-		fds->std_out = dup(STDOUT_FILENO);
-		if (redir->type == OP_REDIR_OUT)
-			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);// check shell convention for permissions
-		else
-			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
-		if (fds->outfile < 0)
-			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
-		dup2(fds->outfile, STDOUT_FILENO);
-		if (fds->outfile < 0)
-			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
-	}
 	if (redir->type == OP_REDIR_IN)
 	{
 		if (STDIN_FILENO != 0)
@@ -102,6 +86,26 @@ void	change_io(t_redir *redir, t_fds *fds)
 		}
 		close(fds->infile);
 	}
+}
+
+void	change_io(t_redir *redir, t_fds *fds)
+{
+	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
+	{
+		fds->std_out = dup(STDOUT_FILENO);
+		if (redir->type == OP_REDIR_OUT)
+			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
+					0644);// check shell convention for permissions
+		else
+			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
+					0644);
+		if (fds->outfile < 0)
+			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
+		dup2(fds->outfile, STDOUT_FILENO);
+		if (fds->outfile < 0)
+			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
+	}
+	change_redir_in(redir, fds);
 }
 
 void	exec_redir(t_list *redir, t_fds *fds)

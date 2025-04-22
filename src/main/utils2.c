@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 11:34:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 21:09:11 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 00:20:30 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	count_table(char **table)
  *
  * @return 0 true // supp false
  */
-int	ft_strncmp_env_var(const char *var_name, const char *var_env, int var_name_len)
+int	ft_strncmp_env_var(const char *var_name, const char *var_env,
+		int var_name_len)
 {
 	int	i;
 	int	var_env_len;
@@ -50,7 +51,8 @@ int	ft_strncmp_env_var(const char *var_name, const char *var_env, int var_name_l
 	while (i < var_env_len)
 	{
 		if (var_name[i] != var_env[i])
-			return (((unsigned char *)var_name)[i] - ((unsigned char *)var_env)[i]);
+			return (((unsigned char *)var_name)[i] -
+				((unsigned char *)var_env)[i]);
 		i++;
 	}
 	return (0);
@@ -77,4 +79,20 @@ char	*strdup_limiter(char *str, char stop)
 			tmp_var[i] = str[i];
 	}
 	return (tmp_var);
+}
+
+int	is_any_cmd(t_type type)
+{
+	if (is_builtin(type) || type == COMMAND)
+		return (1);
+	else
+		return (0);
+}
+
+int	is_redir_op(t_type type)
+{
+	if (type >= 8 && type <= 11)
+		return (1);
+	else
+		return (0);
 }

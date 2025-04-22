@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:53:11 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/20 17:40:50 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:45:19 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 	}
 	dup2(fds->herepipe[0], STDIN_FILENO);
 	if (!fds->herepipe[0])
-		error_handle(ERR_UNKNOWN, "herepipe[0]:", "exec_heredoc:37\ndup2 failed", KILL);
+		error_handle(ERR_UNKNOWN, "herepipe[0]:",
+			"exec_heredoc:37\ndup2 failed", KILL);
 	close(fds->herepipe[0]);
 	close(fds->herepipe[1]);
 }

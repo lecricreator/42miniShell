@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:16:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/19 15:43:09 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 00:19:27 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	main(int ac, char **av, char **env)
 	data = ft_calloc(1, sizeof(t_data));
 	init_data(data, env);
 	sig_init();
-//	print_env(data->env_list);
 	while (1)
 	{
 		reset_input(data);
@@ -58,7 +57,6 @@ int	main(int ac, char **av, char **env)
 			exec_exit();
 		add_history(data->input);
 		parsing(data);
-//		print_token_list(data->token_list);
 		create_cmd_block(data->token_list, &data->cmd_list);
 		execution(data);
 		wait_and_status(data);
