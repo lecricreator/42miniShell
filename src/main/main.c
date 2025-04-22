@@ -64,9 +64,7 @@ int	main(int ac, char **av, char **env)
 	{
 		reset_input(data);
 		sigaction(SIGINT, &sa, NULL);
-	//	sigaction(SIGQUIT, &sa, NULL);
-		if(data->pid)
-			signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		data->input = readline("Minishell $ ");
 		if (!data->input)
 			exec_exit();

@@ -16,6 +16,7 @@ void	wait_and_status(t_data *data)
 {
 	int	exit_code;
 	int	child_exit;
+	int sig;
 
 	exit_code = 0;
 	while (data->n_fork--)
@@ -29,7 +30,12 @@ void	wait_and_status(t_data *data)
 					exit_code = child_exit;
 			}
 			else if (WIFSIGNALED(data->status))
-				exit_code = 127;
+			{
+				sig = WTERMSIG(data->status);
+				if (sig == SIGQUIT)
+					ft_printf_fd(2, "Quit (core dumped)\n");
+				exit_code = 128 + sig;
+			}
 		}
 		data->status = exit_code;
 	}

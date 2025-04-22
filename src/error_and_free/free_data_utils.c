@@ -61,6 +61,7 @@ void	free_cmd(void *cmd_void)
 void	reset_input(t_data *data)
 {
 	data->n_fork = 0;
+	data->pid = 0;
 	if (data->input)
 	{
 		free(data->input);

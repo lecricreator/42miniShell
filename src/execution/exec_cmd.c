@@ -103,7 +103,10 @@ void	exec_cmd(t_data *data, t_cmd *cmd, t_fds *fds, char **tmp_var)
 			"exec_cmd:103\nFork failed", KILL);
 	data->n_fork++;
 	if (!data->pid)
+	{
+		signal(SIGQUIT, SIG_DFL);
 		handle_procesess(data, cmd, fds, env_tab);
+	}
 	if (env_tab)
 		free_table(env_tab);
 	if (tmp_var)
