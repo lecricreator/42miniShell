@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 11:59:56 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:12:37 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,8 @@ void	fill_filename(t_list **token_list, t_token **tmp_token,
 t_cmd	*cmd_if_var(t_cmd **cmd, t_list **token_list);
 int		cmd_has_pipe(t_list *token_list);
 void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head,
-	t_token **tmp_token, t_cmd **cmd);
-
+t_token	**tmp_token, t_cmd **cmd);
+t_type	token_zero(t_token *token);
+t_type	next_token(t_token *token, t_type state, t_type last);
 
 #endif

@@ -6,78 +6,11 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 12:10:02 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:16:07 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_type	token_zero(t_token *token)//re test this and correct if needed
-{
-	if (token->type <= 6)
-		return (ARGUMENT);
-	else if (token->type >= 8 && token->type <= 10)
-		return (FILENAME);
-	else if (token->type == OP_HEREDOC)
-		return (DELIMITER);
-	else if (token->type == OP_PIPE)
-		return (BAD_TOKEN);
-	else if (token->type == UNKNOW)
-	{
-		token->type = COMMAND;
-		return (ARGUMENT);
-	}
-	else if (token->type == ENV_VAR)
-	{
-		token->type = COMMAND;
-		return (ARGUMENT);
-	}
-	return (BAD_TOKEN);
-}
-
-static t_type	next_token(t_token *token, t_type state, t_type last)
-{
-	if (token->type >= 8 && token->type <= 10)
-	{
-		if (state == FILENAME || state == DELIMITER)
-			return (BAD_TOKEN);
-		return (FILENAME);
-	}
-	if (token->type == OP_HEREDOC)
-	{
-		if (state == FILENAME || state == DELIMITER)
-			return (BAD_TOKEN);
-		return (DELIMITER);
-	}
-	if (token->type == OP_PIPE)
-		return (COMMAND);
-	if (state == ARGUMENT)
-		return (token->type = ARGUMENT, ARGUMENT);
-	if (state == COMMAND)
-	{
-		if (token->type > 6)
-			token->type = COMMAND;
-		return (ARGUMENT);
-	}
-	if (state == FILENAME && (last == OP_REDIR_OUT || last == OP_APPEND))
-	{
-		return (token->type = FILENAME, ARGUMENT);
-	}
-	if (state == FILENAME && last == OP_REDIR_IN)
-	{
-		return (token->type = FILENAME, COMMAND);
-	}
-	if (state == DELIMITER)
-	{
-		return (token->type = DELIMITER, COMMAND);
-	}
-	if (token->type == ENV_VAR)
-	{
-		return (token->type = state, state);
-	}
-	else
-		return (BAD_TOKEN);
-}
 
 void	make_var_temp(t_list *token_list)
 {
@@ -107,6 +40,44 @@ static int	is_bad_token(t_type type, t_token *token, t_list **token_list)
 	return (0);
 }
 
+void	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
+		int *i)
+{
+	*i = 0;
+	*tmp_head = (*data)->token_list;
+	if (!*tmp_head)
+		return ;
+	*tmp_token = (t_token *)(*tmp_head)->content;
+	if (is_bad_token((*tmp_token)->type, *tmp_token, &(*data)->token_list))
+		return ;
+	while (*tmp_head && (*tmp_token)->type == ENV_VAR)
+	{
+		(*tmp_token)->index = 0;
+		(*i)++;
+		(*tmp_head) = (*tmp_head)->next;
+		if ((*tmp_head))
+			*tmp_token = (t_token *)(*tmp_head)->content;
+	}
+	if (*tmp_head)
+	{
+		(*tmp_token)->index -= (*i);
+		make_var_temp((*data)->token_list);
+	}
+}
+
+void	verify_state(t_type *state, t_token **tmp_token, t_data **data)
+{
+	if ((*state == FILENAME || *state == DELIMITER))
+	{
+		if (!(*tmp_token)->index)
+			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
+		else
+			error_handle(ERR_SYNTAX, (*tmp_token)->str, NULL, CONTINUE);
+		free_list(&(*data)->token_list, free_token);
+		(*data)->token_list = NULL;
+	}
+}
+
 void	parsing(t_data *data)
 {
 	t_token	*tmp_token;
@@ -116,29 +87,9 @@ void	parsing(t_data *data)
 	int		i;
 
 	lexing_tokens(data, &data->input);
-//	print_token_list(data->token_list);
-	i = 0;
 	state = COMMAND;
 	last = COMMAND;
-	tmp_head = data->token_list;
-	if (!tmp_head)
-		return ;
-	tmp_token = (t_token *)tmp_head->content;
-	if (is_bad_token(tmp_token->type, tmp_token, &data->token_list))
-		return ;
-	while (tmp_head && tmp_token->type == ENV_VAR)
-	{
-		tmp_token->index = 0;
-		i++;
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_token = (t_token *)tmp_head->content;
-	}
-	if (tmp_head)
-	{
-		tmp_token->index -= i;
-		make_var_temp(data->token_list);
-	}
+	parsing_start(&data, &tmp_head, &tmp_token, &i);
 	while (tmp_head)
 	{
 		tmp_token = (t_token *)tmp_head->content;
@@ -154,14 +105,5 @@ void	parsing(t_data *data)
 		last = tmp_token->type;
 		tmp_head = tmp_head->next;
 	}
-	if ((state == FILENAME || state == DELIMITER))
-	{
-		if (!tmp_token->index)
-			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
-		else
-			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
-		free_list(&data->token_list, free_token);
-		data->token_list = NULL;
-	}
-
+	verify_state(&state, &tmp_token, &data);
 }
