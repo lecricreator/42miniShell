@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:08:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/21 23:01:19 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 21:10:37 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	free_table(char **table)
 	int	i;
 
 	i = 0;
+	if (!table)
+		return ;
 	while (table[i])
 		free(table[i++]);
 	free(table);
