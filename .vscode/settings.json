@@ -1,5 +1,8 @@
 {
-	"files.associations": {
-		"type_traits": "c"
+	"github.copilot.enable": {
+		"*": false,
+		"plaintext": false,
+		"markdown": false,
+		"scminput": false
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 01:54:41 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:10:02 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ static t_type	next_token(t_token *token, t_type state, t_type last)
 	if (token->type == OP_PIPE)
 		return (COMMAND);
 	if (state == ARGUMENT)
-	{
-		token->type = ARGUMENT;
-		return (ARGUMENT);
-	}
+		return (token->type = ARGUMENT, ARGUMENT);
 	if (state == COMMAND)
 	{
 		if (token->type > 6)
@@ -64,23 +61,19 @@ static t_type	next_token(t_token *token, t_type state, t_type last)
 	}
 	if (state == FILENAME && (last == OP_REDIR_OUT || last == OP_APPEND))
 	{
-		token->type = FILENAME;
-		return (ARGUMENT);
+		return (token->type = FILENAME, ARGUMENT);
 	}
 	if (state == FILENAME && last == OP_REDIR_IN)
 	{
-		token->type = FILENAME;
-		return (COMMAND);
+		return (token->type = FILENAME, COMMAND);
 	}
 	if (state == DELIMITER)
 	{
-		token->type = DELIMITER;
-		return (COMMAND);
+		return (token->type = DELIMITER, COMMAND);
 	}
 	if (token->type == ENV_VAR)
 	{
-		token->type = state;
-		return (state);
+		return (token->type = state, state);
 	}
 	else
 		return (BAD_TOKEN);

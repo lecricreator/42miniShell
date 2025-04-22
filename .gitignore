@@ -8,3 +8,4 @@ mini_shell
 ./src/target/
 *.o
 *.a
+test2

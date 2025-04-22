@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 10:45:10 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:59:56 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,5 +191,21 @@ char	**create_var(t_data *data, t_cmd *cmd);
 void	add_var(t_list **env_list, char *var, int exported);
 int		var_syntax(char *var);
 void	sig_handle(int sigtype, siginfo_t *info, void *uncont);
+
+char	**get_cmd_tab(t_list **token_list);
+int		cmd_tab_len(t_list *token_list);
+void	create_cmd_block(t_list *token_list, t_list **cmd_list);
+t_cmd	*create_cmd(t_list **token_list);
+int		is_var_declaration(t_type type, int index);
+int		var_tab_size(t_list *token_list);
+void	init_redir(t_redir *redir);
+void	init_cmd(t_cmd *cmd);
+void	fill_filename(t_list **token_list, t_token **tmp_token,
+	t_redir	**redir_node);
+t_cmd	*cmd_if_var(t_cmd **cmd, t_list **token_list);
+int		cmd_has_pipe(t_list *token_list);
+void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head,
+	t_token **tmp_token, t_cmd **cmd);
+
 
 #endif
