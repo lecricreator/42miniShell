@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:38 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 13:16:07 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:03:44 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ void	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
 	}
 }
 
-void	verify_state(t_type *state, t_token **tmp_token, t_data **data)
+void	verify_state(t_type *state, t_token *tmp_token, t_data **data)
 {
 	if ((*state == FILENAME || *state == DELIMITER))
 	{
-		if (!(*tmp_token)->index)
+		if (!tmp_token->index)
 			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
 		else
-			error_handle(ERR_SYNTAX, (*tmp_token)->str, NULL, CONTINUE);
+			error_handle(ERR_SYNTAX, tmp_token->str, NULL, CONTINUE);
 		free_list(&(*data)->token_list, free_token);
 		(*data)->token_list = NULL;
 	}
@@ -80,30 +80,27 @@ void	verify_state(t_type *state, t_token **tmp_token, t_data **data)
 
 void	parsing(t_data *data)
 {
-	t_token	*tmp_token;
-	t_list	*tmp_head;
-	t_type	state;
-	t_type	last;
+	t_pars	pars;
 	int		i;
 
 	lexing_tokens(data, &data->input);
-	state = COMMAND;
-	last = COMMAND;
-	parsing_start(&data, &tmp_head, &tmp_token, &i);
-	while (tmp_head)
+	pars.state = COMMAND;
+	pars.last = COMMAND;
+	parsing_start(&data, &pars.tmp_head, &pars.tmp_token, &i);
+	while (pars.tmp_head)
 	{
-		tmp_token = (t_token *)tmp_head->content;
-		if (tmp_token->index == 0)
-			state = token_zero(tmp_token);
+		pars.tmp_token = (t_token *)pars.tmp_head->content;
+		if (pars.tmp_token->index == 0)
+			pars.state = token_zero(pars.tmp_token);
 		else
 		{
-			tmp_token->index -= i;
-			state = next_token(tmp_token, state, last);
+			pars.tmp_token->index -= i;
+			pars.state = next_token(pars.tmp_token, pars.state, pars.last);
 		}
-		if (is_bad_token(state, tmp_token, &data->token_list))
+		if (is_bad_token(pars.state, pars.tmp_token, &data->token_list))
 			return ;
-		last = tmp_token->type;
-		tmp_head = tmp_head->next;
+		pars.last = pars.tmp_token->type;
+		pars.tmp_head = pars.tmp_head->next;
 	}
-	verify_state(&state, &tmp_token, &data);
+	verify_state(&pars.state, pars.tmp_token, &data);
 }

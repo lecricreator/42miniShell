@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:02:03 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 13:12:37 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:12:39 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,15 @@ typedef struct s_env
 	int		exported;
 }t_env;
 
+typedef struct s_pars
+{
+	t_token	*tmp_token;
+	t_list	*tmp_head;
+	t_type	state;
+	t_type	last;
+}t_pars;
+
+
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
 void	print_env(t_list *env);
@@ -208,5 +217,17 @@ void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head,
 t_token	**tmp_token, t_cmd **cmd);
 t_type	token_zero(t_token *token);
 t_type	next_token(t_token *token, t_type state, t_type last);
+int		is_special_symbol(char c);
+int		is_double_symbol(const char *input, int *i);
+void	init_exp(t_expansion *exp, int start);
+char	*dollar_expansion(t_data *data, char *input, int *start,
+	t_list *env_list);
+void	free_vars(t_expansion *vars);
+int		bad_type(char *token);
+int		get_type(char *token);
+int	token_len(char **input, int *i);
+void	lexing_tokens_next(t_data **data, char **input, int token_index,
+	int len);
+void	fill_token_list(t_data *data, char *token, int token_index);
 
 #endif
