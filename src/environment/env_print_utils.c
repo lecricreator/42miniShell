@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:15 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/23 16:48:48 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:11:30 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	print_env(t_list *env_list)
 	t_env	*tmp_var;
 
 	tmp_var = (t_env *)env_list->content;
-	while (tmp_var)
+	while (env_list)
 	{
 		if (tmp_var->exported)
 			printf("%s\n", tmp_var->var);
