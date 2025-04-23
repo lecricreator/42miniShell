@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:50:06 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 20:13:28 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:56:54 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,13 @@ void	get_env(t_list **env_list, char **env)
 	node = NULL;
 	if (!*env)
 	{
-		env_is_empty(node, env_list, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", 0);
+		env_is_empty(node, env_list, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", 1);
 		join = ft_strjoin("PWD=", getcwd(buffer, sizeof(buffer)));
 		env_is_empty(node, env_list, join, 1);
 		free(join);
 		env_is_empty(node, env_list, "OLDPWD=", 0);
 		env_is_empty(node, env_list, "SHLVL=1", 1);
+		(*env_list)->next = NULL;
 	}
 	while (env[i])
 	{
