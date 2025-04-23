@@ -46,19 +46,18 @@ static void	check_heredoc(t_list *redir, t_fds *fds)
 	}
 }
 
-void	find_to_execute_next(t_cmd **tmp_cmd,
-	t_fds *fds)
+static void	handle_fds(t_cmd **tmp_cmd, t_fds *fds)
 {
+	if ((*fds).prev_pipe != -1)
+	{
+		close((*fds).prev_pipe);
+		(*fds).prev_pipe = -1;
+	}
 	if ((*tmp_cmd)->is_pipe)
 	{
 		close((*fds).pipefd[1]);
 		(*fds).prev_pipe = dup((*fds).pipefd[0]);
 		close((*fds).pipefd[0]);
-	}
-	else
-	{
-		if ((*fds).prev_pipe != -1)
-			close((*fds).prev_pipe);
 	}
 	if ((*fds).std_in != -1 || (*fds).std_out != -1)
 		reset_io(fds);
@@ -82,7 +81,7 @@ void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
 	}
 	else if ((*tmp_cmd)->type == COMMAND)
 		exec_cmd(*data, (*tmp_cmd), fds, tmp_var);
-	find_to_execute_next(tmp_cmd, fds);
+	handle_fds(tmp_cmd, fds);
 }
 
 void	execution(t_data *data)
