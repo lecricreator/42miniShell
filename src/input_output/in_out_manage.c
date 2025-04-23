@@ -14,31 +14,8 @@
 
 void	reset_io(t_fds *fds)
 {
-	if (fds->outfile != -1 || fds->std_out != -1)
-	{
-		dup2(fds->std_out, STDOUT_FILENO);
-		if (fds->std_out < 0)
-			error_handle(ERR_UNKNOWN, "std out",
-				"in_out_manage.c:21\ndup2 failed", KILL);
-		if (fds->std_out > -1)
-			close(fds->std_out);
-		if (fds->outfile > -1)
-			close(fds->outfile);
-		fds->std_out = -1;
-		fds->outfile = -1;
-	}
-	if (fds->infile != -1 || fds->std_in != -1)
-	{
-		dup2(fds->std_in, STDIN_FILENO);
-		if (fds->std_in < 0)
-			error_handle(ERR_UNKNOWN, "std in", "in_out_management.c:\n", KILL);
-		if (fds->std_in > -1)
-			close(fds->std_in);
-		if (fds->infile > -1)
-			close(fds->infile);
-		fds->std_in = -1;
-		fds->infile = -1;
-	}
+	restore_stdin(fds);
+	restore_stdout(fds);
 }
 
 void	exec_pipe(t_cmd *cmd, t_fds *fds)
@@ -67,6 +44,7 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 
 void	change_redir_in(t_redir *redir, t_fds *fds)
 {
+	restore_stdin(fds);
 	if (redir->type == OP_REDIR_IN)
 	{
 		if (STDIN_FILENO != 0)
@@ -92,6 +70,7 @@ void	change_io(t_redir *redir, t_fds *fds)
 {
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
 	{
+		restore_stdout(fds);
 		fds->std_out = dup(STDOUT_FILENO);
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,

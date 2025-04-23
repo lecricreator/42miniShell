@@ -36,7 +36,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 
 # files
-IO_FILES = in_out_manage.c
+IO_FILES = in_out_manage.c in_out_utils.c
 MAIN_FILES = main.c utils1.c utils2.c
 ENV_FILES = environment.c env_utils.c env_print_utils.c env_generate.c env_built.c
 EXEC_FILES = execution.c exec_built_in.c exec_cmd.c exec_heredoc.c

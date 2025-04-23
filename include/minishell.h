@@ -230,5 +230,7 @@ void	lexing_tokens_next(t_data **data, char **input, int token_index,
 			int len);
 void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);
+void    restore_stdin(t_fds *fds);
+void    restore_stdout(t_fds *fds);
 
 #endif
