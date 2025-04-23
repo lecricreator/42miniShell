@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/23 10:27:57 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:22:39 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,17 @@ int	cmd_if_absolute_path(t_cmd *cmd)
 {
 	errno = 0;
 	cmd->command_path = ft_strdup(cmd->cmd_args[0]);
-	if (!access(cmd->command_path, X_OK))
-		return (0);
+	if (!access(cmd->command_path, F_OK))
+	{
+		if (!access(cmd->command_path, X_OK))
+			return (0);
+		else
+			return (error_handle(ERR_PERMISSION,
+					cmd->cmd_args[0], NULL, CONTINUE));
+	}
 	else
-		return (1);
+		return (error_handle(ERR_NO_FILE,
+				cmd->cmd_args[0], NULL, CONTINUE));
 }
 
 int	verif_access(char **path, t_cmd *cmd)
@@ -30,16 +37,20 @@ int	verif_access(char **path, t_cmd *cmd)
 	while (path[i])
 	{
 		cmd->command_path = ft_strjoin(path[i], cmd->cmd_args[0]);
-		if (!access(cmd->command_path, X_OK))
+		if (!access(cmd->command_path, F_OK))
 		{
-			free_table(path);
-			return (1);
+			if (!access(cmd->command_path, X_OK))
+				return (free_table(path), 0);
+			else
+				return (free_table(path), error_handle(ERR_PERMISSION,
+						cmd->cmd_args[0], NULL, CONTINUE));
 		}
 		free(cmd->command_path);
 		cmd->command_path = NULL;
 		i++;
 	}
-	return (0);
+	return (free_table(path), error_handle(ERR_NOT_FOUND,
+			cmd->cmd_args[0], NULL, CONTINUE));
 }
 
 int	find_program(t_data *data, t_cmd *cmd)
@@ -54,20 +65,13 @@ int	find_program(t_data *data, t_cmd *cmd)
 		if (stat(cmd->cmd_args[0], &st) == 0 && S_ISDIR(st.st_mode))
 			return (free_table(path), error_handle(ERR_IS_DIRECTORY,
 					cmd->cmd_args[0], NULL, CONTINUE));
-		if (!cmd_if_absolute_path(cmd))
-			return (free_table(path), 0);
-		else
-			return (free_table(path), error_handle(ERR_NO_FILE,
-					cmd->cmd_args[0], NULL, CONTINUE));
+		return (free_table(path), cmd_if_absolute_path(cmd));
 	}
 	if (path)
-		if (verif_access(path, cmd))
-			return (0);
-	if (!path)
+		return (verif_access(path, cmd));
+	else
 		return (free_table(path), error_handle(ERR_NO_FILE,
 				cmd->cmd_args[0], NULL, CONTINUE));
-	return (free_table(path), error_handle(ERR_NOT_FOUND,
-			cmd->cmd_args[0], NULL, CONTINUE));
 }
 
 int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
