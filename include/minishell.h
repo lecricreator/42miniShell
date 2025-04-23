@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*																			*/
 /*														:::	  ::::::::   */
-/*   minishell.h										:+:	  :+:	:+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*													+:+ +:+		 +:+	 */
 /*   By: lomorale <lomorale@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/03/19 10:02:03 by lomorale		  #+#	#+#			 */
-/*   Updated: 2025/04/22 15:32:10 by lomorale		 ###   ########.fr	   */
+/*   Updated: 2025/04/23 10:20:33 by odruke-s         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef enum e_type
 	NONE
 }t_type;
 
-typedef enum e_error {
+typedef enum e_error
+{
 	ERR_SYNTAX,
 	ERR_NOT_FOUND,
 	ERR_PERMISSION,

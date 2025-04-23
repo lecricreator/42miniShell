@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:32:13 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 21:08:50 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:27:57 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ int	verif_access(char **path, t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	if (!path)
-	{
-
-	}
 	while (path[i])
 	{
 		cmd->command_path = ft_strjoin(path[i], cmd->cmd_args[0]);
