@@ -12,54 +12,39 @@
 
 #include "minishell.h"
 
-void	delete_list_in_liked_list(t_list **env_list,
-		t_list	*tmp_list_delete, t_list	*tmp_head, int first)
-{
-	if (!first)
-	{
-		free(((t_env *)(*env_list)->next->content)->var);
-		tmp_list_delete = (*env_list)->next;
-		(*env_list)->next = (*env_list)->next->next;
-		free(tmp_list_delete);
-		(*env_list) = tmp_head;
-	}
-	else if (first)
-	{
-		free(((t_env *)(*env_list)->content)->var);
-		tmp_list_delete = (*env_list);
-		(*env_list) = (*env_list)->next;
-		free(tmp_list_delete);
-		tmp_head = *env_list;
-	}
-}
-
 int	exec_unset(char **cmd_args, t_list **env_list)
 {
 	t_list	*tmp_head;
-	t_list	*tmp_list_delete;
+	t_env	*tmp_env;
+	int		i;
 
-	tmp_list_delete = NULL;
-	tmp_head = *env_list;
-	if (ft_strchr(cmd_args[1], '='))
-		return (0);
-	if (give_var_env_list(cmd_args[1], *env_list))
+	i = 1;
+	while (cmd_args[i])
 	{
-		if (ft_strncmp(cmd_args[1], ((t_env *)(*env_list)->content)->var,
-				ft_strlen(cmd_args[1])) == 0)
-				{
-					delete_list_in_liked_list(env_list, tmp_list_delete,
-						tmp_head, 1);
-					ft_printf_fd(2, "%s\n", ((t_env *)(*env_list)->content)->var);
-					return(0);
-				}
-		while ((*env_list)->next)
+		if (ft_strchr(cmd_args[i], '=') || !ft_strncmp(cmd_args[i], "_=", 2))
 		{
-			if (ft_strncmp(cmd_args[1], ((t_env *)(*env_list)->next->content)->var,
-				ft_strlen(cmd_args[1])) == 0)
-				delete_list_in_liked_list(env_list, tmp_list_delete,
-						tmp_head, 0);
-			(*env_list) = (*env_list)->next;
+			i++;
+			continue ;
 		}
+		tmp_head = *env_list;
+		tmp_env = (t_env *)tmp_head->content;
+		if (!ft_strncmp_env_var(cmd_args[i], tmp_env->var, var_len(cmd_args[i])))
+		{
+			ft_lstdel_node(env_list, free_env);
+			i++;
+			continue ;
+		}
+		while (tmp_head && tmp_head->next)
+		{
+			tmp_env = (t_env *)tmp_head->next->content;
+			if (!ft_strncmp_env_var(cmd_args[i], tmp_env->var, var_len(cmd_args[i])))
+			{
+				ft_lstdel_nxtnode(&tmp_head, free_env);
+				break ;
+			}
+			tmp_head = tmp_head->next;
+		}
+		i++;
 	}
 	return (0);
 }

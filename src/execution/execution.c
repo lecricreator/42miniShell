@@ -63,7 +63,7 @@ static void	handle_fds(t_cmd **tmp_cmd, t_fds *fds)
 		reset_io(fds);
 }
 
-void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
+void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 		t_fds *fds)
 {
 	if ((*tmp_cmd)->is_pipe)
@@ -77,10 +77,10 @@ void	find_to_execute(t_data **data, char **tmp_var, t_cmd **tmp_cmd,
 	if (is_builtin((*tmp_cmd)->type))
 	{
 		(*tmp_cmd)->nbr_arg = count_table((*tmp_cmd)->cmd_args);
-		exec_builtin_before_fork(*data, (*tmp_cmd), fds);
+		exec_builtin_before_fork(data, (*tmp_cmd), fds);
 	}
 	else if ((*tmp_cmd)->type == COMMAND)
-		exec_cmd(*data, (*tmp_cmd), fds, tmp_var);
+		exec_cmd(data, (*tmp_cmd), fds, tmp_var);
 	handle_fds(tmp_cmd, fds);
 }
 
@@ -105,7 +105,7 @@ void	execution(t_data *data)
 			tmp_head = tmp_head->next;
 			continue ;
 		}
-		find_to_execute(&data, tmp_var, &tmp_cmd, &fds);
+		find_to_execute(data, tmp_var, &tmp_cmd, &fds);
 		tmp_head = tmp_head->next;
 	}
 }

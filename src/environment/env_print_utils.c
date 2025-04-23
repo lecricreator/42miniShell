@@ -78,6 +78,7 @@ void	write_line_env(int *i, char *var_name, char **env_tab, char *var_value)
 		ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
 	else
 		ft_printf_fd(1, "declare -x %s\n", env_tab[*i]);
+	free(var_value);
 	return ;
 }
 
@@ -97,8 +98,7 @@ void	print_export(t_list *env_list)
 		var_name = strdup_limiter(env_tab[i], '=');
 		write_line_env(&i, var_name, env_tab, var_value);
 		free(var_name);
-		free(var_value);
 		i++;
 	}
-	free(env_tab);
+	free_table(env_tab);
 }
