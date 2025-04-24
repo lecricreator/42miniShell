@@ -29,7 +29,7 @@ void	empty_env(t_list **env_list, t_env	*node)
 	char	buffer[1024];
 	char	*join;
 
-	add_env_empty(node, env_list, "OLDPWD", 0);
+	add_env_empty(node, env_list, "OLDPWD", 1);
 	add_env_empty(node, env_list,
 		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", 0);
 	join = ft_strjoin("PWD=", getcwd(buffer, sizeof(buffer)));
