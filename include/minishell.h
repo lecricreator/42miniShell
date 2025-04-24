@@ -224,13 +224,11 @@ int		is_double_symbol(const char *input, int *i);
 void	init_exp(t_expansion *exp, int start);
 char	*dollar_expansion(t_data *data, char *input, int *start,
 			t_list *env_list);
-void    lexing_quotes(char **input);
 void	free_vars(t_expansion *vars);
 int		bad_type(char *token);
 int		get_type(char *token);
 int		token_len(char **input, int *i);
-void	tokenize(t_data **data, char **input, int token_index,
-			int len);
+void	tokenize(t_data **data, char **input, int token_index);
 void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);
 void    restore_stdin(t_fds *fds);

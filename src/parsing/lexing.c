@@ -78,14 +78,11 @@ t_token	*create_token(char *str, int index)
 
 void	lexing_tokens(t_data *data, char **input)
 {
-	int		len;
 	int		token_index;
 
 	if (!(*input))
 		return ;
-	len = 0;
-	token_index = -1;
+	token_index = 0;
 	check_for_expansion(data, input);
-//	lexing_quotes(input);
-	tokenize(&data, input, token_index, len);
+	tokenize(&data, input, token_index);
 }

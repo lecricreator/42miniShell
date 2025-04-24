@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:02:39 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 15:13:08 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:12:12 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,44 +25,49 @@ void	fill_token_list(t_data *data, char *token, int token_index)
 	ft_lstadd_back(&data->token_list, new_node);
 }
 
-void	tokenize(t_data **data, char **input, int token_index,
-		int len)
+static char	*tokenize_loop(char **input, int *i, int len)
 {
-	int		i;
 	char	*token_str;
 	char	*tmp;
 
-	token_str = NULL;
 	tmp = NULL;
+	token_str = NULL;
+	while ((*input)[*i] && !ft_isblank((*input)[*i]))
+	{
+		len = token_len(input, i);
+		if (!token_str)
+			token_str = ft_strndup((*input) + (*i - len), len);
+		else
+		{
+			tmp = token_str;
+			token_str = ft_strnjoin(token_str, (*input) + (*i - len), len);
+			free(tmp);
+		}
+		if (is_special_symbol((*input)[*i])
+				|| is_special_symbol((*input)[*i - 1]))
+			break ;
+		if ((*input)[*i] == 39 || (*input)[*i] == 34)
+			(*i)++;
+	}
+	return (token_str);
+}
+
+void	tokenize(t_data **data, char **input, int token_index)
+{
+	int		i;
+	int		len;
+	char	*token_str;
+
+	token_str = NULL;
+	len = 0;
 	i = 0;
 	while ((*input)[i])
 	{
-		while ((*input)[i] && !ft_isblank((*input)[i]))
-		{
-			token_index++;
-			len = token_len(input, &i);
-			if (!token_str)
-			{
-				token_str = ft_strndup((*input) + (i - len), len);
-				if (!token_str)
-					error_handle(ERR_UNKNOWN, "Minishell:",
-						"lexing.c:251\nft_strndup failed", KILL);
-			}
-			else
-			{
-					tmp = token_str;
-					token_str = ft_strnjoin(token_str, (*input) + (i - len), len);
-					free(tmp);
-			}
-			if (is_special_symbol((*input)[i]) || is_special_symbol((*input)[i - 1]))
-				break ;
-		}	
+		token_str = tokenize_loop(input, &i, len);
 		fill_token_list(*data, token_str, token_index);
-		token_str = NULL;
+		token_index++;
 		if ((*input)[i] == '\0')
 			break ;
-		if ((*input)[i] == 39 || (*input)[i] == 34)
-			i++;
 		else
 			while (ft_isblank((*input)[i]))
 				i++;
@@ -87,7 +92,8 @@ static int	token_next_len(char **input, int *i, int *len)
 	else
 	{
 		while (input[0][*i] && !ft_isblank(input[0][*i]) &&
-				!is_special_symbol(input[0][*i]) && (*input)[*i] != 34 && (*input)[*i] != 39)
+				!is_special_symbol(input[0][*i]) &&
+				(*input)[*i] != 34 && (*input)[*i] != 39)
 		{
 			(*i)++;
 			(*len)++;
