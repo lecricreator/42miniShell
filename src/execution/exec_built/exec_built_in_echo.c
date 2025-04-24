@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/24 22:50:31 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:34:38 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,17 @@ int	exec_echo(char **cmd_args)
 int	exec_echo(char **cmd_args)
 {
 	int		i;
+	int		j;
 	int		flags;
 
 	i = 0;
+	j = 0;
 	flags = 0;
 	while (cmd_args[++i])
 	{
 		if (flags == 0 && cmd_args[i][0] == '-')
 			flags = 1;
-		else
-
+		while (cmd_args[i][++j])
+			if (cmd_args[i][j] == 'n')
 	}
 }
