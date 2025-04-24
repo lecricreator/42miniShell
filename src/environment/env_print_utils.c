@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:15 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/23 17:11:30 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:11:45 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	print_env(t_list *env_list)
 {
 	t_env	*tmp_var;
 
+	if (!(t_env *)env_list->content)
+		error_handle(ERR_NO_FILE, "", "", 0);
 	tmp_var = (t_env *)env_list->content;
 	while (env_list)
 	{

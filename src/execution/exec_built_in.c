@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 23:10:19 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:38:22 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:33:25 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 	if (cmd->type == BI_ECHO)
 		return (exec_echo(cmd->cmd_args));
 	if (cmd->type == BI_EXIT)
-		return (exec_exit(), 0);
+		return (exec_exit(cmd->cmd_args), 0);
 	if (cmd->type == BI_ENV)
 		return (print_env(*env_list), 0);
 	if (cmd->type == BI_EXPORT)
