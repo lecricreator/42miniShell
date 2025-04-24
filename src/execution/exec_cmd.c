@@ -88,8 +88,8 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 	if (execve(cmd->command_path, cmd->cmd_args, env_tab) == -1)
 	{
 		free_table(env_tab);
-		return (error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
-				strerror(errno), KILL));
+		return (error_handle(ERR_NOT_FOUND, cmd->cmd_args[0],
+				NULL, KILL));
 	}
 	return (errno);
 }
