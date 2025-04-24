@@ -20,9 +20,7 @@ void	get_env(t_list **env_list, char **env)
 	i = 0;
 	node = NULL;
 	if (!*env)
-	{
 		empty_env(env_list, node);
-	}
 	while (env[i])
 	{
 		node = (t_env *)malloc(sizeof(t_env));
@@ -68,7 +66,8 @@ char	**add_env(char **env_tab, t_list *env_list, char **tmp_var)
 	while (tmp_head)
 	{
 		tmp_env_var = (t_env *)tmp_head->content;
-		env_tab[i++] = ft_strdup(tmp_env_var->var);
+		if (tmp_env_var->exported)
+			env_tab[i++] = ft_strdup(tmp_env_var->var);
 		tmp_head = tmp_head->next;
 		if (tmp_head)
 			tmp_env_var = (t_env *)tmp_head->content;

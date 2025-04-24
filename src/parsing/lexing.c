@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+int	is_valid_exp_synt(char c)
+{
+	if (ft_isalnum(c) || c == '_')
+		return (1);
+	else
+		return (0);
+}
+
 void	check_for_expansion(t_data *data, char **input)
 {
 	int		i;
@@ -29,13 +37,13 @@ void	check_for_expansion(t_data *data, char **input)
 		}
 		if (is_special_symbol((*input)[i]))
 			i++;
-		if ((*input)[i] == 39)
+		else if ((*input)[i] == 39)
 		{
 			i++;
-			while ((*input)[i] != 39)
+			while ((*input)[i] && (*input)[i] != 39)
 				i++;
 		}
-		if ((*input)[i])
+		else if ((*input)[i])
 			i++;
 	}
 }
@@ -70,13 +78,11 @@ t_token	*create_token(char *str, int index)
 
 void	lexing_tokens(t_data *data, char **input)
 {
-	int		len;
 	int		token_index;
 
 	if (!(*input))
 		return ;
-	len = 0;
-	token_index = -1;
+	token_index = 0;
 	check_for_expansion(data, input);
-	lexing_tokens_next(&data, input, token_index, len);
+	tokenize(&data, input, token_index);
 }

@@ -40,16 +40,16 @@ static int	is_bad_token(t_type type, t_token *token, t_list **token_list)
 	return (0);
 }
 
-void	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
+int	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
 		int *i)
 {
 	*i = 0;
 	*tmp_head = (*data)->token_list;
 	if (!*tmp_head)
-		return ;
+		return (1);
 	*tmp_token = (t_token *)(*tmp_head)->content;
 	if (is_bad_token((*tmp_token)->type, *tmp_token, &(*data)->token_list))
-		return ;
+		return (1);
 	while (*tmp_head && (*tmp_token)->type == ENV_VAR)
 	{
 		(*tmp_token)->index = 0;
@@ -63,6 +63,7 @@ void	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
 		(*tmp_token)->index -= (*i);
 		make_var_temp((*data)->token_list);
 	}
+	return (0);
 }
 
 void	verify_state(t_type *state, t_token *tmp_token, t_data **data)
@@ -86,7 +87,8 @@ void	parsing(t_data *data)
 	lexing_tokens(data, &data->input);
 	pars.state = COMMAND;
 	pars.last = COMMAND;
-	parsing_start(&data, &pars.tmp_head, &pars.tmp_token, &i);
+	if (parsing_start(&data, &pars.tmp_head, &pars.tmp_token, &i))
+		return ;
 	while (pars.tmp_head)
 	{
 		pars.tmp_token = (t_token *)pars.tmp_head->content;

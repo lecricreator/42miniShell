@@ -16,12 +16,10 @@ void	print_env(t_list *env_list)
 {
 	t_env	*tmp_var;
 
-	if (!(t_env *)env_list->content)
-		error_handle(ERR_NO_FILE, "", "", 0);
 	tmp_var = (t_env *)env_list->content;
 	while (env_list)
 	{
-		if (tmp_var->exported)
+		if (tmp_var->exported && ft_strchr(tmp_var->var, '='))
 			printf("%s\n", tmp_var->var);
 		env_list = env_list->next;
 		if (env_list)
@@ -76,8 +74,9 @@ void	write_line_env(int *i, char *var_name, char **env_tab, char *var_value)
 		var_value = ft_strdup(env_tab[*i] + (var_len(env_tab[*i]) + 1));
 	else
 		var_value = ft_strdup("");
-	if (ft_strchr(env_tab[*i], '=') && env_tab[*i][0] != '"' &&
-			env_tab[*i][0] != '\0' && var_value[0] != '"')
+	if (ft_strchr(env_tab[*i], '='))
+	// if (ft_strchr(env_tab[*i], '=') && env_tab[*i][0] != '"' &&
+	// 		env_tab[*i][0] != '\0' && var_value[0] != '"')
 		ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
 	else
 		ft_printf_fd(1, "declare -x %s\n", env_tab[*i]);

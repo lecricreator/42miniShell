@@ -35,6 +35,7 @@ FILES = ft_isalpha\
 		ft_strndup\
 		ft_substr\
 		ft_strjoin\
+		ft_strnjoin\
 		ft_strtrim\
 		ft_split\
 		ft_itoa\
