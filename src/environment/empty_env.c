@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:13:06 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/24 15:34:47 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:43:51 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,5 @@ void	empty_env(t_list **env_list, t_env	*node)
 	add_env_empty(node, env_list, join, 1);
 	free(join);
 	add_env_empty(node, env_list, "SHLVL=1", 1);
+	add_env_empty(node, env_list, "_=./mini_shell", 0);
 }

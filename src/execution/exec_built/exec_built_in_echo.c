@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:26:33 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 22:50:31 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,21 @@ int	exec_echo(char **cmd_args)
 	if (flags <= 0)
 		ft_printf_fd(1, "\n");
 	return (0);
+}
+
+
+int	exec_echo(char **cmd_args)
+{
+	int		i;
+	int		flags;
+
+	i = 0;
+	flags = 0;
+	while (cmd_args[++i])
+	{
+		if (flags == 0 && cmd_args[i][0] == '-')
+			flags = 1;
+		else
+
+	}
 }
