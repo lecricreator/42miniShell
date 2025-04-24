@@ -163,6 +163,7 @@ void	free_list(t_list **list, void (*del)(void *));
 void	free_redir(void *redir_void);
 void	free_env(void *var_void);
 void	get_env(t_list **env_list, char **env);
+void	empty_env(t_list **env_list, t_env	*node);
 char	**get_path(char **path, t_list *env);
 int		count_table(char **table);
 char	**get_env_tab(t_list *env_list, char **tmp_var);

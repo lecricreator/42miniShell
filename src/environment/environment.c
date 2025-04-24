@@ -6,41 +6,22 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:50:06 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/24 13:11:13 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:40:16 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*appears 1 / not apears 0*/
-void	env_is_empty(t_env *node, t_list **env_list, char *str, int exported)
-{
-	node = (t_env *)malloc(sizeof(t_env));
-	node->exported = exported;
-	node->var = ft_strdup(str);
-	if (!node->var)
-		error_handle(ERR_UNKNOWN,
-				"Minishell$", "ERROR MALLOC  environment.c", 0);
-	ft_lstadd_back(env_list, ft_lstnew(node));
-}
-
 void	get_env(t_list **env_list, char **env)
 {
 	t_env	*node;
 	int		i;
-	char	buffer[1024];
-	char	*join;
 
 	i = 0;
 	node = NULL;
 	if (!*env)
 	{
-		env_is_empty(node, env_list, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", 0);
-		join = ft_strjoin("PWD=", getcwd(buffer, sizeof(buffer)));
-		env_is_empty(node, env_list, join, 1);
-		free(join);
-		env_is_empty(node, env_list, "OLDPWD", 1);
-		env_is_empty(node, env_list, "SHLVL=1", 1);
+		empty_env(env_list, node);
 	}
 	while (env[i])
 	{
@@ -87,8 +68,7 @@ char	**add_env(char **env_tab, t_list *env_list, char **tmp_var)
 	while (tmp_head)
 	{
 		tmp_env_var = (t_env *)tmp_head->content;
-		if (tmp_env_var->exported)
-			env_tab[i++] = ft_strdup(tmp_env_var->var);
+		env_tab[i++] = ft_strdup(tmp_env_var->var);
 		tmp_head = tmp_head->next;
 		if (tmp_head)
 			tmp_env_var = (t_env *)tmp_head->content;

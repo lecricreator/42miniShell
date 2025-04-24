@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:39:15 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/24 13:11:45 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:46:16 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	write_line_env(int *i, char *var_name, char **env_tab, char *var_value)
 		var_value = ft_strdup(env_tab[*i] + (var_len(env_tab[*i]) + 1));
 	else
 		var_value = ft_strdup("");
-	if (ft_strchr(env_tab[*i], '='))
+	if (ft_strchr(env_tab[*i], '=') && env_tab[*i][0] != '"' &&
+			env_tab[*i][0] != '\0' && var_value[0] != '"')
 		ft_printf_fd(1, "declare -x %s=\"%s\"\n", var_name, var_value);
 	else
 		ft_printf_fd(1, "declare -x %s\n", env_tab[*i]);
