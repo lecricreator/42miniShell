@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/21 23:00:51 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 11:45:41 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	error_handle(t_error error, char *cmd, char *extra, int terminate)
 {
 	const t_errinfo	*err_info;
 	t_data			*data;
+	int				error_status;
 
 	data = recover_data_address(NULL);
 	err_info = get_errinfo(error);
@@ -48,56 +49,11 @@ int	error_handle(t_error error, char *cmd, char *extra, int terminate)
 		ft_printf_fd(2, err_info->str_format, cmd, extra);
 	if (terminate)
 	{
+		error_status = data->status;
 		free_data(data);
 		rl_clear_history();
-		exit(data->status);
+		exit(error_status);
 	}
 	else
 		return (data->status);
 }
-/*
-int	error_handle_without_rl(t_data *data, char *cmd, char *msg, int terminate)
-{
-	int	exit_code;
-
-	if (!data)
-		data = recover_data_address(NULL);
-	exit_code = 1;
-	ft_printf_fd(2, "%s: %s\n", cmd, msg);
-	if (ft_strnstr(msg, "directory", ft_strlen(msg)) || ft_strnstr(msg,
-			"permission", ft_strlen(msg)))
-		exit_code = 126;
-	else if (ft_strnstr(msg, "command", ft_strlen(msg)))
-		exit_code = 127;
-	if (terminate)
-	{
-		free_data(data);
-		rl_clear_history();
-		exit(exit_code);
-	}
-	else
-		return (exit_code);
-}
-
-int	error_handle(t_data *data, char *cmd, char *msg, int terminate)
-{
-	int	exit_code;
-
-	if (!data)
-		data = recover_data_address(NULL);
-	exit_code = 1;
-	ft_printf_fd(2, "Minishell: %s: %s\n", cmd, msg);
-	if (ft_strnstr(msg, "directory", ft_strlen(msg)) || ft_strnstr(msg,
-			"permission", ft_strlen(msg)))
-		exit_code = 126;
-	else if (ft_strnstr(msg, "command", ft_strlen(msg)))
-		exit_code = 127;
-	if (terminate)
-	{
-		free_data(data);
-		rl_clear_history();
-		exit(exit_code);
-	}
-	else
-		return (exit_code);
-}*/
