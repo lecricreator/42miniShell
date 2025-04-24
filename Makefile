@@ -43,7 +43,7 @@ EXEC_FILES = execution.c exec_built_in.c exec_cmd.c exec_heredoc.c
 EXEC_BUILT_FILES = exec_built_in_exit.c exec_built_in_cd.c exec_built_in_pwd.c \
 		exec_built_in_unset.c exec_built_in_export.c exec_built_in_echo.c
 PARS_FILES = parsing.c command_block.c command_block_utils.c \
-		command_block_cmd.c parsing_token.c lexing_utils.c lexing.c lexing_token.c lexing_type.c
+		command_block_cmd.c parsing_token.c lexing_utils.c lexing.c lexing_token.c lexing_type.c lexing_quotes.c
 ERR_FILES = error_handle.c free_data.c free_data_utils.c
 SIG_FILES = signal_init.c
 FILES = $(addprefix $(EXEC_DIR), $(EXEC_FILES)) \

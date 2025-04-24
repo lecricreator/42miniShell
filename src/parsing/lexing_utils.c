@@ -16,7 +16,7 @@ int	is_special_symbol(char c)
 {
 	char	*symbol_set;
 
-	symbol_set = "|<>&;(){}";
+	symbol_set = "|<>&;()#";
 	while (*symbol_set)
 	{
 		if (*symbol_set == c)
@@ -70,8 +70,7 @@ char	*dollar_expansion(t_data *data, char *input, int *start,
 	}
 	else
 	{
-		while (input[vars.i] && !ft_isblank(input[vars.i]) && input[vars.i]
-			!= 34)
+		while (input[vars.i] &&  is_valid_exp_synt(input[vars.i]))
 			vars.i++;
 		vars.var = ft_strndup(input + (*start + 1), vars.i - *start - 1);
 		vars.tmp = vars.var;

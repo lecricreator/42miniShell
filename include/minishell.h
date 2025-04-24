@@ -207,6 +207,7 @@ int		cmd_tab_len(t_list *token_list);
 void	create_cmd_block(t_list *token_list, t_list **cmd_list);
 t_cmd	*create_cmd(t_list **token_list);
 int		is_var_declaration(t_type type, int index);
+int		is_valid_exp_synt(char c);
 int		var_tab_size(t_list *token_list);
 void	init_redir(t_redir *redir);
 void	init_cmd(t_cmd *cmd);
@@ -223,11 +224,12 @@ int		is_double_symbol(const char *input, int *i);
 void	init_exp(t_expansion *exp, int start);
 char	*dollar_expansion(t_data *data, char *input, int *start,
 			t_list *env_list);
+void    lexing_quotes(char **input);
 void	free_vars(t_expansion *vars);
 int		bad_type(char *token);
 int		get_type(char *token);
 int		token_len(char **input, int *i);
-void	lexing_tokens_next(t_data **data, char **input, int token_index,
+void	tokenize(t_data **data, char **input, int token_index,
 			int len);
 void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);

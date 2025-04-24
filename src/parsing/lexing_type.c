@@ -14,10 +14,10 @@
 
 static int	bad_type_next(char *token)
 {
-	if (!ft_strncmp(token, "(", ft_strlen("(") + 1))
-		return (1);
-	if (!ft_strncmp(token, ")", ft_strlen(")") + 1))
-		return (1);
+//	if (!ft_strncmp(token, "(", ft_strlen("(") + 1))
+//		return (1);
+//	if (!ft_strncmp(token, ")", ft_strlen(")") + 1))
+//		return (1);
 	if (!ft_strncmp(token, "\"", ft_strlen("\"") + 1))
 		return (1);
 	if (!ft_strncmp(token, "\'", ft_strlen("\'") + 1))
@@ -41,12 +41,12 @@ int	bad_type(char *token)
 		return (1);
 	if (!ft_strncmp(token, ";", ft_strlen(";") + 1))
 		return (1);
-	if (!ft_strncmp(token, "{{", ft_strlen("{{") + 1))
-		return (1);
-	if (!ft_strncmp(token, "((", ft_strlen("((") + 1))
-		return (1);
-	if (!ft_strncmp(token, "}}", ft_strlen("}}") + 1))
-		return (1);
+//	if (!ft_strncmp(token, "{{", ft_strlen("{{") + 1))
+//		return (1);
+//	if (!ft_strncmp(token, "((", ft_strlen("((") + 1))
+//		return (1);
+//	if (!ft_strncmp(token, "}}", ft_strlen("}}") + 1))
+//		return (1);
 	return (bad_type_next(token));
 }
 
