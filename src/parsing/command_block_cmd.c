@@ -23,7 +23,7 @@ t_cmd	*create_cmd(t_list **token_list)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		error_handle(ERR_UNKNOWN, "Minishell:",
-			"command_block.c:189\nmalloc failed", KILL);
+			"command_block_cmd.c:26\nmalloc failed", KILL);
 	init_cmd(cmd);
 	if (is_var_declaration(tmp_token->type, tmp_token->index))
 		return (cmd_if_var(&cmd, token_list));
