@@ -18,6 +18,8 @@ void	fill_token_list(t_data *data, char *token, int token_index)
 	t_token	*token_node;
 
 	token_node = create_token(token, token_index);
+	if (!token_node)
+		return ;
 	new_node = ft_lstnew(token_node);
 	if (!new_node)
 		error_handle(ERR_UNKNOWN, "new_node",
@@ -64,7 +66,8 @@ void	tokenize(t_data **data, char **input, int token_index)
 	while ((*input)[i])
 	{
 		token_str = tokenize_loop(input, &i, len);
-		fill_token_list(*data, token_str, token_index);
+		if (token_str)
+			fill_token_list(*data, token_str, token_index);
 		token_index++;
 		if ((*input)[i] == '\0')
 			break ;
