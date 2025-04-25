@@ -33,6 +33,7 @@
 typedef struct s_fds
 {
 	int	pipefd[2];
+	int	doublepipe[2];
 	int	herepipe[2];
 	int	prev_pipe;
 	int	infile;
@@ -235,5 +236,6 @@ void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);
 void    restore_stdin(t_fds *fds);
 void    restore_stdout(t_fds *fds);
+void	exec_tee(t_redir *redir, t_fds *fds);
 
 #endif
