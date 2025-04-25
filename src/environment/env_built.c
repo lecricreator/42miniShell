@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 22:09:48 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 19:20:59 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:49:37 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ void	write_env_list(char *new_value, char *var_name, t_list **env_list)
 	}
 	if (*env_list)
 	{
+		free(((t_env *)(*env_list)->content)->var);
 		((t_env *)(*env_list)->content)->var = ft_strjoin(var_name,
 				new_value);
 		if (((t_env *)(*env_list)->content)->exported == 0)
 			((t_env *)(*env_list)->content)->exported = 1;
-
 	}
 	(*env_list) = head_env;
 }

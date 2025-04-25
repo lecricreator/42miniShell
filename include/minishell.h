@@ -29,6 +29,8 @@
 # include <sys/stat.h>
 # define KILL 1
 # define CONTINUE 0
+# define TRUE 1
+# define FALSE 0
 
 typedef struct s_fds
 {
