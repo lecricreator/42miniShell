@@ -6,15 +6,23 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:41:24 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/24 12:31:42 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:45:15 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_exit(char **cmd_args)
+static void	free_exit(int exit_status)
 {
 	t_data	*tmp_data;
+
+	tmp_data = recover_data_address(NULL);
+	free_data(tmp_data);
+	exit(exit_status);
+}
+
+void	exec_exit(char **cmd_args)
+{
 	int		i;
 	int		exit_status;
 
@@ -35,9 +43,7 @@ void	exec_exit(char **cmd_args)
 		ft_printf_fd(2, "exit\n");
 		if (cmd_args[1] && exit_status == 2)
 			ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
-					cmd_args[1]);
+				cmd_args[1]);
 	}
-	tmp_data = recover_data_address(NULL);
-	free_data(tmp_data);
-	exit(exit_status);
+	free_exit(exit_status);
 }

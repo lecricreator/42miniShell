@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   in_out_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: odruke-s <odruke-s@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:21:52 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/23 16:26:11 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:28:02 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	restore_stdin(t_fds *fds)
 
 void	restore_stdout(t_fds *fds)
 {
-	 if (fds->outfile != -1 || fds->std_out != -1)
+	if (fds->outfile != -1 || fds->std_out != -1)
 	{
 		dup2(fds->std_out, STDOUT_FILENO);
 		if (fds->std_out < 0)

@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:04:24 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 15:06:04 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:38:17 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 static int	bad_type_next(char *token)
 {
-//	if (!ft_strncmp(token, "(", ft_strlen("(") + 1))
-//		return (1);
-//	if (!ft_strncmp(token, ")", ft_strlen(")") + 1))
-//		return (1);
 	if (!ft_strncmp(token, "\"", ft_strlen("\"") + 1))
 		return (1);
 	if (!ft_strncmp(token, "\'", ft_strlen("\'") + 1))
@@ -41,12 +37,6 @@ int	bad_type(char *token)
 		return (1);
 	if (!ft_strncmp(token, ";", ft_strlen(";") + 1))
 		return (1);
-//	if (!ft_strncmp(token, "{{", ft_strlen("{{") + 1))
-//		return (1);
-//	if (!ft_strncmp(token, "((", ft_strlen("((") + 1))
-//		return (1);
-//	if (!ft_strncmp(token, "}}", ft_strlen("}}") + 1))
-//		return (1);
 	return (bad_type_next(token));
 }
 

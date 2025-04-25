@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:08:12 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/21 16:12:09 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 01:24:56 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	free_data(t_data *data)
 	if (data->input)
 		free(data->input);
 	if (data->fds)
-		free(data->fds);// is it necesaire to close all fds before free? 
+		free(data->fds);
 	if (data->env_list)
 		free_list(&data->env_list, free_env);
 	if (data->token_list)

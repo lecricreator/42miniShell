@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:07:30 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 15:20:33 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 01:26:05 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ static void	handle_fds(t_cmd **tmp_cmd, t_fds *fds)
 		(*fds).prev_pipe = dup((*fds).pipefd[0]);
 		close((*fds).pipefd[0]);
 	}
-//	if (fds->std_in != -1 || fds->std_out != -1 || fds->herepipe[0] != -1)
-//		reset_io(fds);
 }
 
 void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
@@ -74,7 +72,7 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 				"execution.c:73\nPipe failed", KILL);
 	}
 	check_heredoc((*tmp_cmd)->redir, fds);
-	if(!exec_redir((*tmp_cmd)->redir, fds))
+	if (!exec_redir((*tmp_cmd)->redir, fds))
 	{
 		if (is_builtin((*tmp_cmd)->type))
 		{

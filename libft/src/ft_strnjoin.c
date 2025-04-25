@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strnjoin.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 01:25:45 by lomorale          #+#    #+#             */
+/*   Updated: 2025/04/26 01:25:52 by lomorale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
+
 /*concatenate at most n characters of s2 in s1*/
 char	*ft_strnjoin(char *s1, char const *s2, int n)
 {

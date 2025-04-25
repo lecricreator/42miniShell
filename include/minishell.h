@@ -235,7 +235,7 @@ int		token_len(char **input, int *i);
 void	tokenize(t_data **data, char **input, int token_index);
 void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);
-void    restore_stdin(t_fds *fds);
-void    restore_stdout(t_fds *fds);
+void	restore_stdin(t_fds *fds);
+void	restore_stdout(t_fds *fds);
 
 #endif

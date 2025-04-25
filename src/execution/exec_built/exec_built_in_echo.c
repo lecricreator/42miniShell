@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/25 15:54:34 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:39:36 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_n_flag(char *str)
 {
-	str+ = 2;
+	str += 2;
 	while (*str)
 	{
 		if (*str == 'n')

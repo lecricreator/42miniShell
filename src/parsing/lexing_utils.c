@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:19:14 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/22 14:04:07 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:36:48 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*dollar_expansion(t_data *data, char *input, int *start,
 	}
 	else
 	{
-		while (input[vars.i] &&  is_valid_exp_synt(input[vars.i]))
+		while (input[vars.i] && is_valid_exp_synt(input[vars.i]))
 			vars.i++;
 		vars.var = ft_strndup(input + (*start + 1), vars.i - *start - 1);
 		vars.tmp = vars.var;

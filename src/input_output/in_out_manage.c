@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:54:39 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 11:40:24 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:34:53 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 
 int	change_redir_in(t_redir *redir, t_fds *fds)
 {
-	
 	if (redir->type == OP_REDIR_IN)
 	{
 		fds->infile = open(redir->filename, O_RDONLY);
@@ -68,8 +67,9 @@ int	change_redir_in(t_redir *redir, t_fds *fds)
 int	change_io(t_redir *redir, t_fds *fds)
 {
 	int	exit_code;
+
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
-	{	
+	{
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
@@ -77,7 +77,8 @@ int	change_io(t_redir *redir, t_fds *fds)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		if (fds->outfile < 0)
-			return(error_handle(ERR_PERMISSION, redir->filename, NULL, CONTINUE));
+			return (error_handle(ERR_PERMISSION, redir->filename, NULL,
+					CONTINUE));
 		dup2(fds->outfile, STDOUT_FILENO);
 		if (fds->outfile < 0)
 			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);
@@ -97,7 +98,7 @@ int	exec_redir(t_list *redir, t_fds *fds)
 	while (tmp_head)
 	{
 		if (change_io(tmp_redir, fds))
-			return(1);
+			return (1);
 		tmp_head = tmp_head->next;
 		if (tmp_head)
 			tmp_redir = (t_redir *)tmp_head->content;
