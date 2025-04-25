@@ -14,8 +14,15 @@
 
 void	reset_io(t_fds *fds)
 {
+	if (!fds)
+		return ;
 	restore_stdin(fds);
 	restore_stdout(fds);
+	if (fds->herepipe[0] != -1)
+	{
+		fds->herepipe[0] = -1;
+		fds->herepipe[1] = -1;
+	}
 }
 
 void	exec_pipe(t_cmd *cmd, t_fds *fds)
@@ -85,8 +92,6 @@ int	exec_redir(t_list *redir, t_fds *fds)
 	t_list	*tmp_head;
 
 	tmp_head = redir;
-	fds->std_out = dup(STDOUT_FILENO);
-	fds->std_in = dup(STDIN_FILENO);
 	if (tmp_head)
 		tmp_redir = (t_redir *)tmp_head->content;
 	while (tmp_head)

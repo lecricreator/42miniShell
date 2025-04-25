@@ -73,5 +73,6 @@ int	main(int ac, char **av, char **env)
 		create_cmd_block(data->token_list, &data->cmd_list);
 		execution(data);
 		wait_and_status(data);
+		reset_io(data->fds);
 	}
 }

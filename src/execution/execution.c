@@ -12,17 +12,18 @@
 
 #include <minishell.h>
 
-void	init_fds(t_fds *fds)
+void	init_fds(t_data *data)
 {
-	fds->infile = -1;
-	fds->outfile = -1;
-	fds->pipefd[0] = -1;
-	fds->pipefd[1] = -1;
-	fds->herepipe[0] = -1;
-	fds->herepipe[1] = -1;
-	fds->prev_pipe = -1;
-	fds->std_in = -1;
-	fds->std_out = -1;
+	data->fds = (t_fds *)malloc(sizeof(t_fds));
+	data->fds->infile = -1;
+	data->fds->outfile = -1;
+	data->fds->pipefd[0] = -1;
+	data->fds->pipefd[1] = -1;
+	data->fds->herepipe[0] = -1;
+	data->fds->herepipe[1] = -1;
+	data->fds->prev_pipe = -1;
+	data->fds->std_out = dup(STDOUT_FILENO);
+	data->fds->std_in = dup(STDIN_FILENO);
 }
 
 static void	check_heredoc(t_list *redir, t_fds *fds)
@@ -59,8 +60,8 @@ static void	handle_fds(t_cmd **tmp_cmd, t_fds *fds)
 		(*fds).prev_pipe = dup((*fds).pipefd[0]);
 		close((*fds).pipefd[0]);
 	}
-	if ((*fds).std_in != -1 || (*fds).std_out != -1)
-		reset_io(fds);
+//	if (fds->std_in != -1 || fds->std_out != -1 || fds->herepipe[0] != -1)
+//		reset_io(fds);
 }
 
 void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
@@ -70,7 +71,7 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 	{
 		if (pipe((*fds).pipefd) == -1)
 			error_handle(ERR_UNKNOWN, (*tmp_cmd)->cmd_args[0],
-				"execution.c:55\nPipe failed", KILL);
+				"execution.c:73\nPipe failed", KILL);
 	}
 	check_heredoc((*tmp_cmd)->redir, fds);
 	if(!exec_redir((*tmp_cmd)->redir, fds))
@@ -90,12 +91,11 @@ void	execution(t_data *data)
 {
 	t_cmd	*tmp_cmd;
 	t_list	*tmp_head;
-	t_fds	fds;
 	char	**tmp_var;
 
 	if (!data->cmd_list)
 		return ;
-	init_fds(&fds);
+	init_fds(data);
 	tmp_var = NULL;
 	tmp_head = data->cmd_list;
 	while (tmp_head)
@@ -107,7 +107,7 @@ void	execution(t_data *data)
 			tmp_head = tmp_head->next;
 			continue ;
 		}
-		find_to_execute(data, tmp_var, &tmp_cmd, &fds);
+		find_to_execute(data, tmp_var, &tmp_cmd, data->fds);
 		tmp_head = tmp_head->next;
 	}
 }

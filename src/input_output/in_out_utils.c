@@ -14,7 +14,7 @@
 
 void	restore_stdin(t_fds *fds)
 {
-	if (fds->infile != -1 || fds->std_in != -1)
+	if (fds->infile != -1 || fds->std_in != -1 || fds->herepipe[0] != -1)
 	{
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)

@@ -34,7 +34,7 @@ static void	here_loop(t_data *data, char *line, char *delimiter, t_fds *fds)
 		free(line);
 		line = NULL;
 	}
-	if (!line)
+	if (line)
 		free(line);
 	exit_code = data->status;
 	free_data(data);
@@ -53,19 +53,18 @@ void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 	line = NULL;
 	if (pipe(fds->herepipe) == -1)
 		error_handle(ERR_UNKNOWN, heredoc->filename,
-			"exec_heredoc.c:24\npipe failed", KILL);
+			"exec_heredoc.c:56\npipe failed", KILL);
 	data->pid = fork();
 	if (data->pid == -1)
 		error_handle(ERR_UNKNOWN, "Minishell :",
-			"exec_cmd:103\nFork failed", KILL);
+			"exec_cmd:60\nFork failed", KILL);
 	data->n_fork++;
 	if (!data->pid)
 		here_loop(data, line, delimiter, fds);
 	waitpid(data->pid, &data->status, 0);
 	close(fds->herepipe[1]);
-	dup2(fds->herepipe[0], STDIN_FILENO);
-	if (!fds->herepipe[0])
+	if (dup2(fds->herepipe[0], STDIN_FILENO) == -1)
 		error_handle(ERR_UNKNOWN, "herepipe[0]:",
-			"exec_heredoc:37\ndup2 failed", KILL);
+			"exec_heredoc:68\ndup2 failed", KILL);
 	close(fds->herepipe[0]);
 }

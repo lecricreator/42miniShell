@@ -113,6 +113,7 @@ typedef struct s_data
 	t_list	*env_list;
 	t_list	*token_list;
 	t_list	*cmd_list;
+	t_fds	*fds;
 	char	*input;
 	int		status;
 	int		n_fork;

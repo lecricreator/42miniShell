@@ -43,6 +43,8 @@ void	free_data(t_data *data)
 {
 	if (data->input)
 		free(data->input);
+	if (data->fds)
+		free(data->fds);// is it necesaire to close all fds before free? 
 	if (data->env_list)
 		free_list(&data->env_list, free_env);
 	if (data->token_list)
