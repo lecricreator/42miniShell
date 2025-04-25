@@ -69,7 +69,6 @@ int	main(int ac, char **av, char **env)
 		if (!data->input)
 			exec_exit(NULL);
 		add_history(data->input);
-
 		parsing(data);
 		create_cmd_block(data->token_list, &data->cmd_list);
 		execution(data);

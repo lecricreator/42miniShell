@@ -18,7 +18,7 @@ void	restore_stdin(t_fds *fds)
 	{
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)
-			error_handle(ERR_UNKNOWN, "std in", "in_out_management.c:\n", KILL);
+			error_handle(ERR_UNKNOWN, "std in", "in_out_utils.c:21\n", KILL);
 		if (fds->std_in > -1)
 			close(fds->std_in);
 		if (fds->infile > -1)
@@ -30,12 +30,12 @@ void	restore_stdin(t_fds *fds)
 
 void	restore_stdout(t_fds *fds)
 {
-	if (fds->outfile != -1 || fds->std_out != -1)
+	 if (fds->outfile != -1 || fds->std_out != -1)
 	{
 		dup2(fds->std_out, STDOUT_FILENO);
 		if (fds->std_out < 0)
 			error_handle(ERR_UNKNOWN, "std out",
-				"in_out_manage.c:21\ndup2 failed", KILL);
+				"in_out_utils.c:38\ndup2 failed", KILL);
 		if (fds->std_out > -1)
 			close(fds->std_out);
 		if (fds->outfile > -1)

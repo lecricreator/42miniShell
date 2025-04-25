@@ -22,7 +22,7 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 {
 	if (cmd->is_pipe)
 	{
-		if (STDOUT_FILENO != 1)
+		if (fds->outfile != -1)
 		{
 			cmd->is_pipe = 0;
 			return ;
@@ -44,12 +44,13 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 
 void	change_redir_in(t_redir *redir, t_fds *fds)
 {
-	restore_stdin(fds);
+	
 	if (redir->type == OP_REDIR_IN)
 	{
+//		restore_stdin(fds);
 		if (STDIN_FILENO != 0)
 			return ;
-		fds->std_in = dup(STDIN_FILENO);
+		
 		fds->infile = open(redir->filename, O_RDONLY);
 		if (fds->infile < 0)
 		{
@@ -70,8 +71,8 @@ void	change_io(t_redir *redir, t_fds *fds)
 {
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
 	{
-		restore_stdout(fds);
-		fds->std_out = dup(STDOUT_FILENO);
+	//	restore_stdout(fds);
+		
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
@@ -93,6 +94,8 @@ void	exec_redir(t_list *redir, t_fds *fds)
 	t_list	*tmp_head;
 
 	tmp_head = redir;
+	fds->std_out = dup(STDOUT_FILENO);
+	fds->std_in = dup(STDIN_FILENO);
 	if (tmp_head)
 		tmp_redir = (t_redir *)tmp_head->content;
 	while (tmp_head)
