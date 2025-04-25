@@ -73,14 +73,16 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 				"execution.c:55\nPipe failed", KILL);
 	}
 	check_heredoc((*tmp_cmd)->redir, fds);
-	exec_redir((*tmp_cmd)->redir, fds);
-	if (is_builtin((*tmp_cmd)->type))
+	if(!exec_redir((*tmp_cmd)->redir, fds))
 	{
-		(*tmp_cmd)->nbr_arg = count_table((*tmp_cmd)->cmd_args);
-		exec_builtin_before_fork(data, (*tmp_cmd), fds);
+		if (is_builtin((*tmp_cmd)->type))
+		{
+			(*tmp_cmd)->nbr_arg = count_table((*tmp_cmd)->cmd_args);
+			exec_builtin_before_fork(data, (*tmp_cmd), fds);
+		}
+		else if ((*tmp_cmd)->type == COMMAND)
+			exec_cmd(data, (*tmp_cmd), fds, tmp_var);
 	}
-	else if ((*tmp_cmd)->type == COMMAND)
-		exec_cmd(data, (*tmp_cmd), fds, tmp_var);
 	handle_fds(tmp_cmd, fds);
 }
 
