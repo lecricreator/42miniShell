@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_esc_char.c                                   :+:      :+:    :+:   */
+/*   check_esc_char.c                                    :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 10:31:40 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/26 10:32:03 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 11:37:01 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int is_in_quotes(int state, char c)
+int	is_in_quotes(int state, char c)
 {
 	if (c == 34)
 	{
@@ -30,7 +30,7 @@ static char	*esc_char(char *input, int *start)
 	char	*str_front;
 	char	*str_back;
 	char	*new_input;
-	int	 i;
+	int		i;
 
 	i = *start + 1;
 	str_front = NULL;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_built_in_exit.c                               :+:      :+:    :+:   */
+/*   exec_built_in_exit.c                                :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:41:24 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/26 10:42:44 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 11:33:35 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	free_exit(int exit_status, char *args)
 		ft_printf_fd(2, "exit\n");
 	if (args && exit_status == 2)
 		ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
-		args);
+			args);
 	free_data(tmp_data);
 	exit(exit_status);
 }
