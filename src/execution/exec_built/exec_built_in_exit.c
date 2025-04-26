@@ -12,11 +12,16 @@
 
 #include "minishell.h"
 
-static void	free_exit(int exit_status)
+static void	free_exit(int exit_status, char *args)
 {
 	t_data	*tmp_data;
 
 	tmp_data = recover_data_address(NULL);
+	if (tmp_data->pid)
+		ft_printf_fd(2, "exit\n");
+	if (args && exit_status == 2)
+		ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
+		args);
 	free_data(tmp_data);
 	exit(exit_status);
 }
@@ -27,7 +32,6 @@ void	exec_exit(char **cmd_args)
 	int		exit_status;
 
 	exit_status = EXIT_SUCCESS;
-	tmp_data = recover_data_address(NULL);
 	if (cmd_args)
 	{
 		i = -1;
@@ -41,11 +45,7 @@ void	exec_exit(char **cmd_args)
 			else
 				exit_status = 2;
 		}
-		if (tmp_data->pid)
-			ft_printf_fd(2, "exit\n");
-		if (cmd_args[1] && exit_status == 2)
-			ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
-				cmd_args[1]);
+
 	}
-	free_exit(exit_status);
+	free_exit(exit_status, cmd_args[1]);
 }

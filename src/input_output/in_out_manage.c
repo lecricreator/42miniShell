@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   in_out_manage.c                                    :+:      :+:    :+:   */
+/*   in_out_manage.c                                     :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:54:39 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/26 09:12:55 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:33:17 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,9 @@ int	change_redir_in(t_redir *redir, t_fds *fds)
 int	change_io(t_redir *redir, t_fds *fds)
 {
 	int	exit_code;
+
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
-<<<<<<< HEAD
 	{
-		if (fds->doublepipe[0] != -1)
-			return (change_redir_in(redir, fds));
-=======
-	{	
->>>>>>> 9281f99cc243a762ce0f2a09a786ac6f2b066f7e
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
@@ -82,7 +77,8 @@ int	change_io(t_redir *redir, t_fds *fds)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		if (fds->outfile < 0)
-			return(error_handle(ERR_PERMI_OPEN, redir->filename, NULL, CONTINUE));
+			return (error_handle(ERR_PERMI_OPEN,
+					redir->filename, NULL, CONTINUE));
 		dup2(fds->outfile, STDOUT_FILENO);
 		if (fds->outfile < 0)
 			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);

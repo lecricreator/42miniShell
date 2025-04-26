@@ -24,10 +24,8 @@ void	check_for_expansion(t_data *data, char **input)
 {
 	int		i;
 	int		quotes;
-	char	*tmp;
 
 	i = 0;
-	tmp = NULL;
 	quotes = 0;
 	while ((*input)[i])
 	{
@@ -42,11 +40,7 @@ void	check_for_expansion(t_data *data, char **input)
 			continue ;
 		}
 		if ((*input)[i] == '$')
-		{
-			tmp = *input;
-			*input = dollar_expansion(data, *input, &i, data->env_list);
-			free(tmp);
-		}
+			dollar_expansion(data, input, &i, data->env_list);
 		if (is_special_symbol((*input)[i]))
 			i++;
 		else if ((*input)[i] == 39)
