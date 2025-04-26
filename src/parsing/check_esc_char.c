@@ -51,7 +51,7 @@ void	check_esc_char(char **input, int *i, int quotes)
 	char	*tmp;
 	char	*scp_on_quotes;
 
-	scp_on_quotes = "\"\\$`";
+	scp_on_quotes = "\"$`";
 	tmp = NULL;
 	if (!quotes || (quotes && ft_strchr(scp_on_quotes, (*input)[*i + 1])))
 	{
@@ -59,4 +59,6 @@ void	check_esc_char(char **input, int *i, int quotes)
 		*input = esc_char(*input, i);
 		free(tmp);
 	}
+	else
+		(*i)++;
 }

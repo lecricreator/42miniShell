@@ -14,6 +14,8 @@
 
 static void	free_exit(int exit_status, char *args)
 {
+	t_data	*tmp_data;
+
 	tmp_data = recover_data_address(NULL);
 	if (tmp_data->pid)
 		ft_printf_fd(2, "exit\n");
@@ -28,7 +30,6 @@ void	exec_exit(char **cmd_args)
 {
 	int		i;
 	int		exit_status;
-	t_data	*tmp_data;
 
 	exit_status = EXIT_SUCCESS;
 	if (cmd_args)
