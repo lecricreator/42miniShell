@@ -133,6 +133,12 @@ typedef struct s_expansion
 	char	*tmp;
 }t_expansion;
 
+typedef struct s_mini_expan
+{
+	int	i;
+	int	quotes;
+}t_mini_expan;
+
 typedef struct s_env
 {
 	char	*var;
@@ -241,5 +247,7 @@ void	restore_stdout(t_fds *fds);
 void	clean_fds(t_fds *fds);
 void	check_esc_char(char **input, int *i, int quotes);
 int		is_in_quotes(int state, char c);
+void	fordward_w_quote(char *input, int *i);
+void	init_mini_expand(t_mini_expan **ex);
 
 #endif

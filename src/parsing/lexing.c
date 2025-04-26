@@ -22,36 +22,31 @@ int	is_valid_exp_synt(char c)
 
 void	check_for_expansion(t_data *data, char **input)
 {
-	int		i;
-	int		quotes;
+	t_mini_expan	*ex;
 
-	i = 0;
-	quotes = 0;
-	while ((*input)[i])
+	init_mini_expand(&ex);
+	while ((*input)[ex->i])
 	{
-		quotes = is_in_quotes(quotes, (*input)[i]);
-		if ((*input)[i] == 92)
+		ex->quotes = is_in_quotes(ex->quotes, (*input)[ex->i]);
+		if ((*input)[ex->i] == 92)
 		{
-			check_esc_char(input, &i, quotes);
-			if (!(*input)[i])
+			check_esc_char(input, &ex->i, ex->quotes);
+			if (!(*input)[ex->i])
 				break ;
-			if ((*input)[i] != 92)
-				i++;
+			if ((*input)[ex->i] != 92)
+				ex->i++;
 			continue ;
 		}
-		if ((*input)[i] == '$')
-			dollar_expansion(data, input, &i, data->env_list);
-		if (is_special_symbol((*input)[i]))
-			i++;
-		else if ((*input)[i] == 39)
-		{
-			i++;
-			while ((*input)[i] && (*input)[i] != 39)
-				i++;
-		}
-		else if ((*input)[i])
-			i++;
+		if ((*input)[ex->i] == '$')
+			dollar_expansion(data, input, &ex->i, data->env_list);
+		if (is_special_symbol((*input)[ex->i]))
+			ex->i++;
+		else if ((*input)[ex->i] == 39)
+			fordward_w_quote(*input, &ex->i);
+		else if ((*input)[ex->i])
+			ex->i++;
 	}
+	free(ex);
 }
 
 void	free_vars(t_expansion *vars)
