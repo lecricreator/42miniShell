@@ -19,6 +19,7 @@ void	exec_exit(char **cmd_args)
 	int		exit_status;
 
 	exit_status = EXIT_SUCCESS;
+	tmp_data = recover_data_address(NULL);
 	if (cmd_args)
 	{
 		i = -1;
@@ -32,12 +33,12 @@ void	exec_exit(char **cmd_args)
 			else
 				exit_status = 2;
 		}
-		ft_printf_fd(2, "exit\n");
+		if (tmp_data->pid)
+			ft_printf_fd(2, "exit\n");
 		if (cmd_args[1] && exit_status == 2)
 			ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
 					cmd_args[1]);
 	}
-	tmp_data = recover_data_address(NULL);
 	free_data(tmp_data);
 	exit(exit_status);
 }
