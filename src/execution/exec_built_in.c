@@ -47,6 +47,7 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 		if (!data->pid)
 		{
 			signal(SIGQUIT, SIG_DFL);
+			signal(SIGPIPE, SIG_IGN);
 			exec_pipe(cmd, fds);
 			exec_builtin(cmd, &data->env_list);
 			free_data(data);

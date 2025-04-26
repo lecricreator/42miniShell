@@ -73,6 +73,7 @@ void	reset_input(t_data *data)
 	{
 		clean_fds(data->fds);
 		free(data->fds);
+		data->fds = NULL;
 	}
 	if (data->token_list)
 		free_list(&data->token_list, free_token);
