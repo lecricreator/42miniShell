@@ -20,8 +20,10 @@ const t_errinfo	*get_errinfo(t_error error)
 		"Minishell: syntax error near unexpected token `%s'\n"};
 	errtab[ERR_NOT_FOUND] = (t_errinfo){ERR_NOT_FOUND, 127,
 		"%s: command not found\n"};
-	errtab[ERR_PERMISSION] = (t_errinfo){ERR_PERMISSION, 126,
+	errtab[ERR_PERMI_OPEN] = (t_errinfo){ERR_PERMI_OPEN, 1,
 		"Minishell: %s: permission denied\n"};
+	errtab[ERR_PERMI_EXEC] = (t_errinfo){ERR_PERMI_EXEC, 126,
+			"Minishell: %s: permission denied\n"};
 	errtab[ERR_IS_DIRECTORY] = (t_errinfo){ERR_IS_DIRECTORY, 126,
 		"Minishell: %s: is a directory\n"};
 	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 127,

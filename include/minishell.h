@@ -72,7 +72,8 @@ typedef enum e_error
 {
 	ERR_SYNTAX,
 	ERR_NOT_FOUND,
-	ERR_PERMISSION,
+	ERR_PERMI_OPEN,
+	ERR_PERMI_EXEC,
 	ERR_IS_DIRECTORY,
 	ERR_NO_FILE,
 	ERR_MANY_ARGS,
@@ -237,5 +238,6 @@ void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);
 void    restore_stdin(t_fds *fds);
 void    restore_stdout(t_fds *fds);
+void	clean_fds(t_fds *fds);
 
 #endif
