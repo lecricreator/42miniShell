@@ -16,8 +16,8 @@ static int	bad_type_next(char *token)
 {
 //	if (!ft_strncmp(token, "(", ft_strlen("(") + 1))
 //		return (1);
-//	if (!ft_strncmp(token, ")", ft_strlen(")") + 1))
-//		return (1);
+	if (!ft_strncmp(token, "\\", ft_strlen("\\") + 1))
+		return (1);
 	if (!ft_strncmp(token, "\"", ft_strlen("\"") + 1))
 		return (1);
 	if (!ft_strncmp(token, "\'", ft_strlen("\'") + 1))

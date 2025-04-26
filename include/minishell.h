@@ -239,5 +239,7 @@ t_token	*create_token(char *str, int index);
 void    restore_stdin(t_fds *fds);
 void    restore_stdout(t_fds *fds);
 void	clean_fds(t_fds *fds);
+void	check_esc_char(char **input, int *i, int quotes);
+int 	is_in_quotes(int state, char c);
 
 #endif
