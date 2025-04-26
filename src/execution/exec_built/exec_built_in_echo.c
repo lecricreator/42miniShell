@@ -14,14 +14,9 @@
 
 int	is_n_flag(char *str)
 {
-	str+ = 2;
-	while (*str)
-	{
-		if (*str == 'n')
+	str += 2;
+	while (*str && *str == 'n')
 			str++;
-		else
-			break ;
-	}
 	if (*str == '\0')
 		return (TRUE);
 	return (FALSE);
@@ -39,9 +34,7 @@ int	exec_echo(char **cmd_args)
 		if (ft_strncmp(cmd_args[i], "-n", 2) == 0 && is_n_flag(cmd_args[i]))
 			line_break = FALSE;
 		else
-		{
 			break ;
-		}
 		i++;
 	}
 	if (cmd_args[i])

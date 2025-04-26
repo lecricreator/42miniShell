@@ -23,12 +23,24 @@ int	is_valid_exp_synt(char c)
 void	check_for_expansion(t_data *data, char **input)
 {
 	int		i;
+	int		quotes;
 	char	*tmp;
 
 	i = 0;
 	tmp = NULL;
+	quotes = 0;
 	while ((*input)[i])
 	{
+		quotes = is_in_quotes(quotes, (*input)[i]);
+		if ((*input)[i] == 92)
+		{
+			check_esc_char(input, &i, quotes);
+			if (!(*input)[i])
+				break ;
+			if ((*input)[i] != 92)
+				i++;
+			continue ;
+		}
 		if ((*input)[i] == '$')
 		{
 			tmp = *input;
