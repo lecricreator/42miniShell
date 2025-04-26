@@ -29,11 +29,11 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 {
 	if (cmd->is_pipe)
 	{
-		// if (fds->outfile != -1)
-		// {
-		// 	cmd->is_pipe = 0;
-		// 	return ;
-		// }
+		if (fds->outfile != -1)
+		{
+			cmd->is_pipe = 0;
+			return ;
+		}
 		close(fds->pipefd[0]);
 		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
 			error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
@@ -68,12 +68,8 @@ int	change_redir_in(t_redir *redir, t_fds *fds)
 int	change_io(t_redir *redir, t_fds *fds)
 {
 	int	exit_code;
-
-	exit_code = 0;
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
 	{	
-		if (fds->doublepipe[0] != -1)
-			return (change_redir_in(redir, fds));
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);

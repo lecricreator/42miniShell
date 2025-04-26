@@ -35,7 +35,6 @@
 typedef struct s_fds
 {
 	int	pipefd[2];
-	int	doublepipe[2];
 	int	herepipe[2];
 	int	prev_pipe;
 	int	infile;
