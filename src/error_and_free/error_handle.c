@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:26:24 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/24 11:45:41 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:25:24 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ const t_errinfo	*get_errinfo(t_error error)
 	errtab[ERR_PERMI_OPEN] = (t_errinfo){ERR_PERMI_OPEN, 1,
 		"Minishell: %s: permission denied\n"};
 	errtab[ERR_PERMI_EXEC] = (t_errinfo){ERR_PERMI_EXEC, 126,
-			"Minishell: %s: permission denied\n"};
+		"Minishell: %s: permission denied\n"};
 	errtab[ERR_IS_DIRECTORY] = (t_errinfo){ERR_IS_DIRECTORY, 126,
 		"Minishell: %s: is a directory\n"};
 	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 127,

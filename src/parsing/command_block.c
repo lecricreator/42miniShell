@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 02:02:16 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/22 12:06:05 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:33:04 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head,
 			fill_redir(&(*cmd)->redir, tmp_head);
 			break ;
 		}
-		// if (*tmp_head)
-			*tmp_head = (*tmp_head)->next;
+		*tmp_head = (*tmp_head)->next;
 		if (*tmp_head)
 			(*tmp_token) = ((t_token *)(*tmp_head)->content);
 	}
