@@ -53,30 +53,33 @@ static void	transform_dollar(t_expansion *vars, char **input, int **start)
 	vars->new_input = ft_strjoin(vars->new_input, vars->str_back);
 	*start += ft_strlen(vars->var);
 	free_vars(vars);
+	vars->tmp = *input;
+	*input = vars->new_input;
+	free(vars->tmp);
 }
 
-char	*dollar_expansion(t_data *data, char *input, int *start,
+void	dollar_expansion(t_data *data, char **input, int *start,
 		t_list *env_list)
 {
 	t_expansion	vars;
 
 	init_exp(&vars, *start);
-	if (!input[vars.i] || ft_isblank(input[vars.i]))
+	if (!(*input)[vars.i] || ft_isblank((*input)[vars.i]))
 		vars.var = ft_strdup("$");
-	else if (input[vars.i] == '?')
+	else if ((*input)[vars.i] == '?')
 	{
 		vars.var = ft_itoa(data->status);
 		vars.i++;
 	}
 	else
 	{
-		while (input[vars.i] && is_valid_exp_synt(input[vars.i]))
+		while ((*input)[vars.i] && is_valid_exp_synt((*input)[vars.i]))
 			vars.i++;
-		vars.var = ft_strndup(input + (*start + 1), vars.i - *start - 1);
+		vars.var = ft_strndup(*input + (*start + 1), vars.i - *start - 1);
 		vars.tmp = vars.var;
 		vars.var = ft_strdup(give_var_env_list(vars.var, env_list));
 		free(vars.tmp);
 	}
-	transform_dollar(&vars, &input, &start);
-	return (vars.new_input);
+	transform_dollar(&vars, input, &start);
+	return ;
 }

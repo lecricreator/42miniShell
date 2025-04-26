@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*																			*/
 /*														:::	  ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   minishell.h                                         :+:    :+:           */
 /*													+:+ +:+		 +:+	 */
 /*   By: lomorale <lomorale@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/03/19 10:02:03 by lomorale		  #+#	#+#			 */
-/*   Updated: 2025/04/23 10:20:33 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:30:20 by odruke-s       ########   odam.nl        */
 /*																			*/
 /* ************************************************************************** */
 
@@ -133,6 +133,12 @@ typedef struct s_expansion
 	char	*tmp;
 }t_expansion;
 
+typedef struct s_mini_expan
+{
+	int	i;
+	int	quotes;
+}t_mini_expan;
+
 typedef struct s_env
 {
 	char	*var;
@@ -227,7 +233,7 @@ t_type	next_token(t_token *token, t_type state, t_type last);
 int		is_special_symbol(char c);
 int		is_double_symbol(const char *input, int *i);
 void	init_exp(t_expansion *exp, int start);
-char	*dollar_expansion(t_data *data, char *input, int *start,
+void	dollar_expansion(t_data *data, char **input, int *start,
 			t_list *env_list);
 void	free_vars(t_expansion *vars);
 int		bad_type(char *token);
@@ -240,6 +246,8 @@ void	restore_stdin(t_fds *fds);
 void	restore_stdout(t_fds *fds);
 void	clean_fds(t_fds *fds);
 void	check_esc_char(char **input, int *i, int quotes);
-int 	is_in_quotes(int state, char c);
+int		is_in_quotes(int state, char c);
+void	fordward_w_quote(char *input, int *i);
+void	init_mini_expand(t_mini_expan **ex);
 
 #endif
