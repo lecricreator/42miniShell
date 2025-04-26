@@ -38,7 +38,7 @@ t_type	token_zero(t_token *token)
 static t_type	continue_next_token(t_token *token, t_type state, t_type last)
 {
 	if (state == FILENAME && (last == OP_REDIR_OUT || last == OP_APPEND))
-		return (token->type = FILENAME, ARGUMENT);
+		return (token->type = FILENAME, COMMAND);
 	if (state == FILENAME && last == OP_REDIR_IN)
 		return (token->type = FILENAME, COMMAND);
 	if (state == DELIMITER)

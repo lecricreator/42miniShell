@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/25 23:39:36 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:09:30 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,8 @@
 int	is_n_flag(char *str)
 {
 	str += 2;
-	while (*str)
-	{
-		if (*str == 'n')
+	while (*str && *str == 'n')
 			str++;
-		else
-			break ;
-	}
 	if (*str == '\0')
 		return (TRUE);
 	return (FALSE);
@@ -39,9 +34,7 @@ int	exec_echo(char **cmd_args)
 		if (ft_strncmp(cmd_args[i], "-n", 2) == 0 && is_n_flag(cmd_args[i]))
 			line_break = FALSE;
 		else
-		{
 			break ;
-		}
 		i++;
 	}
 	if (cmd_args[i])

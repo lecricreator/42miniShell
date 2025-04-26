@@ -39,10 +39,34 @@ void	free_env(void *var_void)
 	free(var);
 }
 
+void	clean_fds(t_fds *fds)
+{
+	if(fds->infile > 0)
+		close(fds->infile);
+	if(fds->outfile > 0)
+		close(fds->outfile);
+	if(fds->pipefd[0] > 0)
+		close(fds->pipefd[0]);
+	if(fds->pipefd[1] > 0)
+		close(fds->pipefd[1]);
+	if(fds->herepipe[0] > 0)
+		close(fds->herepipe[0]);
+	if(fds->herepipe[1] > 0)
+		close(fds->herepipe[1]);
+	if(fds->prev_pipe > 0)
+		close(fds->prev_pipe);
+	if(fds->std_out > 0)
+		close(fds->std_out);
+	if(fds->std_in > 0)
+		close(fds->std_in);
+}
+
 void	free_data(t_data *data)
 {
+	
 	if (data->input)
 		free(data->input);
+	clean_fds(data->fds);
 	if (data->fds)
 		free(data->fds);
 	if (data->env_list)

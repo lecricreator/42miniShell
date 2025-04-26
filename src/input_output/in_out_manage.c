@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:54:39 by odruke-s          #+#    #+#             */
-/*   Updated: 2025/04/25 23:34:53 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:12:55 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 {
 	if (cmd->is_pipe)
 	{
-		if (fds->outfile != -1)
-		{
-			cmd->is_pipe = 0;
-			return ;
-		}
+		// if (fds->outfile != -1)
+		// {
+		// 	cmd->is_pipe = 0;
+		// 	return ;
+		// }
 		close(fds->pipefd[0]);
 		if (dup2(fds->pipefd[1], STDOUT_FILENO) == -1)
 			error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
@@ -68,8 +68,11 @@ int	change_io(t_redir *redir, t_fds *fds)
 {
 	int	exit_code;
 
+	exit_code = 0;
 	if (redir->type == OP_REDIR_OUT || redir->type == OP_APPEND)
 	{
+		if (fds->doublepipe[0] != -1)
+			return (change_redir_in(redir, fds));
 		if (redir->type == OP_REDIR_OUT)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
@@ -77,8 +80,7 @@ int	change_io(t_redir *redir, t_fds *fds)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		if (fds->outfile < 0)
-			return (error_handle(ERR_PERMISSION, redir->filename, NULL,
-					CONTINUE));
+			return(error_handle(ERR_PERMI_OPEN, redir->filename, NULL, CONTINUE));
 		dup2(fds->outfile, STDOUT_FILENO);
 		if (fds->outfile < 0)
 			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);

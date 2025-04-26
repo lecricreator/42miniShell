@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:41:24 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/25 23:45:15 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:10:59 by lomorale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	exec_exit(char **cmd_args)
 	int		exit_status;
 
 	exit_status = EXIT_SUCCESS;
+	tmp_data = recover_data_address(NULL);
 	if (cmd_args)
 	{
 		i = -1;
@@ -40,7 +41,8 @@ void	exec_exit(char **cmd_args)
 			else
 				exit_status = 2;
 		}
-		ft_printf_fd(2, "exit\n");
+		if (tmp_data->pid)
+			ft_printf_fd(2, "exit\n");
 		if (cmd_args[1] && exit_status == 2)
 			ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
 				cmd_args[1]);

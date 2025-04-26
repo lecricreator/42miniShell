@@ -82,8 +82,11 @@ void	fill_arg_and_redir(t_list **token_list, t_list **tmp_head,
 	while (*tmp_head && (*tmp_token)->type != OP_PIPE)
 	{
 		if (is_redir_op((*tmp_token)->type))
+		{
 			fill_redir(&(*cmd)->redir, tmp_head);
-		if (*tmp_head)
+			break ;
+		}
+		// if (*tmp_head)
 			*tmp_head = (*tmp_head)->next;
 		if (*tmp_head)
 			(*tmp_token) = ((t_token *)(*tmp_head)->content);

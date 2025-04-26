@@ -21,7 +21,7 @@ int	cmd_if_absolute_path(t_cmd *cmd)
 		if (!access(cmd->command_path, X_OK))
 			return (0);
 		else
-			return (error_handle(ERR_PERMISSION,
+			return (error_handle(ERR_PERMI_EXEC,
 					cmd->cmd_args[0], NULL, CONTINUE));
 	}
 	else
@@ -42,7 +42,7 @@ int	verif_access(char **path, t_cmd *cmd)
 			if (!access(cmd->command_path, X_OK))
 				return (free_table(path), 0);
 			else
-				return (free_table(path), error_handle(ERR_PERMISSION,
+				return (free_table(path), error_handle(ERR_PERMI_EXEC,
 						cmd->cmd_args[0], NULL, CONTINUE));
 		}
 		free(cmd->command_path);
@@ -78,7 +78,7 @@ int	handle_procesess(t_data *data, t_cmd *cmd, t_fds *fds, char **env_tab)
 {
 	errno = 0;
 	if (!cmd->cmd_args[0])
-		error_handle(ERR_PERMISSION, "", NULL, KILL);
+		error_handle(ERR_PERMI_EXEC, "", NULL, KILL);
 	else if (!cmd->command_path)
 	{
 		free_data(data);
