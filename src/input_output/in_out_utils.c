@@ -16,7 +16,8 @@ void	restore_stdin(t_fds *fds)
 {
 	if (fds->infile != -1 || fds->std_in != -1 || fds->herepipe[0] != -1)
 	{
-		if (dup2(fds->std_in, STDIN_FILENO) < 0)
+		dup2(fds->std_in, STDIN_FILENO);
+		if (fds->std_in < 0)
 			error_handle(ERR_UNKNOWN, "std in", "in_out_utils.c:21\n", KILL);
 		if (fds->std_in > -1)
 			close(fds->std_in);
@@ -31,7 +32,8 @@ void	restore_stdout(t_fds *fds)
 {
 	if (fds->outfile != -1 || fds->std_out != -1)
 	{
-		if (dup2(fds->std_out, STDOUT_FILENO) < 0)
+		dup2(fds->std_out, STDOUT_FILENO);
+		if (fds->std_out < 0)
 			error_handle(ERR_UNKNOWN, "std out",
 				"in_out_utils.c:38\ndup2 failed", KILL);
 		if (fds->std_out > -1)
