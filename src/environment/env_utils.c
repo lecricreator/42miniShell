@@ -14,10 +14,19 @@
 
 int	var_syntax(char *var)
 {
-	if (ft_isalpha(var[0]) || var[0] == '_')
-		return (1);
-	else
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(var[i]) && var[i] != '_')
 		return (0);
+	i++;
+	while (var[i] && var[i] != '=')
+	{
+		if (!ft_isalnum(var[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int	var_len(char *var)
