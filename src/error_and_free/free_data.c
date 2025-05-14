@@ -65,9 +65,11 @@ void	free_data(t_data *data)
 {
 	if (data->input)
 		free(data->input);
-	clean_fds(data->fds);
 	if (data->fds)
+	{
+		clean_fds(data->fds);
 		free(data->fds);
+	}
 	if (data->env_list)
 		free_list(&data->env_list, free_env);
 	if (data->token_list)

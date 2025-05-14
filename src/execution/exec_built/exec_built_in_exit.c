@@ -1,50 +1,75 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_built_in_exit.c                                :+:    :+:           */
+/*   exec_built_in_exit.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:41:24 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/26 11:33:35 by odruke-s       ########   odam.nl        */
+/*   Updated: 2025/05/14 21:57:13 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_exit(int exit_status, char *args)
+static void	print_exit_msg(int pid, int exit_status, char **args)
 {
-	t_data	*tmp_data;
-
-	tmp_data = recover_data_address(NULL);
-	if (tmp_data->pid)
+	if (!pid)
 		ft_printf_fd(2, "exit\n");
-	if (args && exit_status == 2)
-		ft_printf_fd(2, "Minishell: exit: %s:  numeric argument required\n",
-			args);
-	free_data(tmp_data);
-	exit(exit_status);
+	if (args && args[1] && exit_status == 2)
+		ft_printf_fd(2, "Minishell: exit: %s: numeric argument required\n",
+			args[1]);
 }
 
-void	exec_exit(char **cmd_args)
+static int	valid_exit_status(char *args)
 {
-	int		i;
-	int		exit_status;
+	int	status;
 
+	status = ft_atoi(args);
+	if (status > 255 || status < 0)
+		return (status % 256);
+	return (status);
+}
+
+static int	valid_arg_syntax(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isdigit(arg[i]) && arg[i] != '+' && arg[i] != '-')
+		return (0);
+	else if (arg[i] == '+' || arg[i] == '-')
+		i++;
+	if (ft_strlen(arg + i) > 19)
+		return (0);
+	while (arg[i] && ft_isdigit(arg[i]))
+		i++;
+	if (!arg[i])
+		return (1);
+	else
+		return (0);
+}
+
+int	exec_exit(char **cmd_args)
+{
+	int		exit_status;
+	t_data	*data;
+
+	data = recover_data_address(NULL);
 	exit_status = EXIT_SUCCESS;
 	if (cmd_args)
 	{
-		i = -1;
 		if (cmd_args[1])
 		{
-			while (cmd_args[1][++i])
-				if (!ft_isdigit(cmd_args[1][i]))
-					break ;
-			if (!cmd_args[1][i])
-				exit_status = ft_atoi(cmd_args[1]);
+			if (valid_arg_syntax(cmd_args[1]))
+				exit_status = valid_exit_status(cmd_args[1]);
 			else
 				exit_status = 2;
 		}
 	}
-	free_exit(exit_status, cmd_args[1]);
+	print_exit_msg(data->pid, exit_status, cmd_args);
+	if (cmd_args && (count_table(cmd_args) > 2) && (exit_status != 2))
+		return (error_handle(ERR_MANY_ARGS, "exit", NULL, CONTINUE));
+	free_data(data);
+	exit(exit_status);
 }

@@ -9,7 +9,7 @@
 ###VARIABLES###
 
 # name of the executable
-NAME = mini_shell
+NAME = minishell
 
 # compilator and compilation flags
 CC = gcc

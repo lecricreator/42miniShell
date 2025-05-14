@@ -25,7 +25,7 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 	if (cmd->type == BI_ECHO)
 		return (exec_echo(cmd->cmd_args));
 	if (cmd->type == BI_EXIT)
-		return (exec_exit(cmd->cmd_args), 0);
+		return (exec_exit(cmd->cmd_args));
 	if (cmd->type == BI_ENV)
 		return (print_env(*env_list), 0);
 	if (cmd->type == BI_EXPORT)

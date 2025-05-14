@@ -196,7 +196,7 @@ int		exec_cd(t_cmd *cmd, t_list **env_list);
 int		exec_echo(char **cmd_args);
 int		exec_export(char **cmd_args, t_list **env_list);
 int		exec_unset(char **cmd_args, t_list **env_list);
-void	exec_exit(char **cmd_args);
+int		exec_exit(char **cmd_args);
 int		is_builtin(t_type type);
 int		is_any_cmd(t_type type);
 int		is_redir_op(t_type type);
