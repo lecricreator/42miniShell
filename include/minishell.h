@@ -238,7 +238,7 @@ void	dollar_expansion(t_data *data, char **input, int *start,
 void	free_vars(t_expansion *vars);
 int		bad_type(char *token);
 int		get_type(char *token);
-int		token_len(char **input, int *i);
+int		token_len(char **input, int *i, int *status);
 void	tokenize(t_data **data, char **input, int token_index);
 void	fill_token_list(t_data *data, char *token, int token_index);
 t_token	*create_token(char *str, int index);

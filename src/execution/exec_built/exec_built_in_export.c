@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:35:45 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:36:26 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:24:38 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,16 @@ void	add_var_in_env(char **cmd_args, int i,
 	{
 		if (ft_strchr(cmd_args[i], '='))
 		{
-			tmp = ((t_env *)(*tmp_head)->content)->var;
-			((t_env *)(*tmp_head)->content)->var = ft_strdup(cmd_args[i]);
-			((t_env *)(*tmp_head)->content)->exported = 1;
-			free(tmp);
+			if ((ft_strchr(cmd_args[i], '=') - 1)[0] == '+')
+				concat_var_value((t_env **)&(*tmp_head)->content,
+					cmd_args[i] + ((var_len(cmd_args[i]) + 1)));
+			else
+			{
+				tmp = ((t_env *)(*tmp_head)->content)->var;
+				((t_env *)(*tmp_head)->content)->var = ft_strdup(cmd_args[i]);
+				((t_env *)(*tmp_head)->content)->exported = 1;
+				free(tmp);
+			}
 		}
 		else
 			((t_env *)(*tmp_head)->content)->exported = 1;
@@ -51,6 +57,12 @@ void	verified_var_exist_in_env(char **cmd_args, t_list **env_list, int i)
 			free(var_name);
 			break ;
 		}
+		else if (var_name[var_len(var_name) - 1] == '+'
+			&& !ft_strncmp_env_var(var_name, env_var, var_len(var_name) - 1))
+		{
+			free(var_name);
+			break ;
+		}
 		tmp_head = (tmp_head)->next;
 		free(var_name);
 	}
@@ -67,10 +79,7 @@ int	exec_export(char **cmd_args, t_list **env_list)
 	while (cmd_args[i])
 	{
 		if (!var_syntax(cmd_args[i]))
-		{
-			error_handle(ERR_INVAL_IDE, cmd_args[i], NULL, CONTINUE);
-			return (0);
-		}
+			return (error_handle(ERR_INVAL_IDE, cmd_args[i], NULL, CONTINUE));
 		verified_var_exist_in_env(cmd_args, env_list, i);
 		i++;
 	}

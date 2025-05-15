@@ -85,6 +85,7 @@ void	parsing(t_data *data)
 	int		i;
 
 	lexing_tokens(data, &data->input);
+//	print_token_list(data->token_list);
 	pars.state = COMMAND;
 	pars.last = COMMAND;
 	if (parsing_start(&data, &pars.tmp_head, &pars.tmp_token, &i))

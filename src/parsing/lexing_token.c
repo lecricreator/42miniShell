@@ -31,12 +31,14 @@ static char	*tokenize_loop(char **input, int *i, int len)
 {
 	char	*token_str;
 	char	*tmp;
+	int		state;
 
 	tmp = NULL;
 	token_str = NULL;
+	state = 0;
 	while ((*input)[*i] && !ft_isblank((*input)[*i]))
 	{
-		len = token_len(input, i);
+		len = token_len(input, i, &state);
 		if (!token_str)
 			token_str = ft_strndup((*input) + (*i - len), len);
 		else
@@ -48,7 +50,7 @@ static char	*tokenize_loop(char **input, int *i, int len)
 		if (is_special_symbol((*input)[*i])
 				|| is_special_symbol((*input)[*i - 1]))
 			break ;
-		if ((*input)[*i] == 39 || (*input)[*i] == 34)
+		if (state && ((*input)[*i] == 39 || (*input)[*i] == 34))
 			(*i)++;
 	}
 	return (token_str);
@@ -105,24 +107,22 @@ static int	token_next_len(char **input, int *i, int *len)
 	return (*len);
 }
 
-int	token_len(char **input, int *i)
+int	token_len(char **input, int *i, int *state)
 {
 	int	len;
+	int	quote;
 
 	len = 0;
-	if (input[0][*i] == 39)
+	quote = 0;
+	if (input[0][*i] == 39 || input[0][*i] == 34)
 	{
+		quote = input[0][*i];
+		if (*state)
+			*state = 0;
+		else
+			*state = 1;
 		(*i)++;
-		while (input[0][*i] && input[0][*i] != 39)
-		{
-			(*i)++;
-			len++;
-		}
-	}
-	else if (input[0][*i] == 34)
-	{
-		(*i)++;
-		while (input[0][*i] && input[0][*i] != 34)
+		while (input[0][*i] && input[0][*i] != quote)
 		{
 			(*i)++;
 			len++;
@@ -132,3 +132,31 @@ int	token_len(char **input, int *i)
 		len = token_next_len(input, i, &len);
 	return (len);
 }
+
+// int	token_len(char **input, int *i)
+// {
+// 	int	len;
+
+// 	len = 0;
+// 	if (input[0][*i] == 39)
+// 	{
+// 		(*i)++;
+// 		while (input[0][*i] && input[0][*i] != 39)
+// 		{
+// 			(*i)++;
+// 			len++;
+// 		}
+// 	}
+// 	else if (input[0][*i] == 34)
+// 	{
+// 		(*i)++;
+// 		while (input[0][*i] && input[0][*i] != 34)
+// 		{
+// 			(*i)++;
+// 			len++;
+// 		}
+// 	}
+// 	else
+// 		len = token_next_len(input, i, &len);
+// 	return (len);
+// }

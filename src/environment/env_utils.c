@@ -23,7 +23,8 @@ int	var_syntax(char *var)
 	while (var[i] && var[i] != '=')
 	{
 		if (!ft_isalnum(var[i]))
-			return (0);
+			if (var[i] != '+' || var[i + 1] != '=')
+				return (0);
 		i++;
 	}
 	return (1);
