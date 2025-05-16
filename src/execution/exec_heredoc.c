@@ -6,7 +6,7 @@
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:53:11 by lomorale          #+#    #+#             */
-/*   Updated: 2025/04/21 22:45:19 by lomorale         ###   ########.fr       */
+/*   Updated: 2025/05/16 23:41:42 by odruke-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 	char	*line;
 
 	data = recover_data_address(NULL);
-	fds->std_in = dup(STDIN_FILENO);
+	if (dup2(fds->std_in, STDIN_FILENO) == -1)
+		error_handle(ERR_UNKNOWN, "stdin:", "exec_heredoc:51\ndup2 fail", KILL);
 	delimiter = heredoc->filename;
 	line = NULL;
 	if (pipe(fds->herepipe) == -1)

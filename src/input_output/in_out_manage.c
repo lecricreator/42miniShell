@@ -61,6 +61,8 @@ int	change_redir_in(t_redir *redir, t_fds *fds)
 			return (error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE));
 		close(fds->infile);
 	}
+	if (redir->type == OP_HEREDOC)
+		exec_heredoc(redir, fds);
 	return (0);
 }
 

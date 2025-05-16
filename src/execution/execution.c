@@ -26,26 +26,26 @@ void	init_fds(t_data *data)
 	data->fds->std_in = dup(STDIN_FILENO);
 }
 
-static void	check_heredoc(t_list *redir, t_fds *fds)
-{
-	t_list	*tmp_head;
-	t_redir	*tmp_redir;
+// static void	check_heredoc(t_list *redir, t_fds *fds)
+// {
+// 	t_list	*tmp_head;
+// 	t_redir	*tmp_redir;
 
-	tmp_head = redir;
-	if (tmp_head)
-		tmp_redir = ((t_redir *)(tmp_head)->content);
-	while (tmp_head)
-	{
-		if (tmp_redir->type == OP_HEREDOC)
-		{
-			exec_heredoc(tmp_redir, fds);
-			break ;
-		}
-		tmp_head = tmp_head->next;
-		if (tmp_head)
-			tmp_redir = ((t_redir *)(tmp_head)->content);
-	}
-}
+// 	tmp_head = redir;
+// 	if (tmp_head)
+// 		tmp_redir = ((t_redir *)(tmp_head)->content);
+// 	while (tmp_head)
+// 	{
+// 		if (tmp_redir->type == OP_HEREDOC)
+// 		{
+// 			exec_heredoc(tmp_redir, fds);
+// 			break ;
+// 		}
+// 		tmp_head = tmp_head->next;
+// 		if (tmp_head)
+// 			tmp_redir = ((t_redir *)(tmp_head)->content);
+// 	}
+// }
 
 static void	handle_fds(t_cmd **tmp_cmd, t_fds *fds)
 {
@@ -71,7 +71,7 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 			error_handle(ERR_UNKNOWN, (*tmp_cmd)->cmd_args[0],
 				"execution.c:73\nPipe failed", KILL);
 	}
-	check_heredoc((*tmp_cmd)->redir, fds);
+//	check_heredoc((*tmp_cmd)->redir, fds);
 	if (!exec_redir((*tmp_cmd)->redir, fds))
 	{
 		if (is_builtin((*tmp_cmd)->type))

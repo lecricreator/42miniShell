@@ -62,7 +62,7 @@ int	cmd_tab_len(t_list *token_list)
 	tmp_token = ((t_token *)(tmp_head)->content);
 	while (tmp_head && tmp_token->type != OP_PIPE)
 	{
-		if ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT)
+		if (is_any_cmd(tmp_token->type) || tmp_token->type == ARGUMENT)
 			i++;
 		if (is_any_cmd(tmp_token->type) && i > 1)
 			break ;
@@ -87,7 +87,7 @@ char	**get_cmd_tab(t_list **token_list)
 	tmp_token = (t_token *)(*token_list)->content;
 	while (*token_list && tmp_token->type != OP_PIPE)
 	{
-		if ((is_any_cmd(tmp_token->type) && !i) || tmp_token->type == ARGUMENT)
+		if (is_any_cmd(tmp_token->type) || tmp_token->type == ARGUMENT)
 			cmd_tab[i++] = ft_strdup(tmp_token->str);
 		*token_list = (*token_list)->next;
 		if (*token_list)
