@@ -66,9 +66,9 @@ int	parsing_start(t_data **data, t_list **tmp_head, t_token **tmp_token,
 	return (0);
 }
 
-void	verify_state(t_type *state, t_token *tmp_token, t_data **data)
+void	verify_state(t_type *state, t_type last, t_token *tmp_token, t_data **data)
 {
-	if ((*state == FILENAME || *state == DELIMITER))
+	if ((*state == FILENAME || *state == DELIMITER || last == OP_PIPE))
 	{
 		if (!tmp_token->index)
 			error_handle(ERR_SYNTAX, "newline", NULL, CONTINUE);
@@ -105,5 +105,5 @@ void	parsing(t_data *data)
 		pars.last = pars.tmp_token->type;
 		pars.tmp_head = pars.tmp_head->next;
 	}
-	verify_state(&pars.state, pars.tmp_token, &data);
+	verify_state(&pars.state, pars.last, pars.tmp_token, &data);
 }

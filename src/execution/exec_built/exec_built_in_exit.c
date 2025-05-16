@@ -15,7 +15,7 @@
 static void	print_exit_msg(int pid, int exit_status, char **args)
 {
 	if (!pid)
-		ft_printf_fd(2, "exit\n");
+	 	ft_printf_fd(2, "exit\n");
 	if (args && args[1] && exit_status == 2)
 		ft_printf_fd(2, "Minishell: exit: %s: numeric argument required\n",
 			args[1]);

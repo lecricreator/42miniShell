@@ -61,7 +61,7 @@ void	free_vars(t_expansion *vars)
 		free(vars->var);
 }
 
-t_token	*create_token(char *str, int index)
+t_token	*create_token(char *str, int index, int status)
 {
 	t_token	*token;
 
@@ -74,7 +74,10 @@ t_token	*create_token(char *str, int index)
 			"lexing.c:206\nMalloc failed", KILL);
 	}
 	token->str = str;
-	token->type = get_type(token->str);
+	if (!status || (status && ft_strchr(token->str, '=')))
+		token->type = get_type(token->str);
+	else
+			token->type = UNKNOW;
 	token->index = index;
 	return (token);
 }

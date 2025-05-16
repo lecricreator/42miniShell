@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-void	fill_token_list(t_data *data, char *token, int token_index)
+void	fill_token_list(t_data *data, char *token, int token_index, int status)
 {
 	t_list	*new_node;
 	t_token	*token_node;
 
-	token_node = create_token(token, token_index);
+	token_node = create_token(token, token_index, status);
 	if (!token_node)
 		return ;
 	new_node = ft_lstnew(token_node);
@@ -27,18 +27,16 @@ void	fill_token_list(t_data *data, char *token, int token_index)
 	ft_lstadd_back(&data->token_list, new_node);
 }
 
-static char	*tokenize_loop(char **input, int *i, int len)
+static char	*tokenize_loop(char **input, int *i, int len, int *state)
 {
 	char	*token_str;
 	char	*tmp;
-	int		state;
-
+	
 	tmp = NULL;
 	token_str = NULL;
-	state = 0;
 	while ((*input)[*i] && !ft_isblank((*input)[*i]))
 	{
-		len = token_len(input, i, &state);
+		len = token_len(input, i, state);
 		if (!token_str)
 			token_str = ft_strndup((*input) + (*i - len), len);
 		else
@@ -47,11 +45,11 @@ static char	*tokenize_loop(char **input, int *i, int len)
 			token_str = ft_strnjoin(token_str, (*input) + (*i - len), len);
 			free(tmp);
 		}
+		if (*state && ((*input)[*i] == 39 || (*input)[*i] == 34))
+			(*i)++;
 		if (is_special_symbol((*input)[*i])
 				|| is_special_symbol((*input)[*i - 1]))
 			break ;
-		if (state && ((*input)[*i] == 39 || (*input)[*i] == 34))
-			(*i)++;
 	}
 	return (token_str);
 }
@@ -60,16 +58,19 @@ void	tokenize(t_data **data, char **input, int token_index)
 {
 	int		i;
 	int		len;
+	int		state;
 	char	*token_str;
 
 	token_str = NULL;
 	len = 0;
 	i = 0;
+	
 	while ((*input)[i])
 	{
-		token_str = tokenize_loop(input, &i, len);
+		state = 0;
+		token_str = tokenize_loop(input, &i, len, &state);
 		if (token_str)
-			fill_token_list(*data, token_str, token_index);
+			fill_token_list(*data, token_str, token_index, state);
 		token_index++;
 		if ((*input)[i] == '\0')
 			break ;

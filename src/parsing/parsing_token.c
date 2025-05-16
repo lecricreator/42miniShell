@@ -64,14 +64,18 @@ t_type	next_token(t_token *token, t_type state, t_type last)
 		return (DELIMITER);
 	}
 	if (token->type == OP_PIPE)
+	{
+		if (state == DELIMITER)
+			return (BAD_TOKEN);
 		return (COMMAND);
-	if (state == ARGUMENT)
-		return (token->type = ARGUMENT, ARGUMENT);
+	}
 	if (state == COMMAND)
 	{
 		if (token->type > 6)
 			token->type = COMMAND;
 		return (ARGUMENT);
 	}
+	if (state == ARGUMENT)
+		return (token->type = ARGUMENT, ARGUMENT);
 	return (continue_next_token(token, state, last));
 }
