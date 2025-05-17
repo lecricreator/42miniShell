@@ -12,6 +12,54 @@
 
 #include "minishell.h"
 
+char *update_shlvl(char *var)
+{
+	int		lvl;
+	int		blen;
+	int		flen;
+	int		nlen;
+	char	*res;
+	char	*tmp;
+	char	*number;
+
+	lvl = 1;
+	blen = 0;
+	flen = 0;
+	nlen = 0;
+	while (var[flen] && !ft_isdigit(var[flen]))
+		flen++;
+	while (var[flen + nlen] && ft_isdigit(var[flen + nlen]))
+		nlen++;
+	while (var[flen + nlen + blen])
+		blen++;
+	number = ft_strndup(var + flen, nlen);
+	lvl = ft_atoi(number);
+	free(number);
+	lvl += 1;
+	number = ft_itoa(lvl);
+	tmp = ft_strndup(var, flen);
+	res = ft_strjoin(tmp, number);
+	free(number);
+	free(tmp);
+	tmp = res;
+	res = ft_strjoin(res, var + (flen + nlen));
+	free(tmp);
+	return (res);
+}
+
+char	*get_shell_addr(void)
+{
+	char	*res;
+	char	*tmp;
+	char	buffer[1024];
+
+	getcwd(buffer, sizeof(buffer));
+	tmp = ft_strjoin("SHELL=", buffer);
+	res = ft_strjoin(tmp, "/minishell");
+	free(tmp);
+	return (res);
+}
+
 void	get_env(t_list **env_list, char **env)
 {
 	t_env	*node;
@@ -20,16 +68,33 @@ void	get_env(t_list **env_list, char **env)
 	i = 0;
 	node = NULL;
 	if (!*env)
+	{
 		empty_env(env_list, node);
+		return;
+	}
 	while (env[i])
 	{
 		node = (t_env *)malloc(sizeof(t_env));
 		node->exported = 1;
-		node->var = ft_strdup(env[i]);
+		if (!ft_strncmp(env[i], "SHLVL=", 6))
+			node->var = update_shlvl(env[i]);
+		else if(!ft_strncmp(env[i], "SHELL=", 6))
+			node->var = get_shell_addr();
+		else
+			node->var = ft_strdup(env[i]);
 		if (!node->var)
 			return ;
 		ft_lstadd_back(env_list, ft_lstnew(node));
 		i++;
+	}
+	if (!give_var_env_list("OLDPWD", *env_list))
+	{
+		node = (t_env *)malloc(sizeof(t_env));
+		node->exported = 1;
+		node->var = ft_strdup("OLDPWD");
+		if (!node->var)
+			return ;
+		ft_lstadd_back(env_list, ft_lstnew(node));
 	}
 }
 
