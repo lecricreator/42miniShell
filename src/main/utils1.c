@@ -18,27 +18,27 @@ void	wait_and_status(t_data *data)
 	int	child_exit;
 	int	sig;
 
-	exit_code = 0;
-	while (data->n_fork--)
+	exit_code = data->status;
+	if (data->n_fork)
 	{
-		if (waitpid(-1, &data->status, 0) > 0)
+		waitpid(data->pid, &data->status, 0);
+		if (WIFEXITED(data->status))
 		{
-			if (WIFEXITED(data->status))
-			{
-				child_exit = WEXITSTATUS(data->status);
-				if (child_exit != 0)
-					exit_code = child_exit;
-			}
-			else if (WIFSIGNALED(data->status))
-			{
-				sig = WTERMSIG(data->status);
-				if (sig == SIGQUIT)
-					ft_printf_fd(2, "Quit (core dumped)\n");
-				exit_code = 128 + sig;
-			}
+			child_exit = WEXITSTATUS(data->status);
+			if (child_exit != 0)
+				exit_code = child_exit;
 		}
-		data->status = exit_code;
+		else if (WIFSIGNALED(data->status))
+		{
+			sig = WTERMSIG(data->status);
+			if (sig == SIGQUIT)
+				ft_printf_fd(2, "Quit (core dumped)\n");
+			exit_code = 128 + sig;
+		}
 	}
+	while (--data->n_fork > 0)
+		waitpid(-1, NULL, 0);
+	data->status = exit_code;
 }
 
 void	print_token_list(t_list *token_list)
