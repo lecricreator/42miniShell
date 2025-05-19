@@ -64,7 +64,8 @@ void	dollar_expansion(t_data *data, char **input, int *start,
 	t_expansion	vars;
 
 	init_exp(&vars, *start);
-	if (!(*input)[vars.i] || ft_isblank((*input)[vars.i]))
+	if (!(*input)[vars.i] || ft_isblank((*input)[vars.i])
+		|| (*input)[vars.i] == 34)
 		vars.var = ft_strdup("$");
 	else if ((*input)[vars.i] == '?')
 	{
