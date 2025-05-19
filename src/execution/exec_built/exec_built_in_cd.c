@@ -32,7 +32,7 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	else
 		exit_code = chdir(cmd->cmd_args[1]);
 	if (exit_code == -1)
-		exit_code = error_handle(ERR_NO_FILE, cmd->cmd_args[1], NULL, CONTINUE);
+		exit_code = error_handle(ERR_NO_FILE_CD, cmd->cmd_args[1], NULL, CONTINUE);
 	else
 	{
 		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);
