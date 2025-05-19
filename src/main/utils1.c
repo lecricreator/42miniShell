@@ -36,7 +36,7 @@ void	wait_and_status(t_data *data)
 			exit_code = 128 + sig;
 		}
 	}
-	while (--data->n_fork > 0)
+	while (data->n_fork-- > 0)
 		waitpid(-1, NULL, 0);
 	data->status = exit_code;
 }

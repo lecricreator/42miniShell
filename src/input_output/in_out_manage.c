@@ -42,6 +42,8 @@ void	exec_pipe(t_cmd *cmd, t_fds *fds)
 	}
 	if (fds->prev_pipe > 0)
 	{
+		if (fds->infile != -1)
+			return ;
 		if (dup2(fds->prev_pipe, STDIN_FILENO) == -1)
 			error_handle(ERR_UNKNOWN, cmd->cmd_args[0],
 				"in_out_manage.c:63:\ndup2 failed", KILL);
