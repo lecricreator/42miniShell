@@ -31,7 +31,7 @@ static char	*tokenize_loop(char **input, int *i, int len, int *state)
 {
 	char	*token_str;
 	char	*tmp;
-	
+
 	tmp = NULL;
 	token_str = NULL;
 	while ((*input)[*i] && !ft_isblank((*input)[*i]))
@@ -64,7 +64,6 @@ void	tokenize(t_data **data, char **input, int token_index)
 	token_str = NULL;
 	len = 0;
 	i = 0;
-	
 	while ((*input)[i])
 	{
 		state = 0;

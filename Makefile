@@ -38,7 +38,7 @@ FT_PRINTF = $(FT_PRINTF_DIR)printf.a
 # files
 IO_FILES = in_out_manage.c in_out_utils.c
 MAIN_FILES = main.c utils1.c utils2.c
-ENV_FILES = environment.c env_utils.c env_print_utils.c env_generate.c env_built.c empty_env.c
+ENV_FILES = environment.c env_utils.c env_print_utils.c env_generate.c env_built.c empty_env.c create_env.c
 EXEC_FILES = execution.c exec_built_in.c exec_cmd.c exec_heredoc.c
 EXEC_BUILT_FILES = exec_built_in_exit.c exec_built_in_cd.c exec_built_in_pwd.c \
 		exec_built_in_unset.c exec_built_in_export.c exec_built_in_echo.c

@@ -133,6 +133,16 @@ typedef struct s_expansion
 	char	*tmp;
 }t_expansion;
 
+typedef struct s_shlvl_vars
+{
+	int		lvl;
+	int		flen;
+	int		nlen;
+	char	*res;
+	char	*tmp;
+	char	*number;
+}t_shlvl_vars;
+
 typedef struct s_mini_expan
 {
 	int	i;

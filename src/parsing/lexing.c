@@ -77,7 +77,7 @@ t_token	*create_token(char *str, int index, int status)
 	if (!status || (status && ft_strchr(token->str, '=')))
 		token->type = get_type(token->str);
 	else
-			token->type = UNKNOW;
+		token->type = UNKNOW;
 	token->index = index;
 	return (token);
 }
