@@ -68,6 +68,12 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 	// dup2(fds->std_in, STDIN_FILENO);
 	// if (fds->std_in < 0)
 	// 	error_handle(ERR_UNKNOWN, "std in", "in_out_utils.c:21\n", KILL);
+	// close(fds->infile);
+	// close(fds->outfile);
+	// fds->infile = -1;
+	// fds->outfile = -1;
+	restore_stdin(fds);
+	restore_stdout(fds);
 }
 
 void	execution(t_data *data)

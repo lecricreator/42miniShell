@@ -23,6 +23,12 @@ void	reset_io(t_fds *fds)
 		fds->herepipe[0] = -1;
 		fds->herepipe[1] = -1;
 	}
+	if (fds->std_in > -1)
+		close(fds->std_in);
+	if (fds->std_out > -1)
+		close(fds->std_out);
+	fds->std_in = -1;
+	fds->std_out = -1;
 }
 
 void	exec_pipe(t_cmd *cmd, t_fds *fds)
@@ -61,7 +67,7 @@ int	change_redir_in(t_redir *redir, t_fds *fds)
 		dup2(fds->infile, STDIN_FILENO);
 		if (fds->infile < 0)
 			return (error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE));
-		close(fds->infile);
+		// close(fds->infile);
 	}
 	if (redir->type == OP_HEREDOC)
 		exec_heredoc(redir, fds);

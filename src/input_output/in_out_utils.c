@@ -19,11 +19,8 @@ void	restore_stdin(t_fds *fds)
 		dup2(fds->std_in, STDIN_FILENO);
 		if (fds->std_in < 0)
 			error_handle(ERR_UNKNOWN, "std in", "in_out_utils.c:21\n", KILL);
-		if (fds->std_in > -1)
-			close(fds->std_in);
 		if (fds->infile > -1)
 			close(fds->infile);
-		fds->std_in = -1;
 		fds->infile = -1;
 	}
 }
@@ -36,11 +33,8 @@ void	restore_stdout(t_fds *fds)
 		if (fds->std_out < 0)
 			error_handle(ERR_UNKNOWN, "std out",
 				"in_out_utils.c:38\ndup2 failed", KILL);
-		if (fds->std_out > -1)
-			close(fds->std_out);
 		if (fds->outfile > -1)
 			close(fds->outfile);
-		fds->std_out = -1;
 		fds->outfile = -1;
 	}
 }
