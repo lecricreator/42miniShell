@@ -36,5 +36,5 @@ void	empty_env(t_list **env_list, t_env	*node)
 	add_env_empty(node, env_list, join, 1);
 	free(join);
 	add_env_empty(node, env_list, "SHLVL=1", 1);
-	add_env_empty(node, env_list, "_=./mini_shell", 0);
+	add_env_empty(node, env_list, "_=./minishell", 0);
 }

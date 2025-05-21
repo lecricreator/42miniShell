@@ -87,8 +87,15 @@ int	change_io(t_redir *redir, t_fds *fds)
 			fds->outfile = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		if (fds->outfile < 0)
-			return (error_handle(ERR_PERMI_OPEN,
+		{
+			if (!access(redir->filename, F_OK))
+				return (error_handle(ERR_PERMI_OPEN,
 					redir->filename, NULL, CONTINUE));
+			else
+				return (error_handle(ERR_NO_FILE,
+					redir->filename, NULL, CONTINUE));
+		}
+
 		dup2(fds->outfile, STDOUT_FILENO);
 		if (fds->outfile < 0)
 			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);

@@ -21,13 +21,13 @@ const t_errinfo	*get_errinfo(t_error error)
 	errtab[ERR_NOT_FOUND] = (t_errinfo){ERR_NOT_FOUND, 127,
 		"%s: command not found\n"};
 	errtab[ERR_PERMI_OPEN] = (t_errinfo){ERR_PERMI_OPEN, 1,
-		"Minishell: %s: permission denied\n"};
+		"Minishell: %s: Permission denied\n"};
 	errtab[ERR_PERMI_EXEC] = (t_errinfo){ERR_PERMI_EXEC, 126,
-		"Minishell: %s: permission denied\n"};
+		"Minishell: %s: Permission denied\n"};
 	errtab[ERR_IS_DIRECTORY] = (t_errinfo){ERR_IS_DIRECTORY, 126,
-		"Minishell: %s: is a directory\n"};
-	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 127,
-		"Minishell: %s: No such file or directory\n"};
+		"Minishell: %s: Is a directory\n"};
+	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 1,
+		"Minishell: %s: No such file or directory\n"}; // is this not 127?
 	errtab[ERR_NO_FILE_CD] = (t_errinfo){ERR_NO_FILE, 1,
 		"Minishell: cd: %s: No such file or directory\n"};
 	errtab[ERR_MANY_ARGS] = (t_errinfo){ERR_MANY_ARGS, 1,
