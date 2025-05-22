@@ -27,6 +27,8 @@ void	wait_and_status(t_data *data)
 			child_exit = WEXITSTATUS(data->status);
 			if (child_exit != 0)
 				exit_code = child_exit;
+			else
+				exit_code = 0;
 		}
 		else if (WIFSIGNALED(data->status))
 		{

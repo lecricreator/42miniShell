@@ -37,6 +37,9 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 {
+	int exit_code;
+
+	exit_code = data->status;
 	if (cmd->is_pipe || fds->prev_pipe > 0)
 	{
 		data->pid = fork();
@@ -49,9 +52,9 @@ void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGPIPE, SIG_IGN);
 			exec_pipe(cmd, fds);
-			exec_builtin(cmd, &data->env_list);
+			exit_code = exec_builtin(cmd, &data->env_list);
 			free_data(data);
-			exit(errno);
+			exit(exit_code);
 		}
 	}
 	else

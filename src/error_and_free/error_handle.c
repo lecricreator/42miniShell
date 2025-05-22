@@ -28,8 +28,10 @@ const t_errinfo	*get_errinfo(t_error error)
 		"Minishell: %s: Is a directory\n"};
 	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 1,
 		"Minishell: %s: No such file or directory\n"}; // is this not 127?
-	errtab[ERR_NO_FILE_CD] = (t_errinfo){ERR_NO_FILE, 1,
+	errtab[ERR_NO_FILE_CD] = (t_errinfo){ERR_NO_FILE_CD, 1,
 		"Minishell: cd: %s: No such file or directory\n"};
+	errtab[ERR_NO_FILE_X] = (t_errinfo){ERR_NO_FILE_X, 127,
+		"Minishell: %s: No such file or directory\n"};
 	errtab[ERR_MANY_ARGS] = (t_errinfo){ERR_MANY_ARGS, 1,
 		"Minishell: %s: too many arguments\n"};
 	errtab[ERR_INVAL_IDE] = (t_errinfo){ERR_INVAL_IDE, 1,

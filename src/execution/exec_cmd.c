@@ -25,7 +25,7 @@ int	cmd_if_absolute_path(t_cmd *cmd)
 					cmd->cmd_args[0], NULL, CONTINUE));
 	}
 	else
-		return (error_handle(ERR_NO_FILE,
+		return (error_handle(ERR_NO_FILE_X,
 				cmd->cmd_args[0], NULL, CONTINUE));
 }
 
