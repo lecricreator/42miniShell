@@ -12,47 +12,43 @@
 
 #include "minishell.h"
 
-static int	verif_delete(char **cmd_args, t_list **env_list,
-	t_env *tmp_env, int *i)
+static void	check_to_delete(char *var, t_list **env_list)
 {
-	if (ft_strchr(cmd_args[*i], '=') || !ft_strncmp(cmd_args[*i], "_=", 2))
-	{
-		i++;
-		return (1);
-	}
-	if (!ft_strncmp_env_var(cmd_args[*i], tmp_env->var, var_len(cmd_args[*i])))
+	t_list	*tmp_head;
+	t_env	*tmp_env;
+
+	tmp_env = (t_env *)(*env_list)->content;
+	if (!ft_strncmp_env_var(var, tmp_env->var, var_len(var)))
 	{
 		ft_lstdel_node(env_list, free_env);
-		i++;
-		return (1);
+		return ;
 	}
-	return (0);
+	tmp_head = *env_list;
+	while (tmp_head && tmp_head->next)
+	{
+		tmp_env = (t_env *)tmp_head->next->content;
+		if (!ft_strncmp_env_var(var, tmp_env->var, var_len(var)))
+		{
+			ft_lstdel_nxtnode(&tmp_head, free_env);
+			break ;
+		}
+		tmp_head = tmp_head->next;
+	}
 }
 
 int	exec_unset(char **cmd_args, t_list **env_list)
 {
-	t_list	*tmp_head;
-	t_env	*tmp_env;
 	int		i;
 
 	i = 1;
 	while (cmd_args[i])
 	{
-		tmp_head = *env_list;
-		tmp_env = (t_env *)tmp_head->content;
-		if (verif_delete(cmd_args, env_list, tmp_env, &i))
-			continue ;
-		while (tmp_head && tmp_head->next)
+		if (!ft_strcmp(cmd_args[i], "_"))
 		{
-			tmp_env = (t_env *)tmp_head->next->content;
-			if (!ft_strncmp_env_var(cmd_args[i], tmp_env->var,
-					var_len(cmd_args[i])))
-			{
-				ft_lstdel_nxtnode(&tmp_head, free_env);
-				continue ;
-			}
-			tmp_head = tmp_head->next;
+			i++;
+			continue ;
 		}
+		check_to_delete(cmd_args[i], env_list);
 		i++;
 	}
 	return (0);

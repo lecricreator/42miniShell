@@ -35,7 +35,7 @@ const t_errinfo	*get_errinfo(t_error error)
 	errtab[ERR_MANY_ARGS] = (t_errinfo){ERR_MANY_ARGS, 1,
 		"Minishell: %s: too many arguments\n"};
 	errtab[ERR_INVAL_IDE] = (t_errinfo){ERR_INVAL_IDE, 1,
-		"Minishell: `%s': not a valid identifier\n"};
+		"Minishell: export: `%s': not a valid identifier\n"};
 	errtab[ERR_UNKNOWN] = (t_errinfo){ERR_UNKNOWN, 1, "%s: %s\n"};
 	return (&errtab[error]);
 }
