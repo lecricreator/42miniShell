@@ -12,10 +12,12 @@
 
 #include "minishell.h"
 
-void	print_env(t_list *env_list)
+int	print_env(t_list *env_list, t_cmd *cmd)
 {
 	t_env	*tmp_var;
 
+	if (cmd->cmd_args[0] && cmd->cmd_args[1])
+		return (error_handle(ERR_NO_FILE_X, cmd->cmd_args[1], NULL, CONTINUE));
 	tmp_var = (t_env *)env_list->content;
 	while (env_list)
 	{
@@ -25,6 +27,7 @@ void	print_env(t_list *env_list)
 		if (env_list)
 			tmp_var = (t_env *)env_list->content;
 	}
+	return (0);
 }
 
 static void	ft_swap(char **var_a, char **var_b)

@@ -19,15 +19,16 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	int		exit_code;
 
 	exit_code = 0;
-	old_pwd = ft_strdup(getcwd(buffer, sizeof(buffer)));
+	old_pwd = ft_strdup(give_var_env_list("PWD", *env_list));
 	if (!cmd->cmd_args[1])
 		exit_code = chdir(give_var_env_list("HOME=", *env_list));
 	else if (cmd->cmd_args[1][0] == '~' && cmd->cmd_args[1][1] == '\0')
 		exit_code = chdir(give_var_env_list("HOME=", (*env_list)));
 	else if (cmd->cmd_args[1][0] == '-' && cmd->cmd_args[1][1] == '\0')
 	{
-		ft_printf_fd(1, "%s\n", give_var_env_list("OLDPWD=", (*env_list)));
 		exit_code = chdir(give_var_env_list("OLDPWD=", (*env_list)));
+		if (!exit_code)
+			ft_printf_fd(1, "%s\n", give_var_env_list("OLDPWD=", (*env_list)));
 	}
 	else
 		exit_code = chdir(cmd->cmd_args[1]);

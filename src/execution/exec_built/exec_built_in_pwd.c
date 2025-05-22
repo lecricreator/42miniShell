@@ -12,11 +12,18 @@
 
 #include "minishell.h"
 
-int	exec_pwd(void)
+int	exec_pwd(t_list *env)
 {
 	char	buffer[1024];
+	char	*path;
 
-	getcwd(buffer, sizeof(buffer));
-	ft_printf_fd(1, "%s\n", buffer);
+	path = give_var_env_list("PWD", env);
+	if (!path)
+	{
+		getcwd(buffer, sizeof(buffer));
+		ft_printf_fd(1, "%s\n", buffer);
+	}
+	else
+		ft_printf_fd(1, "%s\n", path);
 	return (0);
 }

@@ -167,7 +167,7 @@ typedef struct s_pars
 
 void	init_data(t_data *data, char **env);
 void	parsing(t_data *data);
-void	print_env(t_list *env);
+int		print_env(t_list *env, t_cmd *cmd);
 char	**create_var(t_data *data, t_cmd *cmd);
 void	add_var(t_list **env_list, char *var, int exported);
 void	concat_var_value(t_env **var, char *new_value);
@@ -203,7 +203,7 @@ void	reset_io(t_fds *fds);
 int		change_io(t_redir *redir, t_fds *fds);
 int		exec_builtin(t_cmd *cmd, t_list **env_list);
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds);
-int		exec_pwd(void);
+int		exec_pwd(t_list *env);
 int		exec_cd(t_cmd *cmd, t_list **env_list);
 int		exec_echo(char **cmd_args);
 int		exec_export(char **cmd_args, t_list **env_list);

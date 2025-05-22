@@ -21,13 +21,13 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 		return (exec_cd(cmd, env_list));
 	}
 	if (cmd->type == BI_PWD)
-		return (exec_pwd());
+		return (exec_pwd(*env_list));
 	if (cmd->type == BI_ECHO)
 		return (exec_echo(cmd->cmd_args));
 	if (cmd->type == BI_EXIT)
 		return (exec_exit(cmd->cmd_args));
 	if (cmd->type == BI_ENV)
-		return (print_env(*env_list), 0);
+		return (print_env(*env_list, cmd));
 	if (cmd->type == BI_EXPORT)
 		return (exec_export(cmd->cmd_args, env_list));
 	if (cmd->type == BI_UNSET)
