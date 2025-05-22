@@ -41,7 +41,7 @@ void	check_for_expansion(t_data *data, char **input)
 			dollar_expansion(data, input, &ex->i, data->env_list);
 		if (is_special_symbol((*input)[ex->i]))
 			ex->i++;
-		else if ((*input)[ex->i] == 39)
+		else if ((*input)[ex->i] == 39 && !ex->quotes)
 			fordward_w_quote(*input, &ex->i);
 		else if ((*input)[ex->i])
 			ex->i++;

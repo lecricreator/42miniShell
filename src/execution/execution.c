@@ -22,7 +22,7 @@ void	init_fds(t_data *data)
 	data->fds->herepipe[0] = -1;
 	data->fds->herepipe[1] = -1;
 	data->fds->prev_pipe = -1;
-	data->fds->std_out = dup(STDOUT_FILENO);    
+	data->fds->std_out = dup(STDOUT_FILENO);
 	data->fds->std_in = dup(STDIN_FILENO);
 }
 
@@ -60,6 +60,8 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 		else if ((*tmp_cmd)->type == COMMAND)
 			exec_cmd(data, (*tmp_cmd), fds, tmp_var);
 	}
+	else
+		data->pid =	0;
 	handle_fds(tmp_cmd, fds);
 	// dup2(fds->std_out, STDOUT_FILENO);
 	// if (fds->std_out < 0)

@@ -19,7 +19,7 @@ void	wait_and_status(t_data *data)
 	int	sig;
 
 	exit_code = data->status;
-	if (data->n_fork)
+	if (data->n_fork && data->pid)
 	{
 		waitpid(data->pid, &data->status, 0);
 		if (WIFEXITED(data->status))
