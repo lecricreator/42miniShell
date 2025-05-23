@@ -37,7 +37,7 @@ int	exec_builtin(t_cmd *cmd, t_list **env_list)
 
 void	exec_builtin_before_fork(t_data *data, t_cmd *cmd, t_fds *fds)
 {
-	int exit_code;
+	int	exit_code;
 
 	exit_code = data->status;
 	if (cmd->is_pipe || fds->prev_pipe > 0)

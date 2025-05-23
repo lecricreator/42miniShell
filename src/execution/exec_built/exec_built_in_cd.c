@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+int	old_action(int exit_code, t_list **env_list)
+{
+	exit_code = chdir(give_var_env_list("OLDPWD=", (*env_list)));
+	if (!exit_code)
+		ft_printf_fd(1, "%s\n", give_var_env_list("OLDPWD=", (*env_list)));
+	return (exit_code);
+}
+
 int	exec_cd(t_cmd *cmd, t_list **env_list)
 {
 	char	buffer[1024];
@@ -25,15 +33,12 @@ int	exec_cd(t_cmd *cmd, t_list **env_list)
 	else if (cmd->cmd_args[1][0] == '~' && cmd->cmd_args[1][1] == '\0')
 		exit_code = chdir(give_var_env_list("HOME=", (*env_list)));
 	else if (cmd->cmd_args[1][0] == '-' && cmd->cmd_args[1][1] == '\0')
-	{
-		exit_code = chdir(give_var_env_list("OLDPWD=", (*env_list)));
-		if (!exit_code)
-			ft_printf_fd(1, "%s\n", give_var_env_list("OLDPWD=", (*env_list)));
-	}
+		exit_code = old_action(exit_code, env_list);
 	else
 		exit_code = chdir(cmd->cmd_args[1]);
 	if (exit_code == -1)
-		exit_code = error_handle(ERR_NO_FILE_CD, cmd->cmd_args[1], NULL, CONTINUE);
+		exit_code = error_handle(ERR_NO_FILE_CD, cmd->cmd_args[1], NULL,
+				CONTINUE);
 	else
 	{
 		write_env_list(getcwd(buffer, sizeof(buffer)), "PWD=", env_list);

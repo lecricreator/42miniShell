@@ -67,7 +67,6 @@ int	change_redir_in(t_redir *redir, t_fds *fds)
 		dup2(fds->infile, STDIN_FILENO);
 		if (fds->infile < 0)
 			return (error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE));
-		// close(fds->infile);
 	}
 	if (redir->type == OP_HEREDOC)
 		exec_heredoc(redir, fds);
@@ -90,12 +89,11 @@ int	change_io(t_redir *redir, t_fds *fds)
 		{
 			if (!access(redir->filename, F_OK))
 				return (error_handle(ERR_PERMI_OPEN,
-					redir->filename, NULL, CONTINUE));
+						redir->filename, NULL, CONTINUE));
 			else
 				return (error_handle(ERR_NO_FILE,
-					redir->filename, NULL, CONTINUE));
+						redir->filename, NULL, CONTINUE));
 		}
-
 		dup2(fds->outfile, STDOUT_FILENO);
 		if (fds->outfile < 0)
 			error_handle(ERR_NO_FILE, redir->filename, NULL, CONTINUE);

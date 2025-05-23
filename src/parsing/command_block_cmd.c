@@ -64,8 +64,6 @@ int	cmd_tab_len(t_list *token_list)
 	{
 		if (is_any_cmd(tmp_token->type) || tmp_token->type == ARGUMENT)
 			i++;
-		// if (is_any_cmd(tmp_token->type) && i > 1)
-		// 	break ;
 		tmp_head = tmp_head->next;
 		if (tmp_head)
 			tmp_token = ((t_token *)(tmp_head)->content);

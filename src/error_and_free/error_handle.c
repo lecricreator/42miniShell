@@ -27,7 +27,7 @@ const t_errinfo	*get_errinfo(t_error error)
 	errtab[ERR_IS_DIRECTORY] = (t_errinfo){ERR_IS_DIRECTORY, 126,
 		"Minishell: %s: Is a directory\n"};
 	errtab[ERR_NO_FILE] = (t_errinfo){ERR_NO_FILE, 1,
-		"Minishell: %s: No such file or directory\n"}; // is this not 127?
+		"Minishell: %s: No such file or directory\n"};
 	errtab[ERR_NO_FILE_CD] = (t_errinfo){ERR_NO_FILE_CD, 1,
 		"Minishell: cd: %s: No such file or directory\n"};
 	errtab[ERR_NO_FILE_X] = (t_errinfo){ERR_NO_FILE_X, 127,

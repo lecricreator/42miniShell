@@ -61,19 +61,8 @@ void	find_to_execute(t_data *data, char **tmp_var, t_cmd **tmp_cmd,
 			exec_cmd(data, (*tmp_cmd), fds, tmp_var);
 	}
 	else
-		data->pid =	0;
+		data->pid = 0;
 	handle_fds(tmp_cmd, fds);
-	// dup2(fds->std_out, STDOUT_FILENO);
-	// if (fds->std_out < 0)
-	// 	error_handle(ERR_UNKNOWN, "std out",
-	// 		"in_out_utils.c:38\ndup2 failed", KILL);
-	// dup2(fds->std_in, STDIN_FILENO);
-	// if (fds->std_in < 0)
-	// 	error_handle(ERR_UNKNOWN, "std in", "in_out_utils.c:21\n", KILL);
-	// close(fds->infile);
-	// close(fds->outfile);
-	// fds->infile = -1;
-	// fds->outfile = -1;
 	restore_stdin(fds);
 	restore_stdout(fds);
 }
