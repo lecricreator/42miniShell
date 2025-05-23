@@ -12,12 +12,22 @@
 
 #include "minishell.h"
 
+static void	heredoc_signal(int sig)
+{
+	t_data	*data;
+
+	(void)sig;
+	data = recover_data_address(NULL);
+	free_data(data);
+	exit(130);
+}
+
 static void	here_loop(t_data *data, char *line, char *delimiter, t_fds *fds)
 {
 	int	exit_code;
 
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, heredoc_signal);
 	close(fds->herepipe[0]);
 	while (1)
 	{
@@ -62,7 +72,8 @@ void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 	data->n_fork++;
 	if (!data->pid)
 		here_loop(data, line, delimiter, fds);
-	waitpid(data->pid, &data->status, 0);
+	// waitpid(data->pid, &data->status, 0);
+	wait_and_status(data);
 	close(fds->herepipe[1]);
 	if (dup2(fds->herepipe[0], STDIN_FILENO) == -1)
 		error_handle(ERR_UNKNOWN, "herepipe[0]:",
