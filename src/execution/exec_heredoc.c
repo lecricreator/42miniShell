@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_heredoc.c                                     :+:      :+:    :+:   */
+/*   exec_heredoc.c                                      :+:    :+:           */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lomorale <lomorale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:53:11 by lomorale          #+#    #+#             */
-/*   Updated: 2025/05/16 23:41:42 by odruke-s         ###   ########.fr       */
+/*   Updated: 2025/05/23 19:48:55 by odruke-s       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 	data->n_fork++;
 	if (!data->pid)
 		here_loop(data, line, delimiter, fds);
-	// waitpid(data->pid, &data->status, 0);
 	wait_and_status(data);
 	close(fds->herepipe[1]);
 	if (dup2(fds->herepipe[0], STDIN_FILENO) == -1)
