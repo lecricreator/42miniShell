@@ -261,5 +261,6 @@ void	check_esc_char(char **input, int *i, int quotes);
 int		is_in_quotes(int state, char c);
 void	fordward_w_quote(char *input, int *i);
 void	init_mini_expand(t_mini_expan **ex);
+int		change_status(int status, int exit_code);
 
 #endif

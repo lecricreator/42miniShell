@@ -51,6 +51,28 @@ static void	here_loop(t_data *data, char *line, char *delimiter, t_fds *fds)
 	exit(exit_code);
 }
 
+static void	here_wait(t_data *data)
+{
+	int	exit_code;
+	int	sig;
+
+	exit_code = data->status;
+	if (data->n_fork && data->pid)
+	{
+		waitpid(data->pid, &data->status, 0);
+		if (WIFEXITED(data->status))
+			exit_code = change_status(data->status, exit_code);
+		else if (WIFSIGNALED(data->status))
+		{
+			sig = WTERMSIG(data->status);
+			if (sig == SIGQUIT)
+				ft_printf_fd(2, "Quit (core dumped)\n");
+			exit_code = 128 + sig;
+		}
+	}
+	data->status = exit_code;
+}
+
 void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 {
 	t_data	*data;
@@ -72,7 +94,7 @@ void	exec_heredoc(t_redir *heredoc, t_fds *fds)
 	data->n_fork++;
 	if (!data->pid)
 		here_loop(data, line, delimiter, fds);
-	wait_and_status(data);
+	here_wait(data);
 	close(fds->herepipe[1]);
 	if (dup2(fds->herepipe[0], STDIN_FILENO) == -1)
 		error_handle(ERR_UNKNOWN, "herepipe[0]:",
