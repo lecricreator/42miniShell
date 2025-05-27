@@ -130,20 +130,13 @@ Feel free to to test this with the following examples or just go crazy!.
 ## Examples
 
 ```bash
-Minishell $ echo "Hello, $USER"
-Hello, yourusername
-```
+Minishell $ cat | cat | cat | ls
+ft_printf                   include  Makefile   README.md
+ignore_readline_leaks.supp  libft    minishell  src
 
-```bash
-cd
-env | grep PWD
-cd -
-env | grep PWD
-cd ~
-```
 
-```bash
-Minishell $ < test_file cat | grep "some text" | wc -w > output.txt
+
+Minishell $ 
 ```
 
 ```bash
@@ -158,13 +151,22 @@ but this will remain
 ```
 
 ```bash
-cat | cat | cat | ls
-ft_printf                   include  Makefile   README.md
-ignore_readline_leaks.supp  libft    minishell  src
+Minishell $ echo "Hello, $USER"
+Hello, yourusername
+```
 
 
 
-Minishell $ 
+```bash
+cd
+env | grep PWD
+cd -
+env | grep PWD
+cd ~
+```
+
+```bash
+< test_file cat | grep "some text" | wc -w > output.txt
 ```
 
 ```bash
