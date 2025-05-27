@@ -113,7 +113,7 @@ These are the libraries and external resources required to build and run `minish
 
 ### Already provided whith this code
 * **42 `libft`**: Custom C library providing utility functions (string manipulation, memory management, etc.).
-* **`ft_printf`**: Custom implementation of `printf` for formatted output, supports diferent file descriptors.
+* **`ft_printf`**: Custom implementation of `printf` for formated output, supports diferent file descriptors.
 ### Not provided
 * **GNU Readline**: For interactive input and command history (`readline`, `rl_clear_history`, `rl_on_new_line`, `rl_replace_line`, `rl_redisplay`, `add_history`).
 * **Standard C and POSIX libraries**: (`<unistd.h>`, `<stdlib.h>`,`<string.h>`,`<stdarg.h>`,`<limits.h>`, `<stdio.h>`, `<fcntl.h>`, `<sys/types.h>`,`<sys/stat.h>`,`<signal.h>`, etc.) used implicitly by allowed system calls.
@@ -128,8 +128,6 @@ This will launch the shell with valgrind and send any valgrind issue to a `val_o
 Feel free to to test this with the following examples or just go crazy!.
 
 ## Examples
-
-![Prompt Example](images/prompt_example.png)
 
 ```bash
 Minishell $ echo "Hello, $USER"
@@ -178,7 +176,6 @@ export
 export VAR+=" YOURSELF"
 export
 ```
-![Pipeline Example](images/pipeline_example.png)
 
 ## References
 
