@@ -4,6 +4,9 @@
 
 A simple command-line shell implementation in C, following the 42 school project guidelines.
 
+![image](https://github.com/user-attachments/assets/f3a1b5df-f17f-460b-826a-0035ac86bc53)
+
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
@@ -186,4 +189,4 @@ export
 ## Authors
 
 * Oscar Drüke Santana [odruke-s@student.42lausanne.ch](mailto:odruke-s@student.42lausanne.ch)
-* Louca Morales (`email@example.com`)
+* Louca Morales (loucamorales@orange.fr)
