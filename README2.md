@@ -44,6 +44,15 @@ It is part of the 42 curriculum and focuses on mastering process control, enviro
    ```bash
    make
    ```
+   
+## Required
+
+You need to use a linux for compile and execute the program.
+
+For compilinig you need to install this package for use gcc and make.
+   ```
+   sudo apt install build-essential
+   ```
 
 ## Usage
 
