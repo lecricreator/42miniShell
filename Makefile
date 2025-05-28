@@ -67,7 +67,7 @@ INC = $(addprefix $(INC_DIR)%.h, $(INC_FILES))
 all: aux_libraries $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(OBJ) $(LFLAGS) $(FT_PRINTF) $(LIBFT) -O2 -o $@
+	@$(CC) $(OBJ) $(LFLAGS) $(FT_PRINTF) $(LIBFT) -o $@
 	@$(MAKE) compilation_success
 
 # create .o file
